@@ -1,0 +1,1 @@
+[ -d "$mountpoint/media/$modname/backgrounds" ] && mount -t overlayfs -o lowerdir="$squashfs/usr/share/backgrounds",upperdir="$mountpoint/media/$modname/backgrounds" overlayfs "$mountpoint/usr/share/backgrounds"

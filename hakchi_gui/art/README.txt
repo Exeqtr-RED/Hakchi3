@@ -1,0 +1,1 @@
+Copy your box art set here in PNG or JPEG format, and hakchi2 will look here when adding games. If it finds a box art filename that matches the ROM filename or starts with the ROM CRC32 checksum, hakchi2 will automatically use that box art for the game.

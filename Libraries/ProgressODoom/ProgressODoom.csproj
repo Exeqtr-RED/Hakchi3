@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<OutputType>Library</OutputType>
+		<RootNamespace>ProgressODoom</RootNamespace>
+		<AssemblyName>ProgressODoom</AssemblyName>
+		<!-- Отключаем автогенерацию AssemblyInfo, так как файл Properties\AssemblyInfo.cs уже существует -->
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<!-- Обязательно включаем поддержку WinForms для дизайнера компонентов -->
+		<UseWindowsForms>true</UseWindowsForms>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Встраиваем все иконки из папки Icons как ресурсы -->
+		<EmbeddedResource Include="Icons\**\*.ico" />
+	</ItemGroup>
+
+</Project>

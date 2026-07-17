@@ -1,0 +1,1 @@
+[ "$sftype" = "nes" ] && find "$rootfs$gamepath" -type f -name "*.fnt" -exec rm -f {} \;

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<!-- Изменено на net8.0 -->
+		<TargetFramework>net8.0</TargetFramework>
+		<AssemblyName>fel</AssemblyName>
+		<Authors>Daniel Radtke</Authors>
+		<Company />
+		<Product>FelCli</Product>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommandLineParser" Version="2.4.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\FelHelpers\FelHelpers.csproj" />
+		<ProjectReference Include="..\FelLib\FelLib.csproj" />
+	</ItemGroup>
+
+</Project>

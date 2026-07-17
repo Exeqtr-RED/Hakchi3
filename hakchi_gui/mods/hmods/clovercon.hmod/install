@@ -1,0 +1,3 @@
+cfg_clovercon_enabled='y'
+rm -f "$preinit.d/pc000_clovercon"
+rm -f "$rootfs/etc/init.d/S78clovercon"

@@ -1,0 +1,2 @@
+rm -f "$transferpath/usr/share/backgrounds/put_backgrounds_folders_here"
+return 0

@@ -1,0 +1,8 @@
+*.ai binary
+*.cs text eol=crlf
+*.desktop text eol=lf
+*.png binary
+*.resx text eol=crlf
+*.sln text eol=crlf
+*.xml text eol=lf
+hakchi_gui/data/moon_hashes/* text eol=lf

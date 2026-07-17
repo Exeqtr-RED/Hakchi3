@@ -1,0 +1,23 @@
+*.csproj.user
+*.pfx
+*.vcxproj.user
+.vs/
+ApiKeys/
+hakchi_gui/basehmods.tar
+bin/
+hakchi_gui/commit.txt
+GeneratedFiles/
+driver/source/nesmini_driver/Release/
+hakchi_gui/mods/hmods/hakchi.hmod
+obj/
+packages/
+hakchi_gui/tag.txt
+hakchi_gui/tools/arm/detached-fallback
+hakchi_gui/tools/putty/puttytel.exe
+hakchi_gui/user_mods/bluetooth.hmod
+!hakchi_gui/user_mods/snes_custom_filters.hmod/usr/bin/
+hakchi_gui/git-commits-since-last-tag.txt
+GeneratedData/
+Installer/**/
+Web Installer/**/
+ZIP Files/**/

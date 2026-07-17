@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<!-- Изменено на net8.0-windows -->
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<!-- Включаем WinForms, так как проект использует System.Drawing -->
+		<UseWindowsForms>true</UseWindowsForms>
+	</PropertyGroup>
+
+	<!-- Пакет System.Drawing.Common удален, так как в net8.0-windows он встроен -->
+
+	<ItemGroup>
+		<ProjectReference Include="..\SpineGen\SpineGen.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<!-- Изменено на net8.0-windows -->
+		<TargetFramework>net8.0-windows</TargetFramework>
+	</PropertyGroup>
+
+	<!-- Пакет System.Drawing.Primitives удален, так как он встроен в .NET 8 -->
+
+</Project>

@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<RootNamespace>CueSharp</RootNamespace>
+		<AssemblyName>CueSharp</AssemblyName>
+		<!-- Отключаем автогенерацию AssemblyInfo, так как файл Properties\AssemblyInfo.cs уже существует -->
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<EnableDefaultItems>true</EnableDefaultItems>
+	</PropertyGroup>
+
+</Project>
