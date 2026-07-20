@@ -269,7 +269,7 @@ namespace com.clusterrr.hakchi_gui
                     tasker.AddTask(Tasks.WebClientTasks.DownloadFile(ConfigIni.Instance.HakchiUpdateURL, hakchiTemp, true, true, hmod.LastModified));
                     tasker.AddTask(FileTasks.MoveFile(hakchiTemp, hakchi.latestHmodFile, true, true));
 
-                    
+
                     tasker.AddTask(Tasker.TaskTitle(Resources.UpdatingList));
                     tasker.AddTask(Tasks.WebClientTasks.DownloadFile("https://github.com/TeamShinkansen/hash-db/releases/download/data/romfiles.xml.gz", listTemp, true, true, File.GetLastWriteTime(GamesDB.XmlFile), true));
                     tasker.AddTask(FileTasks.MoveFile(listTemp, listOutput, true, true));
@@ -324,18 +324,19 @@ namespace com.clusterrr.hakchi_gui
             {
                 try // wrap upgrade check in an exception check, to avoid past mistakes
                 {
-                    AutoUpdater.RemindLaterTimeSpan = RemindLaterFormat.Days;
-                    AutoUpdater.RemindLaterAt = 7;
-                    AutoUpdater.ShowRemindLaterButton = true;
-                    AutoUpdater.RunUpdateAsAdmin = false;
-                    AutoUpdater.Start(UPDATE_XML_URL);
+                    // TEMP: disabled for migration
+                    // AutoUpdater.RemindLaterTimeSpan = RemindLaterFormat.Days;
+                    // AutoUpdater.RemindLaterAt = 7;
+                    // AutoUpdater.ShowRemindLaterButton = true;
+                    // AutoUpdater.RunUpdateAsAdmin = false;
+                    // AutoUpdater.Start(UPDATE_XML_URL);
                 }
                 catch (Exception ex)
                 {
                     Tasks.ErrorForm.Show(this, ex);
                 }
             }
-            
+
             kernelToolStripMenuItem.DropDown.KeyDown += menuShiftHandler;
             kernelToolStripMenuItem.DropDown.KeyUp += menuShiftHandler;
             kernelToolStripMenuItem.DropDownOpening += menuShiftHandler;
@@ -361,7 +362,7 @@ namespace com.clusterrr.hakchi_gui
 
             // centralized upgrade actions system
             new Upgrade(this).Run();
-            
+
             // populate mod repository list
             populateRepos();
 
@@ -436,9 +437,9 @@ namespace com.clusterrr.hakchi_gui
             if (Program.ConsoleVisible)
             {
                 title += " (Debug"
-                #if VERY_DEBUG
+#if VERY_DEBUG
                         + ", very verbose mode"
-                #endif
+#endif
                 + ")";
             }
 
@@ -694,7 +695,7 @@ namespace com.clusterrr.hakchi_gui
             // items per folder
             maximumGamesPerFolderToolStripMenuItem.DropDownItems.Clear();
             var numbers = new List<byte>();
-            
+
             for (byte f = (byte)(hakchi.IsMd() ? 24 : 20); f <= (byte)(hakchi.IsMd() ? 102 : 100); f += ((f < (byte)(hakchi.IsMd() ? 49 : 50)) ? (byte)(hakchi.IsMd() ? 6 : 5) : (byte)(hakchi.IsMd() ? 12 : 10)))
             {
                 var item = new ToolStripMenuItem();
@@ -800,7 +801,33 @@ namespace com.clusterrr.hakchi_gui
 
         private void LoadLanguages()
         {
-            var languages = new List<string>(Directory.GetDirectories(Path.Combine(Program.BaseDirectoryInternal, "languages")));
+            // .NET 8 places satellite assemblies next to the exe in
+            // <AppDir>\<culture>\hakchi.resources.dll. Scan those culture subfolders
+            // (the legacy <AppDir>\languages\<culture>\ layout is no longer used).
+            const string satelliteAssemblyName = "hakchi.resources.dll";
+            var languages = new List<string>();
+            foreach (var dir in Directory.GetDirectories(Program.BaseDirectoryInternal))
+            {
+                var code = Path.GetFileName(dir);
+                if (!File.Exists(Path.Combine(dir, satelliteAssemblyName)))
+                    continue;
+                // Accept only directories whose name parses as a valid culture
+                // (e.g. en-US, ru-RU, de-DE). This skips unrelated subfolders.
+                try { _ = new CultureInfo(code); }
+                catch { continue; }
+                languages.Add(dir);
+            }
+            // Backward-compat: if the legacy "languages" folder exists, also include
+            // cultures from there (helps users with leftover files from old builds).
+            var legacyLanguagesDir = Path.Combine(Program.BaseDirectoryInternal, "languages");
+            if (Directory.Exists(legacyLanguagesDir))
+            {
+                foreach (var dir in Directory.GetDirectories(legacyLanguagesDir))
+                {
+                    if (File.Exists(Path.Combine(dir, satelliteAssemblyName)))
+                        languages.Add(dir);
+                }
+            }
             ResourceManager rm = Resources.ResourceManager;
             languages.Add("en-US"); // default language
             var langCodes = new Dictionary<string, string>();
@@ -1464,9 +1491,9 @@ namespace com.clusterrr.hakchi_gui
                         e.Effect = DragDropEffects.All;
                         return;
                     }
-                } 
-            } 
-            
+                }
+            }
+
             e.Effect = DragDropEffects.None;
         }
 
@@ -1585,8 +1612,8 @@ namespace com.clusterrr.hakchi_gui
                 {
                     if (spineForm.ClearLogo != null)
                     {
-                        using(Bitmap cl = new Bitmap(spineForm.ClearLogo.Width, spineForm.ClearLogo.Height, PixelFormat.Format32bppArgb))
-                        using(var g = Graphics.FromImage(cl))
+                        using (Bitmap cl = new Bitmap(spineForm.ClearLogo.Width, spineForm.ClearLogo.Height, PixelFormat.Format32bppArgb))
+                        using (var g = Graphics.FromImage(cl))
                         {
                             g.DrawImage(spineForm.ClearLogo, new Point(0, 0));
                             cl.Save(logoPath, ImageFormat.Png);
@@ -1612,7 +1639,7 @@ namespace com.clusterrr.hakchi_gui
             var game = (selected as NesApplication);
             if (game.Name != textBoxName.Text)
             {
-                
+
                 game.Name = textBoxName.Text;
                 selectedItem.Text = game.ToString();
                 textBoxSortName.Text = Shared.GetSortName(textBoxName.Text);
@@ -2057,7 +2084,7 @@ internal static
                 tasker.SetTitle(title);
                 string dumpFilename = null;
                 string systemSuggestedFilename = "system_software";
-                
+
                 switch (task)
                 {
                     case MembootTasks.NandTasks.DumpNand:
@@ -2169,7 +2196,7 @@ internal static
                 {
                     tasker.AddTask(task.ScrapeGames, 4);
                 }
-                
+
                 tasker.AddTask(task.UpdateListView);
 
                 if (tasker.Start() == Tasks.Tasker.Conclusion.Success)
@@ -3580,7 +3607,7 @@ internal static
             {
                 list.Add("<div class=\"Mod\">");
                 list.Add($"<h2>{WebUtility.HtmlEncode(mod.RawName)}</h2>");
-                
+
                 foreach (var fmKey in mod.Readme.frontMatter.Keys)
                 {
                     list.Add($"<div><strong>{WebUtility.HtmlEncode(fmKey)}:</strong> {WebUtility.HtmlEncode(mod.Readme.frontMatter[fmKey])}</div>");
@@ -3725,12 +3752,12 @@ internal static
             var foundGames = new Dictionary<string, GameImporterForm.FoundGame>();
             var gameCopied = false;
             var previousSelected = listViewGames.SelectedItems.Cast<ListViewItem>().ToList();
-                
+
             listViewGames.SelectedItems.Clear();
 
             using (var tasker = new Tasks.Tasker(this))
             {
-                    
+
                 tasker.AttachView(new TaskerTaskbar());
                 tasker.AttachView(new TaskerForm());
                 tasker.SetTitle(Resources.ImportGames);
@@ -3843,8 +3870,8 @@ internal static
         private void checkM2ThemeMenuItem(string theme)
         {
             autoToolStripMenuItem.Checked =
-            unitedStatesToolStripMenuItem.Checked = 
-            europeToolStripMenuItem.Checked = 
+            unitedStatesToolStripMenuItem.Checked =
+            europeToolStripMenuItem.Checked =
             japanToolStripMenuItem.Checked = false;
             switch (theme ?? "")
             {
@@ -4007,18 +4034,18 @@ internal static
                         tasker.AttachViews(new TaskerTaskbar(), new TaskerForm());
                         tasker.SetStatusImage(Resources.sign_sync);
                         tasker.SetTitle(Resources.ApplyingChanges);
-                        
+
                         foreach (var result in scraperForm.Results)
                         {
                             tasker.AddTask(ApplyScraperData(result));
                         }
-                        
+
                         tasker.Start();
                     }
 
                     listViewGames.BeginUpdate();
                     LoadGames(false);
-                    
+
                     foreach (ListViewItem item in listViewGames.Items)
                     {
                         item.Selected = scraperForm.Games.Contains(item.Tag);
@@ -4073,7 +4100,7 @@ internal static
                                 tag.Save();
                                 game.Text = tag.Name;
                             }
-                            
+
                         }
                         listViewGames.BeginUpdate();
                         LoadGames(false);

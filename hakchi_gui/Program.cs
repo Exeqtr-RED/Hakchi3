@@ -220,32 +220,10 @@ namespace com.clusterrr.hakchi_gui
                         }
                         catch { }
 
-                        string languagesDirectory = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "languages");
-                        const string langFileNames = "hakchi.resources.dll";
-                        // ИСПРАВЛЕНО: AppendPrivatePath удален, так как не поддерживается в .NET 8. 
-                        // .NET 8 автоматически ищет локализации в подпапках (например, /ru/hakchi.resources.dll)
-
-                        // For updates
-                        var oldFiles = Directory.GetFiles(Path.GetDirectoryName(Application.ExecutablePath), langFileNames, SearchOption.AllDirectories);
-                        foreach (var d in oldFiles)
-                        {
-                            if (!d.Contains(Path.DirectorySeparatorChar + "languages" + Path.DirectorySeparatorChar))
-                            {
-                                var dir = Path.GetDirectoryName(d);
-                                Trace.WriteLine("Removing old directory: " + dir);
-                                if (!isPortable)
-                                {
-                                    var targetDir = Path.Combine(languagesDirectory, Path.GetFileName(dir));
-                                    Directory.CreateDirectory(targetDir);
-                                    var targetFile = Path.Combine(targetDir, langFileNames);
-                                    if (File.Exists(targetFile))
-                                        File.Delete(targetFile);
-                                    File.Copy(Path.Combine(dir, langFileNames), targetFile);
-                                }
-                                else
-                                    Directory.Delete(dir, true);
-                            }
-                        }
+                        // .NET 8 автоматически ищет спутниковые сборки локализации
+                        // в подпапках рядом с exe (<AppDir>\ru-RU\hakchi.resources.dll).
+                        // Ручной перенос в languages\<culture>\ больше не нужен —
+                        // MSBuild-target MoveLanguageResourceFiles удалён из .csproj.
 
                         Trace.WriteLine("Loading spine templates");
                         var templateDir = new DirectoryInfo(Path.Combine(BaseDirectoryExternal, "spine_templates"));

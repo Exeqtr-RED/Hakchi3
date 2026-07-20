@@ -133,7 +133,10 @@ namespace com.clusterrr.hakchi_gui
                         };
                         string[] unusedDirectories = new string[]
                         {
-                            Path.Combine(i, "languages", "en-GB"),
+                            // Note: "languages\en-GB" was removed from this list because
+                            // language satellite assemblies no longer live in a "languages\"
+                            // folder after the .NET 8 migration. They now use the default
+                            // .NET layout: <AppDir>\<culture>\hakchi.resources.dll.
                             Path.Combine(i, "mods"),
                             Path.Combine(e, "user_mods", "music_hack.hmod")
                         };
@@ -233,7 +236,7 @@ namespace com.clusterrr.hakchi_gui
                     action = new ActionFunc(() =>
                     {
                         var oldCache = Path.Combine(Program.BaseDirectoryExternal, "user_mods", "readme_cache");
-                        
+
                         if (Directory.Exists(oldCache))
                         {
                             Directory.Delete(oldCache, true);

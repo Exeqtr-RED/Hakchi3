@@ -57,9 +57,13 @@
 		<RepositoryUrl>https://github.com/Exeqtr-RED/Hakchi2-CE-RU/tree/net8-migration</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<BuildDependsOn>$(BuildDependsOn);MoveLanguageResourceFiles;</BuildDependsOn>
 		<CleanDependsOn>$(CleanDependsOn); CustomAfterClean </CleanDependsOn>
 		<Configurations>Debug;Release;Dumper</Configurations>
+
+		<!-- Localized satellite assemblies stay in <OutDir>\<culture>\hakchi.resources.dll
+		     (default .NET 8 layout). Do NOT move them into a custom "languages\" folder —
+		     the .NET 8 runtime only probes the default culture subfolder next to the exe,
+		     and AppendPrivatePath / <probing privatePath> no longer apply to satellites. -->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -235,14 +239,6 @@
 			<UnwantedFiles Include="$(OutDir)mods\hmods\hakchi.hmod" />
 		</ItemGroup>
 		<Delete Files="@(UnwantedFiles)" />
-	</Target>
-
-	<Target Name="MoveLanguageResourceFiles" AfterTargets="PostBuildEvent">
-		<ItemGroup>
-			<LanguageResourceFiles Include="$(OutDir)**\hakchi.resources.dll;" Exclude="$(OutDir)languages\**\*.*" />
-		</ItemGroup>
-		<Copy SourceFiles="@(LanguageResourceFiles)" DestinationFolder="$(OutDir)languages\%(RecursiveDir)" SkipUnchangedFiles="true" />
-		<RemoveDir Directories="$(OutDir)%(LanguageResourceFiles.RecursiveDir);" />
 	</Target>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

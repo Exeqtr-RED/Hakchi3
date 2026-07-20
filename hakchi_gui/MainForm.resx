@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -181,7 +181,7 @@
   <data name="synchronizeToolStripMenuItem.Text" xml:space="preserve">
     <value>S&amp;ynchronize</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="searchToolStripMenuItem.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>F3</value>
   </data>
@@ -345,7 +345,7 @@
   <data name="factoryResetToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vgAADr4B6kKxwAAAAcxJREFUOE+Vk0uL01AAhW8fFEqhUKiBarUaq21SJ9MhQ2lnQtJMqTojLl00i8GF
+        vQAADr0BR/uQrQAAAcxJREFUOE+Vk0uL01AAhW8fFEqhUKiBarUaq21SJ9MhQ2lnQtJMqTojLl00i8GF
         P8KFCLMQdBaR0YUD4x9wI4ig+KK6VHAxgiIjxbULXdw/cMxJ6SPtbBr4yM0957vkhhvBq1ar+QFyQfxQ
         1jTN13Vdep6HRaBDV1SrVdnr9dDtdkO2Nof349i8OhnToSvK5bLsdDogN70N/Oq3cWt7I3yehtmPt214
         NyYZXaGqqnRdF9evuRh8dCAPHRy+coKCC84Tjr+8GGbf3zi4cnk4T1eUSiVp2zYOdoeFEXs7NjhPdu/Y
@@ -438,25 +438,25 @@
     <value>Original games</value>
   </data>
   <data name="nameToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>117, 22</value>
   </data>
   <data name="nameToolStripMenuItem.Text" xml:space="preserve">
     <value>Name</value>
   </data>
   <data name="coreToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>117, 22</value>
   </data>
   <data name="coreToolStripMenuItem.Text" xml:space="preserve">
     <value>Core</value>
   </data>
   <data name="systemToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>117, 22</value>
   </data>
   <data name="systemToolStripMenuItem.Text" xml:space="preserve">
     <value>Console</value>
   </data>
   <data name="regionToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>117, 22</value>
   </data>
   <data name="regionToolStripMenuItem.Text" xml:space="preserve">
     <value>Region</value>
@@ -841,7 +841,7 @@
   <data name="formatSDCardToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vgAADr4B6kKxwAAAAcxJREFUOE+Vk0uL01AAhW8fFEqhUKiBarUaq21SJ9MhQ2lnQtJMqTojLl00i8GF
+        vQAADr0BR/uQrQAAAcxJREFUOE+Vk0uL01AAhW8fFEqhUKiBarUaq21SJ9MhQ2lnQtJMqTojLl00i8GF
         P8KFCLMQdBaR0YUD4x9wI4ig+KK6VHAxgiIjxbULXdw/cMxJ6SPtbBr4yM0957vkhhvBq1ar+QFyQfxQ
         1jTN13Vdep6HRaBDV1SrVdnr9dDtdkO2Nof349i8OhnToSvK5bLsdDogN70N/Oq3cWt7I3yehtmPt214
         NyYZXaGqqnRdF9evuRh8dCAPHRy+coKCC84Tjr+8GGbf3zi4cnk4T1eUSiVp2zYOdoeFEXs7NjhPdu/Y
@@ -945,8 +945,12 @@
   <data name="menuStrip.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="menuStrip.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>7, 2, 0, 2</value>
+  </data>
   <data name="menuStrip.Size" type="System.Drawing.Size, System.Drawing">
-    <value>973, 24</value>
+    <value>1135, 24</value>
   </data>
   <data name="menuStrip.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -955,7 +959,7 @@
     <value>menuStrip</value>
   </data>
   <data name="&gt;&gt;menuStrip.Type" xml:space="preserve">
-    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;menuStrip.Parent" xml:space="preserve">
     <value>$this</value>
@@ -970,13 +974,13 @@
     <value>NoControl</value>
   </data>
   <data name="buttonAddGames.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 577</value>
+    <value>2, 669</value>
   </data>
   <data name="buttonAddGames.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="buttonAddGames.Size" type="System.Drawing.Size, System.Drawing">
-    <value>320, 41</value>
+    <value>374, 48</value>
   </data>
   <data name="buttonAddGames.TabIndex" type="System.Int32, mscorlib">
     <value>25</value>
@@ -988,7 +992,7 @@
     <value>buttonAddGames</value>
   </data>
   <data name="&gt;&gt;buttonAddGames.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonAddGames.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -1132,19 +1136,19 @@
     <value>281, 6</value>
   </data>
   <data name="editROMHeaderToolStripMenuItem.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
-    <value>393246</value>
+    <value>Ctrl+Alt+IMEAccept</value>
   </data>
   <data name="editROMHeaderToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>285, 22</value>
+    <value>289, 22</value>
   </data>
   <data name="editROMHeaderToolStripMenuItem.Text" xml:space="preserve">
     <value>Edit SFROM header</value>
   </data>
   <data name="toolStripMenuItem9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>282, 6</value>
+    <value>286, 6</value>
   </data>
   <data name="resetROMHeaderToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>285, 22</value>
+    <value>289, 22</value>
   </data>
   <data name="resetROMHeaderToolStripMenuItem.Text" xml:space="preserve">
     <value>Reset SFROM header for selected games</value>
@@ -1171,13 +1175,13 @@
     <value>Select emulation core...</value>
   </data>
   <data name="contextMenuStrip.Size" type="System.Drawing.Size, System.Drawing">
-    <value>285, 392</value>
+    <value>285, 370</value>
   </data>
   <data name="&gt;&gt;contextMenuStrip.Name" xml:space="preserve">
     <value>contextMenuStrip</value>
   </data>
   <data name="&gt;&gt;contextMenuStrip.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <metadata name="openFileDialogImage.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>537, 56</value>
@@ -1192,13 +1196,13 @@
     <value>Fill</value>
   </data>
   <data name="buttonStart.Location" type="System.Drawing.Point, System.Drawing">
-    <value>650, 577</value>
+    <value>758, 669</value>
   </data>
   <data name="buttonStart.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="buttonStart.Size" type="System.Drawing.Size, System.Drawing">
-    <value>321, 41</value>
+    <value>375, 48</value>
   </data>
   <data name="buttonStart.TabIndex" type="System.Int32, mscorlib">
     <value>27</value>
@@ -1210,7 +1214,7 @@
     <value>buttonStart</value>
   </data>
   <data name="&gt;&gt;buttonStart.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonStart.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -1249,10 +1253,13 @@
     <value>Top</value>
   </data>
   <data name="structureButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>233, 3</value>
+    <value>269, 3</value>
+  </data>
+  <data name="structureButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="structureButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 23</value>
+    <value>89, 27</value>
   </data>
   <data name="structureButton.TabIndex" type="System.Int32, mscorlib">
     <value>29</value>
@@ -1264,7 +1271,7 @@
     <value>structureButton</value>
   </data>
   <data name="&gt;&gt;structureButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;structureButton.Parent" xml:space="preserve">
     <value>tableLayoutPanel3</value>
@@ -1276,13 +1283,13 @@
     <value>Top</value>
   </data>
   <data name="gamesConsoleComboBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 4</value>
+    <value>4, 5</value>
   </data>
   <data name="gamesConsoleComboBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
+    <value>4, 5, 4, 5</value>
   </data>
   <data name="gamesConsoleComboBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>224, 21</value>
+    <value>257, 23</value>
   </data>
   <data name="gamesConsoleComboBox.TabIndex" type="System.Int32, mscorlib">
     <value>30</value>
@@ -1291,7 +1298,7 @@
     <value>gamesConsoleComboBox</value>
   </data>
   <data name="&gt;&gt;gamesConsoleComboBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;gamesConsoleComboBox.Parent" xml:space="preserve">
     <value>tableLayoutPanel3</value>
@@ -1303,13 +1310,16 @@
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanel3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
+    <value>4, 19</value>
+  </data>
+  <data name="tableLayoutPanel3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="tableLayoutPanel3.RowCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="tableLayoutPanel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>312, 551</value>
+    <value>362, 640</value>
   </data>
   <data name="tableLayoutPanel3.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1318,7 +1328,7 @@
     <value>tableLayoutPanel3</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel3.Parent" xml:space="preserve">
     <value>groupBoxCurrentGamesCollection</value>
@@ -1333,10 +1343,13 @@
     <value>Fill</value>
   </data>
   <data name="listViewGames.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 32</value>
+    <value>4, 36</value>
+  </data>
+  <data name="listViewGames.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="listViewGames.Size" type="System.Drawing.Size, System.Drawing">
-    <value>306, 516</value>
+    <value>354, 601</value>
   </data>
   <data name="listViewGames.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1345,7 +1358,7 @@
     <value>listViewGames</value>
   </data>
   <data name="&gt;&gt;listViewGames.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;listViewGames.Parent" xml:space="preserve">
     <value>tableLayoutPanel3</value>
@@ -1363,13 +1376,13 @@
     <value>NoControl</value>
   </data>
   <data name="buttonExport.Location" type="System.Drawing.Point, System.Drawing">
-    <value>326, 577</value>
+    <value>380, 669</value>
   </data>
   <data name="buttonExport.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="buttonExport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>320, 41</value>
+    <value>374, 48</value>
   </data>
   <data name="buttonExport.TabIndex" type="System.Int32, mscorlib">
     <value>26</value>
@@ -1381,7 +1394,7 @@
     <value>buttonExport</value>
   </data>
   <data name="&gt;&gt;buttonExport.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonExport.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -1402,7 +1415,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="labelID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 13</value>
+    <value>10, 15</value>
   </data>
   <data name="labelID.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1417,7 +1430,7 @@
     <value>labelID</value>
   </data>
   <data name="&gt;&gt;labelID.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelID.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameID</value>
@@ -1438,13 +1451,13 @@
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
   <data name="label10.Location" type="System.Drawing.Point, System.Drawing">
-    <value>156, 16</value>
+    <value>181, 18</value>
   </data>
   <data name="label10.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="label10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 13</value>
+    <value>177, 13</value>
   </data>
   <data name="label10.TabIndex" type="System.Int32, mscorlib">
     <value>23</value>
@@ -1459,7 +1472,7 @@
     <value>label10</value>
   </data>
   <data name="&gt;&gt;label10.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label10.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1479,6 +1492,9 @@
   <data name="textBoxDescription.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
+  <data name="textBoxDescription.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
+  </data>
   <data name="textBoxDescription.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -1486,7 +1502,7 @@
     <value>Vertical</value>
   </data>
   <data name="textBoxDescription.Size" type="System.Drawing.Size, System.Drawing">
-    <value>306, 130</value>
+    <value>354, 192</value>
   </data>
   <data name="textBoxDescription.TabIndex" type="System.Int32, mscorlib">
     <value>26</value>
@@ -1495,7 +1511,7 @@
     <value>textBoxDescription</value>
   </data>
   <data name="&gt;&gt;textBoxDescription.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textBoxDescription.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -1507,10 +1523,13 @@
     <value>Fill</value>
   </data>
   <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 418</value>
+    <value>4, 445</value>
+  </data>
+  <data name="panel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>306, 130</value>
+    <value>354, 192</value>
   </data>
   <data name="panel1.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -1519,7 +1538,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;panel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1531,10 +1550,13 @@
     <value>Top</value>
   </data>
   <data name="textBoxArguments.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 379</value>
+    <value>4, 403</value>
+  </data>
+  <data name="textBoxArguments.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="textBoxArguments.Size" type="System.Drawing.Size, System.Drawing">
-    <value>306, 20</value>
+    <value>354, 23</value>
   </data>
   <data name="textBoxArguments.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -1543,7 +1565,7 @@
     <value>textBoxArguments</value>
   </data>
   <data name="&gt;&gt;textBoxArguments.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textBoxArguments.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1564,13 +1586,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelCommandLine.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 363</value>
+    <value>0, 387</value>
   </data>
   <data name="labelCommandLine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="labelCommandLine.Size" type="System.Drawing.Size, System.Drawing">
-    <value>309, 13</value>
+    <value>358, 13</value>
   </data>
   <data name="labelCommandLine.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1585,7 +1607,7 @@
     <value>labelCommandLine</value>
   </data>
   <data name="&gt;&gt;labelCommandLine.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelCommandLine.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1597,10 +1619,13 @@
     <value>Top</value>
   </data>
   <data name="numericUpDownSaveCount.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 300</value>
+    <value>4, 319</value>
+  </data>
+  <data name="numericUpDownSaveCount.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="numericUpDownSaveCount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 20</value>
+    <value>173, 23</value>
   </data>
   <data name="numericUpDownSaveCount.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -1609,7 +1634,7 @@
     <value>numericUpDownSaveCount</value>
   </data>
   <data name="&gt;&gt;numericUpDownSaveCount.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;numericUpDownSaveCount.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1621,10 +1646,13 @@
     <value>Top</value>
   </data>
   <data name="maxPlayersComboBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 260</value>
+    <value>4, 277</value>
+  </data>
+  <data name="maxPlayersComboBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="maxPlayersComboBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 21</value>
+    <value>173, 23</value>
   </data>
   <data name="maxPlayersComboBox.TabIndex" type="System.Int32, mscorlib">
     <value>25</value>
@@ -1633,7 +1661,7 @@
     <value>maxPlayersComboBox</value>
   </data>
   <data name="&gt;&gt;maxPlayersComboBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;maxPlayersComboBox.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1675,7 +1703,7 @@
     <value>label9</value>
   </data>
   <data name="&gt;&gt;label9.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label9.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameID</value>
@@ -1693,7 +1721,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanelGameID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 13</value>
+    <value>34, 15</value>
   </data>
   <data name="tableLayoutPanelGameID.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -1702,7 +1730,7 @@
     <value>tableLayoutPanelGameID</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelGameID.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelGameID.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1726,19 +1754,19 @@
     <value>NoControl</value>
   </data>
   <data name="buttonShowGameGenieDatabase.Location" type="System.Drawing.Point, System.Drawing">
-    <value>286, 0</value>
+    <value>331, 0</value>
   </data>
   <data name="buttonShowGameGenieDatabase.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="buttonShowGameGenieDatabase.MaximumSize" type="System.Drawing.Size, System.Drawing">
-    <value>20, 20</value>
+    <value>23, 23</value>
   </data>
   <data name="buttonShowGameGenieDatabase.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>20, 20</value>
+    <value>23, 23</value>
   </data>
   <data name="buttonShowGameGenieDatabase.Size" type="System.Drawing.Size, System.Drawing">
-    <value>20, 20</value>
+    <value>23, 23</value>
   </data>
   <data name="buttonShowGameGenieDatabase.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -1750,7 +1778,7 @@
     <value>buttonShowGameGenieDatabase</value>
   </data>
   <data name="&gt;&gt;buttonShowGameGenieDatabase.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonShowGameGenieDatabase.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameGenie</value>
@@ -1768,7 +1796,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="textBoxGameGenie.Size" type="System.Drawing.Size, System.Drawing">
-    <value>286, 20</value>
+    <value>331, 23</value>
   </data>
   <data name="textBoxGameGenie.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -1777,7 +1805,7 @@
     <value>textBoxGameGenie</value>
   </data>
   <data name="&gt;&gt;textBoxGameGenie.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textBoxGameGenie.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameGenie</value>
@@ -1789,13 +1817,16 @@
     <value>Top</value>
   </data>
   <data name="tableLayoutPanelGameGenie.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 340</value>
+    <value>4, 361</value>
+  </data>
+  <data name="tableLayoutPanelGameGenie.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="tableLayoutPanelGameGenie.RowCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="tableLayoutPanelGameGenie.Size" type="System.Drawing.Size, System.Drawing">
-    <value>306, 20</value>
+    <value>354, 23</value>
   </data>
   <data name="tableLayoutPanelGameGenie.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
@@ -1804,7 +1835,7 @@
     <value>tableLayoutPanelGameGenie</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelGameGenie.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelGameGenie.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1813,7 +1844,7 @@
     <value>7</value>
   </data>
   <data name="tableLayoutPanelGameGenie.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="buttonShowGameGenieDatabase" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBoxGameGenie" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="buttonShowGameGenieDatabase" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBoxGameGenie" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,23" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="labelMaxPlayers.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1828,13 +1859,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelMaxPlayers.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 244</value>
+    <value>0, 261</value>
   </data>
   <data name="labelMaxPlayers.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="labelMaxPlayers.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 13</value>
+    <value>177, 13</value>
   </data>
   <data name="labelMaxPlayers.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1849,7 +1880,7 @@
     <value>labelMaxPlayers</value>
   </data>
   <data name="&gt;&gt;labelMaxPlayers.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelMaxPlayers.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1861,10 +1892,13 @@
     <value>Top</value>
   </data>
   <data name="textBoxPublisher.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 143</value>
+    <value>4, 151</value>
+  </data>
+  <data name="textBoxPublisher.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="textBoxPublisher.Size" type="System.Drawing.Size, System.Drawing">
-    <value>306, 20</value>
+    <value>354, 23</value>
   </data>
   <data name="textBoxPublisher.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -1873,7 +1907,7 @@
     <value>textBoxPublisher</value>
   </data>
   <data name="&gt;&gt;textBoxPublisher.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textBoxPublisher.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1894,13 +1928,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelSaveCount.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 284</value>
+    <value>0, 303</value>
   </data>
   <data name="labelSaveCount.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="labelSaveCount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 13</value>
+    <value>177, 13</value>
   </data>
   <data name="labelSaveCount.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -1915,7 +1949,7 @@
     <value>labelSaveCount</value>
   </data>
   <data name="&gt;&gt;labelSaveCount.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelSaveCount.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1936,13 +1970,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelGameGenie.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 324</value>
+    <value>0, 345</value>
   </data>
   <data name="labelGameGenie.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="labelGameGenie.Size" type="System.Drawing.Size, System.Drawing">
-    <value>309, 13</value>
+    <value>358, 13</value>
   </data>
   <data name="labelGameGenie.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1957,7 +1991,7 @@
     <value>labelGameGenie</value>
   </data>
   <data name="&gt;&gt;labelGameGenie.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelGameGenie.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1969,10 +2003,13 @@
     <value>Top</value>
   </data>
   <data name="textBoxSortName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 104</value>
+    <value>4, 109</value>
+  </data>
+  <data name="textBoxSortName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="textBoxSortName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>306, 20</value>
+    <value>354, 23</value>
   </data>
   <data name="textBoxSortName.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -1981,7 +2018,7 @@
     <value>textBoxSortName</value>
   </data>
   <data name="&gt;&gt;textBoxSortName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textBoxSortName.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -1996,7 +2033,10 @@
     <value>NoControl</value>
   </data>
   <data name="checkBoxCompressed.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 32</value>
+    <value>4, 34</value>
+  </data>
+  <data name="checkBoxCompressed.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="checkBoxCompressed.Size" type="System.Drawing.Size, System.Drawing">
     <value>15, 14</value>
@@ -2011,7 +2051,7 @@
     <value>checkBoxCompressed</value>
   </data>
   <data name="&gt;&gt;checkBoxCompressed.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;checkBoxCompressed.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2029,13 +2069,13 @@
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
   <data name="labelCompress.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 16</value>
+    <value>0, 18</value>
   </data>
   <data name="labelCompress.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="labelCompress.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 13</value>
+    <value>177, 13</value>
   </data>
   <data name="labelCompress.TabIndex" type="System.Int32, mscorlib">
     <value>24</value>
@@ -2050,7 +2090,7 @@
     <value>labelCompress</value>
   </data>
   <data name="&gt;&gt;labelCompress.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelCompress.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2065,10 +2105,10 @@
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
   <data name="labelPublisher.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 127</value>
+    <value>0, 135</value>
   </data>
   <data name="labelPublisher.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="labelPublisher.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 13</value>
@@ -2083,7 +2123,7 @@
     <value>labelPublisher</value>
   </data>
   <data name="&gt;&gt;labelPublisher.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelPublisher.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2095,13 +2135,16 @@
     <value>Left</value>
   </data>
   <data name="maskedTextBoxReleaseDate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 221</value>
+    <value>4, 235</value>
+  </data>
+  <data name="maskedTextBoxReleaseDate.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="maskedTextBoxReleaseDate.Mask" xml:space="preserve">
     <value>0000-00-00</value>
   </data>
   <data name="maskedTextBoxReleaseDate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 20</value>
+    <value>75, 23</value>
   </data>
   <data name="maskedTextBoxReleaseDate.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -2110,7 +2153,7 @@
     <value>maskedTextBoxReleaseDate</value>
   </data>
   <data name="&gt;&gt;maskedTextBoxReleaseDate.Type" xml:space="preserve">
-    <value>System.Windows.Forms.MaskedTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.MaskedTextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;maskedTextBoxReleaseDate.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2131,13 +2174,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelSortName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 88</value>
+    <value>0, 93</value>
   </data>
   <data name="labelSortName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="labelSortName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>309, 13</value>
+    <value>358, 13</value>
   </data>
   <data name="labelSortName.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -2152,7 +2195,7 @@
     <value>labelSortName</value>
   </data>
   <data name="&gt;&gt;labelSortName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelSortName.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2170,13 +2213,13 @@
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
   <data name="labelDescription.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 402</value>
+    <value>0, 429</value>
   </data>
   <data name="labelDescription.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="labelDescription.Size" type="System.Drawing.Size, System.Drawing">
-    <value>309, 13</value>
+    <value>358, 13</value>
   </data>
   <data name="labelDescription.TabIndex" type="System.Int32, mscorlib">
     <value>27</value>
@@ -2191,7 +2234,7 @@
     <value>labelDescription</value>
   </data>
   <data name="&gt;&gt;labelDescription.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelDescription.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2212,13 +2255,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelReleaseDate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 205</value>
+    <value>0, 219</value>
   </data>
   <data name="labelReleaseDate.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="labelReleaseDate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>309, 13</value>
+    <value>358, 13</value>
   </data>
   <data name="labelReleaseDate.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2233,7 +2276,7 @@
     <value>labelReleaseDate</value>
   </data>
   <data name="&gt;&gt;labelReleaseDate.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelReleaseDate.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2251,13 +2294,13 @@
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
   <data name="labelName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 49</value>
+    <value>0, 51</value>
   </data>
   <data name="labelName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="labelName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 13</value>
+    <value>181, 13</value>
   </data>
   <data name="labelName.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -2272,7 +2315,7 @@
     <value>labelName</value>
   </data>
   <data name="&gt;&gt;labelName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelName.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2290,10 +2333,10 @@
     <value>MiddleLeft</value>
   </data>
   <data name="labelGenre.Location" type="System.Drawing.Point, System.Drawing">
-    <value>156, 284</value>
+    <value>181, 303</value>
   </data>
   <data name="labelGenre.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="labelGenre.Size" type="System.Drawing.Size, System.Drawing">
     <value>41, 13</value>
@@ -2308,7 +2351,7 @@
     <value>labelGenre</value>
   </data>
   <data name="&gt;&gt;labelGenre.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelGenre.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2320,10 +2363,13 @@
     <value>Top</value>
   </data>
   <data name="comboBoxGenre.Location" type="System.Drawing.Point, System.Drawing">
-    <value>159, 300</value>
+    <value>185, 319</value>
+  </data>
+  <data name="comboBoxGenre.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="comboBoxGenre.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 21</value>
+    <value>173, 23</value>
   </data>
   <data name="comboBoxGenre.TabIndex" type="System.Int32, mscorlib">
     <value>36</value>
@@ -2332,7 +2378,7 @@
     <value>comboBoxGenre</value>
   </data>
   <data name="&gt;&gt;comboBoxGenre.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;comboBoxGenre.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2347,10 +2393,10 @@
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
   <data name="labelCountry.Location" type="System.Drawing.Point, System.Drawing">
-    <value>156, 244</value>
+    <value>181, 261</value>
   </data>
   <data name="labelCountry.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="labelCountry.Size" type="System.Drawing.Size, System.Drawing">
     <value>47, 13</value>
@@ -2368,7 +2414,7 @@
     <value>labelCountry</value>
   </data>
   <data name="&gt;&gt;labelCountry.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelCountry.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2380,10 +2426,13 @@
     <value>Top</value>
   </data>
   <data name="comboBoxCountry.Location" type="System.Drawing.Point, System.Drawing">
-    <value>159, 260</value>
+    <value>185, 277</value>
+  </data>
+  <data name="comboBoxCountry.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="comboBoxCountry.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 21</value>
+    <value>173, 23</value>
   </data>
   <data name="comboBoxCountry.TabIndex" type="System.Int32, mscorlib">
     <value>38</value>
@@ -2392,7 +2441,7 @@
     <value>comboBoxCountry</value>
   </data>
   <data name="&gt;&gt;comboBoxCountry.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;comboBoxCountry.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2410,13 +2459,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelSize.Location" type="System.Drawing.Point, System.Drawing">
-    <value>156, 29</value>
+    <value>181, 31</value>
   </data>
   <data name="labelSize.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="labelSize.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 13</value>
+    <value>181, 15</value>
   </data>
   <data name="labelSize.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2431,7 +2480,7 @@
     <value>labelSize</value>
   </data>
   <data name="&gt;&gt;labelSize.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelSize.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2446,10 +2495,10 @@
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
   <data name="labelCopyright.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 166</value>
+    <value>0, 177</value>
   </data>
   <data name="labelCopyright.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>0, 0, 4, 0</value>
   </data>
   <data name="labelCopyright.Size" type="System.Drawing.Size, System.Drawing">
     <value>60, 13</value>
@@ -2464,7 +2513,7 @@
     <value>labelCopyright</value>
   </data>
   <data name="&gt;&gt;labelCopyright.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelCopyright.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2476,10 +2525,13 @@
     <value>Top</value>
   </data>
   <data name="textBoxCopyright.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 182</value>
+    <value>4, 193</value>
+  </data>
+  <data name="textBoxCopyright.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="textBoxCopyright.Size" type="System.Drawing.Size, System.Drawing">
-    <value>306, 20</value>
+    <value>354, 23</value>
   </data>
   <data name="textBoxCopyright.TabIndex" type="System.Int32, mscorlib">
     <value>39</value>
@@ -2488,7 +2540,7 @@
     <value>textBoxCopyright</value>
   </data>
   <data name="&gt;&gt;textBoxCopyright.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textBoxCopyright.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2500,7 +2552,7 @@
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanelGameInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
+    <value>4, 19</value>
   </data>
   <data name="tableLayoutPanelGameInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -2509,7 +2561,7 @@
     <value>23</value>
   </data>
   <data name="tableLayoutPanelGameInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>312, 551</value>
+    <value>362, 640</value>
   </data>
   <data name="tableLayoutPanelGameInfo.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -2518,7 +2570,7 @@
     <value>tableLayoutPanelGameInfo</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelGameInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelGameInfo.Parent" xml:space="preserve">
     <value>groupBoxGameInfo</value>
@@ -2533,10 +2585,13 @@
     <value>Top</value>
   </data>
   <data name="textBoxName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 65</value>
+    <value>4, 67</value>
+  </data>
+  <data name="textBoxName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="textBoxName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>306, 20</value>
+    <value>354, 23</value>
   </data>
   <data name="textBoxName.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
@@ -2545,7 +2600,7 @@
     <value>textBoxName</value>
   </data>
   <data name="&gt;&gt;textBoxName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textBoxName.Parent" xml:space="preserve">
     <value>tableLayoutPanelGameInfo</value>
@@ -2557,10 +2612,13 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBoxArt.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
+    <value>4, 3</value>
+  </data>
+  <data name="pictureBoxArt.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="pictureBoxArt.Size" type="System.Drawing.Size, System.Drawing">
-    <value>230, 206</value>
+    <value>268, 237</value>
   </data>
   <data name="pictureBoxArt.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>Zoom</value>
@@ -2572,7 +2630,7 @@
     <value>pictureBoxArt</value>
   </data>
   <data name="&gt;&gt;pictureBoxArt.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;pictureBoxArt.Parent" xml:space="preserve">
     <value>panel2</value>
@@ -2587,13 +2645,13 @@
     <value>NoControl</value>
   </data>
   <data name="buttonBrowseImage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>158, 2</value>
+    <value>183, 2</value>
   </data>
   <data name="buttonBrowseImage.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="buttonBrowseImage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 30</value>
+    <value>178, 38</value>
   </data>
   <data name="buttonBrowseImage.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -2605,7 +2663,7 @@
     <value>buttonBrowseImage</value>
   </data>
   <data name="&gt;&gt;buttonBrowseImage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonBrowseImage.Parent" xml:space="preserve">
     <value>tableLayoutPanelArtButtons</value>
@@ -2620,13 +2678,13 @@
     <value>NoControl</value>
   </data>
   <data name="buttonGoogle.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 36</value>
+    <value>2, 44</value>
   </data>
   <data name="buttonGoogle.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="buttonGoogle.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 31</value>
+    <value>177, 38</value>
   </data>
   <data name="buttonGoogle.TabIndex" type="System.Int32, mscorlib">
     <value>22</value>
@@ -2638,7 +2696,7 @@
     <value>buttonGoogle</value>
   </data>
   <data name="&gt;&gt;buttonGoogle.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonGoogle.Parent" xml:space="preserve">
     <value>tableLayoutPanelArtButtons</value>
@@ -2659,7 +2717,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="buttonDefaultCover.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 30</value>
+    <value>177, 38</value>
   </data>
   <data name="buttonDefaultCover.TabIndex" type="System.Int32, mscorlib">
     <value>20</value>
@@ -2671,7 +2729,7 @@
     <value>buttonDefaultCover</value>
   </data>
   <data name="&gt;&gt;buttonDefaultCover.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonDefaultCover.Parent" xml:space="preserve">
     <value>tableLayoutPanelArtButtons</value>
@@ -2683,10 +2741,13 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBoxThumbnail.Location" type="System.Drawing.Point, System.Drawing">
-    <value>236, 147</value>
+    <value>275, 170</value>
+  </data>
+  <data name="pictureBoxThumbnail.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="pictureBoxThumbnail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>62, 62</value>
+    <value>72, 71</value>
   </data>
   <data name="pictureBoxThumbnail.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>CenterImage</value>
@@ -2698,7 +2759,7 @@
     <value>pictureBoxThumbnail</value>
   </data>
   <data name="&gt;&gt;pictureBoxThumbnail.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;pictureBoxThumbnail.Parent" xml:space="preserve">
     <value>panel2</value>
@@ -2713,13 +2774,13 @@
     <value>Fill</value>
   </data>
   <data name="buttonSpine.Location" type="System.Drawing.Point, System.Drawing">
-    <value>158, 36</value>
+    <value>183, 44</value>
   </data>
   <data name="buttonSpine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="buttonSpine.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 31</value>
+    <value>178, 38</value>
   </data>
   <data name="buttonSpine.TabIndex" type="System.Int32, mscorlib">
     <value>23</value>
@@ -2731,7 +2792,7 @@
     <value>buttonSpine</value>
   </data>
   <data name="&gt;&gt;buttonSpine.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonSpine.Parent" xml:space="preserve">
     <value>tableLayoutPanelArtButtons</value>
@@ -2743,7 +2804,7 @@
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanelArtButtons.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
+    <value>4, 19</value>
   </data>
   <data name="tableLayoutPanelArtButtons.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -2752,7 +2813,7 @@
     <value>2</value>
   </data>
   <data name="tableLayoutPanelArtButtons.Size" type="System.Drawing.Size, System.Drawing">
-    <value>313, 69</value>
+    <value>363, 84</value>
   </data>
   <data name="tableLayoutPanelArtButtons.TabIndex" type="System.Int32, mscorlib">
     <value>27</value>
@@ -2761,7 +2822,7 @@
     <value>tableLayoutPanelArtButtons</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelArtButtons.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelArtButtons.Parent" xml:space="preserve">
     <value>groupBoxButtons</value>
@@ -2770,13 +2831,16 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanelArtButtons.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="buttonGoogle" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="buttonBrowseImage" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="buttonDefaultCover" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="buttonSpine" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,50,Percent,50,Absolute,20,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="buttonGoogle" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="buttonBrowseImage" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="buttonDefaultCover" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="buttonSpine" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,50,Percent,50,Absolute,23,Absolute,23" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="pictureBoxM2Spine.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
+    <value>4, 3</value>
+  </data>
+  <data name="pictureBoxM2Spine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="pictureBoxM2Spine.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 216</value>
+    <value>35, 249</value>
   </data>
   <data name="pictureBoxM2Spine.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2785,7 +2849,7 @@
     <value>pictureBoxM2Spine</value>
   </data>
   <data name="&gt;&gt;pictureBoxM2Spine.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;pictureBoxM2Spine.Parent" xml:space="preserve">
     <value>panel3</value>
@@ -2794,10 +2858,13 @@
     <value>0</value>
   </data>
   <data name="pictureBoxM2Front.Location" type="System.Drawing.Point, System.Drawing">
-    <value>32, 3</value>
+    <value>37, 3</value>
+  </data>
+  <data name="pictureBoxM2Front.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="pictureBoxM2Front.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 216</value>
+    <value>177, 249</value>
   </data>
   <data name="pictureBoxM2Front.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2806,7 +2873,7 @@
     <value>pictureBoxM2Front</value>
   </data>
   <data name="&gt;&gt;pictureBoxM2Front.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;pictureBoxM2Front.Parent" xml:space="preserve">
     <value>panel3</value>
@@ -2938,7 +3005,7 @@
     <value>foldersContextMenuStrip</value>
   </data>
   <data name="&gt;&gt;foldersContextMenuStrip.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <metadata name="timerUpdate.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1034, 17</value>
@@ -2950,13 +3017,16 @@
     <value>Fill</value>
   </data>
   <data name="groupBoxButtons.Location" type="System.Drawing.Point, System.Drawing">
-    <value>651, 485</value>
+    <value>760, 559</value>
   </data>
   <data name="groupBoxButtons.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 2</value>
+    <value>4, 3, 4, 2</value>
+  </data>
+  <data name="groupBoxButtons.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="groupBoxButtons.Size" type="System.Drawing.Size, System.Drawing">
-    <value>319, 88</value>
+    <value>371, 106</value>
   </data>
   <data name="groupBoxButtons.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2965,7 +3035,7 @@
     <value>groupBoxButtons</value>
   </data>
   <data name="&gt;&gt;groupBoxButtons.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;groupBoxButtons.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -2977,13 +3047,16 @@
     <value>Fill</value>
   </data>
   <data name="groupBoxCurrentGamesCollection.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
+    <value>4, 3</value>
   </data>
   <data name="groupBoxCurrentGamesCollection.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 2</value>
+    <value>4, 3, 4, 2</value>
+  </data>
+  <data name="groupBoxCurrentGamesCollection.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="groupBoxCurrentGamesCollection.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 570</value>
+    <value>370, 662</value>
   </data>
   <data name="groupBoxCurrentGamesCollection.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -2995,7 +3068,7 @@
     <value>groupBoxCurrentGamesCollection</value>
   </data>
   <data name="&gt;&gt;groupBoxCurrentGamesCollection.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;groupBoxCurrentGamesCollection.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -3007,13 +3080,13 @@
     <value>Fill</value>
   </data>
   <data name="panel3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
+    <value>4, 19</value>
   </data>
   <data name="panel3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="panel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>313, 222</value>
+    <value>363, 257</value>
   </data>
   <data name="panel3.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -3022,7 +3095,7 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;panel3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;panel3.Parent" xml:space="preserve">
     <value>groupBoxArtSega</value>
@@ -3034,13 +3107,16 @@
     <value>Fill</value>
   </data>
   <data name="groupBoxArtSega.Location" type="System.Drawing.Point, System.Drawing">
-    <value>651, 239</value>
+    <value>760, 275</value>
   </data>
   <data name="groupBoxArtSega.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 2</value>
+    <value>4, 3, 4, 2</value>
+  </data>
+  <data name="groupBoxArtSega.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="groupBoxArtSega.Size" type="System.Drawing.Size, System.Drawing">
-    <value>319, 241</value>
+    <value>371, 279</value>
   </data>
   <data name="groupBoxArtSega.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -3052,7 +3128,7 @@
     <value>groupBoxArtSega</value>
   </data>
   <data name="&gt;&gt;groupBoxArtSega.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;groupBoxArtSega.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -3064,13 +3140,13 @@
     <value>Fill</value>
   </data>
   <data name="panel2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
+    <value>4, 19</value>
   </data>
   <data name="panel2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="panel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>313, 212</value>
+    <value>363, 245</value>
   </data>
   <data name="panel2.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -3079,7 +3155,7 @@
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;panel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;panel2.Parent" xml:space="preserve">
     <value>groupBoxArtNintendo</value>
@@ -3091,13 +3167,16 @@
     <value>Fill</value>
   </data>
   <data name="groupBoxArtNintendo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>651, 3</value>
+    <value>760, 3</value>
   </data>
   <data name="groupBoxArtNintendo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 2</value>
+    <value>4, 3, 4, 2</value>
+  </data>
+  <data name="groupBoxArtNintendo.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="groupBoxArtNintendo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>319, 231</value>
+    <value>371, 267</value>
   </data>
   <data name="groupBoxArtNintendo.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -3109,7 +3188,7 @@
     <value>groupBoxArtNintendo</value>
   </data>
   <data name="&gt;&gt;groupBoxArtNintendo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;groupBoxArtNintendo.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -3121,13 +3200,16 @@
     <value>Fill</value>
   </data>
   <data name="groupBoxGameInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>327, 3</value>
+    <value>382, 3</value>
   </data>
   <data name="groupBoxGameInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 2</value>
+    <value>4, 3, 4, 2</value>
+  </data>
+  <data name="groupBoxGameInfo.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="groupBoxGameInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 570</value>
+    <value>370, 662</value>
   </data>
   <data name="groupBoxGameInfo.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -3139,7 +3221,7 @@
     <value>groupBoxGameInfo</value>
   </data>
   <data name="&gt;&gt;groupBoxGameInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;groupBoxGameInfo.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -3160,7 +3242,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="toolStripStatusConnectionIcon.Size" type="System.Drawing.Size, System.Drawing">
-    <value>22, 23</value>
+    <value>26, 27</value>
   </data>
   <data name="toolStripStatusConnectionIcon.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>CenterImage</value>
@@ -3172,7 +3254,7 @@
     <value>toolStripStatusConnectionIcon</value>
   </data>
   <data name="&gt;&gt;toolStripStatusConnectionIcon.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripStatusConnectionIcon.Parent" xml:space="preserve">
     <value>tableLayoutPanelStatusBar</value>
@@ -3193,7 +3275,7 @@
     <value>1, 2, 1, 2</value>
   </data>
   <data name="toolStripStatusLabelShell.Size" type="System.Drawing.Size, System.Drawing">
-    <value>142, 19</value>
+    <value>166, 23</value>
   </data>
   <data name="toolStripStatusLabelShell.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3208,7 +3290,7 @@
     <value>toolStripStatusLabelShell</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabelShell.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabelShell.Parent" xml:space="preserve">
     <value>tableLayoutPanelStatusBarInner</value>
@@ -3220,13 +3302,13 @@
     <value>Fill</value>
   </data>
   <data name="toolStripStatusLabelSelected.Location" type="System.Drawing.Point, System.Drawing">
-    <value>145, 2</value>
+    <value>169, 2</value>
   </data>
   <data name="toolStripStatusLabelSelected.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 2, 1, 2</value>
   </data>
   <data name="toolStripStatusLabelSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 19</value>
+    <value>316, 23</value>
   </data>
   <data name="toolStripStatusLabelSelected.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -3238,7 +3320,7 @@
     <value>toolStripStatusLabelSelected</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabelSelected.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabelSelected.Parent" xml:space="preserve">
     <value>tableLayoutPanelStatusBarInner</value>
@@ -3250,13 +3332,13 @@
     <value>Fill</value>
   </data>
   <data name="toolStripStatusLabelSize.Location" type="System.Drawing.Point, System.Drawing">
-    <value>417, 2</value>
+    <value>487, 2</value>
   </data>
   <data name="toolStripStatusLabelSize.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 2, 1, 2</value>
   </data>
   <data name="toolStripStatusLabelSize.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 19</value>
+    <value>316, 23</value>
   </data>
   <data name="toolStripStatusLabelSize.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -3268,7 +3350,7 @@
     <value>toolStripStatusLabelSize</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabelSize.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabelSize.Parent" xml:space="preserve">
     <value>tableLayoutPanelStatusBarInner</value>
@@ -3280,13 +3362,13 @@
     <value>Fill</value>
   </data>
   <data name="toolStripProgressBar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>689, 2</value>
+    <value>805, 2</value>
   </data>
   <data name="toolStripProgressBar.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 2, 3, 2</value>
+    <value>1, 2, 4, 2</value>
   </data>
   <data name="toolStripProgressBar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 19</value>
+    <value>301, 23</value>
   </data>
   <data name="toolStripProgressBar.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -3295,7 +3377,7 @@
     <value>toolStripProgressBar</value>
   </data>
   <data name="&gt;&gt;toolStripProgressBar.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripProgressBar.Parent" xml:space="preserve">
     <value>tableLayoutPanelStatusBarInner</value>
@@ -3307,7 +3389,7 @@
     <value>Top</value>
   </data>
   <data name="tableLayoutPanelStatusBarInner.Location" type="System.Drawing.Point, System.Drawing">
-    <value>22, 1</value>
+    <value>26, 1</value>
   </data>
   <data name="tableLayoutPanelStatusBarInner.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -3316,7 +3398,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanelStatusBarInner.Size" type="System.Drawing.Size, System.Drawing">
-    <value>951, 23</value>
+    <value>1110, 27</value>
   </data>
   <data name="tableLayoutPanelStatusBarInner.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -3325,7 +3407,7 @@
     <value>tableLayoutPanelStatusBarInner</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelStatusBarInner.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelStatusBarInner.Parent" xml:space="preserve">
     <value>tableLayoutPanelStatusBar</value>
@@ -3334,13 +3416,13 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanelStatusBarInner.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="toolStripStatusLabelShell" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="toolStripStatusLabelSelected" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="toolStripStatusLabelSize" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="toolStripProgressBar" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,15.19232,Percent,28.65383,Percent,28.65383,Percent,27.50003" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="toolStripStatusLabelShell" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="toolStripStatusLabelSelected" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="toolStripStatusLabelSize" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="toolStripProgressBar" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,15,19232,Percent,28,65383,Percent,28,65383,Percent,27,50003" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tableLayoutPanelStatusBar.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanelStatusBar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 620</value>
+    <value>0, 719</value>
   </data>
   <data name="tableLayoutPanelStatusBar.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -3352,7 +3434,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanelStatusBar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>973, 24</value>
+    <value>1135, 28</value>
   </data>
   <data name="tableLayoutPanelStatusBar.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -3361,7 +3443,7 @@
     <value>tableLayoutPanelStatusBar</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelStatusBar.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelStatusBar.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -3370,7 +3452,7 @@
     <value>8</value>
   </data>
   <data name="tableLayoutPanelStatusBar.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="toolStripStatusConnectionIcon" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelStatusBarInner" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,22,AutoSize,0" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="toolStripStatusConnectionIcon" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelStatusBarInner" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,26,AutoSize,0" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tableLayoutPanelMain.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -3378,11 +3460,14 @@
   <data name="tableLayoutPanelMain.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 24</value>
   </data>
+  <data name="tableLayoutPanelMain.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
+  </data>
   <data name="tableLayoutPanelMain.RowCount" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
   <data name="tableLayoutPanelMain.Size" type="System.Drawing.Size, System.Drawing">
-    <value>973, 644</value>
+    <value>1135, 747</value>
   </data>
   <data name="tableLayoutPanelMain.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -3391,7 +3476,7 @@
     <value>tableLayoutPanelMain</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelMain.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelMain.Parent" xml:space="preserve">
     <value>$this</value>
@@ -3400,7 +3485,7 @@
     <value>2</value>
   </data>
   <data name="tableLayoutPanelMain.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="groupBoxButtons" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="groupBoxCurrentGamesCollection" Row="0" RowSpan="3" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="buttonStart" Row="3" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="groupBoxArtSega" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="buttonExport" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="groupBoxArtNintendo" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="buttonAddGames" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="groupBoxGameInfo" Row="0" RowSpan="3" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelStatusBar" Row="4" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,33.33332,Percent,33.33334,Percent,33.33335" /&gt;&lt;Rows Styles="Absolute,236,Absolute,246,Percent,100,Absolute,45,Absolute,24" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="groupBoxButtons" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="groupBoxCurrentGamesCollection" Row="0" RowSpan="3" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="buttonStart" Row="3" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="groupBoxArtSega" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="buttonExport" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="groupBoxArtNintendo" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="buttonAddGames" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="groupBoxGameInfo" Row="0" RowSpan="3" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelStatusBar" Row="4" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,33,33332,Percent,33,33334,Percent,33,33335" /&gt;&lt;Rows Styles="Absolute,272,Absolute,284,Percent,100,Absolute,52,Absolute,28" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="label1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -3430,7 +3515,7 @@
     <value>label1</value>
   </data>
   <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="label2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -3457,7 +3542,7 @@
     <value>label2</value>
   </data>
   <data name="&gt;&gt;label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="label3.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -3484,7 +3569,7 @@
     <value>label3</value>
   </data>
   <data name="&gt;&gt;label3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="progressBar1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -3505,22 +3590,25 @@
     <value>progressBar1</value>
   </data>
   <data name="&gt;&gt;progressBar1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>56</value>
+    <value>40</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
+    <value>7, 15</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>973, 668</value>
+    <value>1135, 771</value>
+  </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
   </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>989, 707</value>
+    <value>1151, 810</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>
@@ -3532,1110 +3620,1110 @@
     <value>fileToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;fileToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;addMoreGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>addMoreGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;addMoreGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;autodetectToolStripMenuItem.Name" xml:space="preserve">
     <value>autodetectToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;autodetectToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;asIsToolStripMenuItem.Name" xml:space="preserve">
     <value>asIsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;asIsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;addCustomAppToolStripMenuItem.Name" xml:space="preserve">
     <value>addCustomAppToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;addCustomAppToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;presetsToolStripMenuItem.Name" xml:space="preserve">
     <value>presetsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;presetsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem2.Name" xml:space="preserve">
     <value>toolStripMenuItem2</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;addPresetToolStripMenuItem.Name" xml:space="preserve">
     <value>addPresetToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;addPresetToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;deletePresetToolStripMenuItem.Name" xml:space="preserve">
     <value>deletePresetToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;deletePresetToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem13.Name" xml:space="preserve">
     <value>toolStripMenuItem13</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem13.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;exportGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>exportGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;exportGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;synchronizeToolStripMenuItem.Name" xml:space="preserve">
     <value>synchronizeToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;synchronizeToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;searchToolStripMenuItem.Name" xml:space="preserve">
     <value>searchToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;searchToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;reloadGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>reloadGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;reloadGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem12.Name" xml:space="preserve">
     <value>toolStripMenuItem12</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem12.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resetOriginalGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>resetOriginalGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;resetOriginalGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem1.Name" xml:space="preserve">
     <value>toolStripMenuItem1</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;exitToolStripMenuItem.Name" xml:space="preserve">
     <value>exitToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;exitToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;kernelToolStripMenuItem.Name" xml:space="preserve">
     <value>kernelToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;kernelToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;flashCustomKernelToolStripMenuItem.Name" xml:space="preserve">
     <value>flashCustomKernelToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;flashCustomKernelToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resetToolStripMenuItem.Name" xml:space="preserve">
     <value>resetToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;resetToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;uninstallToolStripMenuItem.Name" xml:space="preserve">
     <value>uninstallToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;uninstallToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem11.Name" xml:space="preserve">
     <value>toolStripMenuItem11</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem11.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;flashUbootToolStripMenuItem.Name" xml:space="preserve">
     <value>flashUbootToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;flashUbootToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;normalModeToolStripMenuItem.Name" xml:space="preserve">
     <value>normalModeToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;normalModeToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;sDModeToolStripMenuItem.Name" xml:space="preserve">
     <value>sDModeToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;sDModeToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;advancedToolStripMenuItem.Name" xml:space="preserve">
     <value>advancedToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;advancedToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;membootOriginalKernelToolStripMenuItem.Name" xml:space="preserve">
     <value>membootOriginalKernelToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;membootOriginalKernelToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;membootCustomKernelToolStripMenuItem.Name" xml:space="preserve">
     <value>membootCustomKernelToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;membootCustomKernelToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;membootRecoveryKernelToolStripMenuItem.Name" xml:space="preserve">
     <value>membootRecoveryKernelToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;membootRecoveryKernelToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem10.Name" xml:space="preserve">
     <value>toolStripMenuItem10</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem10.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;dumpOriginalKernellegacyToolStripMenuItem.Name" xml:space="preserve">
     <value>dumpOriginalKernellegacyToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;dumpOriginalKernellegacyToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem24.Name" xml:space="preserve">
     <value>toolStripMenuItem24</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem24.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;dumpTheWholeNANDToolStripMenuItem.Name" xml:space="preserve">
     <value>dumpTheWholeNANDToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;dumpTheWholeNANDToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolFlashTheWholeNANDStripMenuItem.Name" xml:space="preserve">
     <value>toolFlashTheWholeNANDStripMenuItem</value>
   </data>
   <data name="&gt;&gt;toolFlashTheWholeNANDStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;dumpNANDBToolStripMenuItem.Name" xml:space="preserve">
     <value>dumpNANDBToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;dumpNANDBToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;flashNANDBPartitionToolStripMenuItem.Name" xml:space="preserve">
     <value>flashNANDBPartitionToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;flashNANDBPartitionToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;dumpNANDCPartitionToolStripMenuItem.Name" xml:space="preserve">
     <value>dumpNANDCPartitionToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;dumpNANDCPartitionToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;flashNANDCPartitionToolStripMenuItem.Name" xml:space="preserve">
     <value>flashNANDCPartitionToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;flashNANDCPartitionToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;formatNANDCToolStripMenuItem.Name" xml:space="preserve">
     <value>formatNANDCToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;formatNANDCToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
     <value>toolStripSeparator1</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;factoryResetToolStripMenuItem.Name" xml:space="preserve">
     <value>factoryResetToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;factoryResetToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;modulesToolStripMenuItem.Name" xml:space="preserve">
     <value>modulesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;modulesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;installModulesToolStripMenuItem.Name" xml:space="preserve">
     <value>installModulesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;installModulesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;uninstallModulesToolStripMenuItem.Name" xml:space="preserve">
     <value>uninstallModulesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;uninstallModulesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;generateModulesReportToolStripMenuItem.Name" xml:space="preserve">
     <value>generateModulesReportToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;generateModulesReportToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;modRepoStartSeparator.Name" xml:space="preserve">
     <value>modRepoStartSeparator</value>
   </data>
   <data name="&gt;&gt;modRepoStartSeparator.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;modRepoEndSeparator.Name" xml:space="preserve">
     <value>modRepoEndSeparator</value>
   </data>
   <data name="&gt;&gt;modRepoEndSeparator.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;manageModRepositoriesToolStripMenuItem.Name" xml:space="preserve">
     <value>manageModRepositoriesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;manageModRepositoriesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;viewToolStripMenuItem.Name" xml:space="preserve">
     <value>viewToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;viewToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;originalGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>originalGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;originalGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;positionAtTheTopToolStripMenuItem.Name" xml:space="preserve">
     <value>positionAtTheTopToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;positionAtTheTopToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;positionAtTheBottomToolStripMenuItem.Name" xml:space="preserve">
     <value>positionAtTheBottomToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;positionAtTheBottomToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;positionSortedToolStripMenuItem.Name" xml:space="preserve">
     <value>positionSortedToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;positionSortedToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;positionHiddenToolStripMenuItem.Name" xml:space="preserve">
     <value>positionHiddenToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;positionHiddenToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;sortByToolStripMenuItem.Name" xml:space="preserve">
     <value>sortByToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;sortByToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;nameToolStripMenuItem.Name" xml:space="preserve">
     <value>nameToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;nameToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;coreToolStripMenuItem.Name" xml:space="preserve">
     <value>coreToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;coreToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;systemToolStripMenuItem.Name" xml:space="preserve">
     <value>systemToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;systemToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;regionToolStripMenuItem.Name" xml:space="preserve">
     <value>regionToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;regionToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;showGamesWithoutBoxArtToolStripMenuItem.Name" xml:space="preserve">
     <value>showGamesWithoutBoxArtToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;showGamesWithoutBoxArtToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;settingsToolStripMenuItem.Name" xml:space="preserve">
     <value>settingsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;settingsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;languageToolStripMenuItem.Name" xml:space="preserve">
     <value>languageToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;languageToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;segaUiThemeToolStripMenuItem.Name" xml:space="preserve">
     <value>segaUiThemeToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;segaUiThemeToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;autoToolStripMenuItem.Name" xml:space="preserve">
     <value>autoToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;autoToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;unitedStatesToolStripMenuItem.Name" xml:space="preserve">
     <value>unitedStatesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;unitedStatesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;europeToolStripMenuItem.Name" xml:space="preserve">
     <value>europeToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;europeToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;japanToolStripMenuItem.Name" xml:space="preserve">
     <value>japanToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;japanToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;sFROMToolToolStripMenuItem.Name" xml:space="preserve">
     <value>sFROMToolToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;sFROMToolToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;enableSFROMToolToolStripMenuItem.Name" xml:space="preserve">
     <value>enableSFROMToolToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;enableSFROMToolToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;usePCMPatchWhenAvailableToolStripMenuItem.Name" xml:space="preserve">
     <value>usePCMPatchWhenAvailableToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;usePCMPatchWhenAvailableToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;convertSNESROMSToSFROMToolStripMenuItem.Name" xml:space="preserve">
     <value>convertSNESROMSToSFROMToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;convertSNESROMSToSFROMToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;separateGamesStorageToolStripMenuItem.Name" xml:space="preserve">
     <value>separateGamesStorageToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;separateGamesStorageToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;compressGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>compressGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;compressGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;compressBoxArtToolStripMenuItem.Name" xml:space="preserve">
     <value>compressBoxArtToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;compressBoxArtToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;centerBoxArtThumbnailToolStripMenuItem.Name" xml:space="preserve">
     <value>centerBoxArtThumbnailToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;centerBoxArtThumbnailToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;disableHakchi2PopupsToolStripMenuItem.Name" xml:space="preserve">
     <value>disableHakchi2PopupsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;disableHakchi2PopupsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;enableInformationScrapeOnImportToolStripMenuItem.Name" xml:space="preserve">
     <value>enableInformationScrapeOnImportToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;enableInformationScrapeOnImportToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem25.Name" xml:space="preserve">
     <value>toolStripMenuItem25</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem25.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;developerToolsToolStripMenuItem.Name" xml:space="preserve">
     <value>developerToolsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;developerToolsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;devForceSshToolStripMenuItem.Name" xml:space="preserve">
     <value>devForceSshToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;devForceSshToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;uploadTotmpforTestingToolStripMenuItem.Name" xml:space="preserve">
     <value>uploadTotmpforTestingToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;uploadTotmpforTestingToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem23.Name" xml:space="preserve">
     <value>toolStripMenuItem23</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem23.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;forceNetworkMembootsToolStripMenuItem.Name" xml:space="preserve">
     <value>forceNetworkMembootsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;forceNetworkMembootsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;forceClovershellMembootsToolStripMenuItem.Name" xml:space="preserve">
     <value>forceClovershellMembootsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;forceClovershellMembootsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;downloadLatestHakchiToolStripMenuItem.Name" xml:space="preserve">
     <value>downloadLatestHakchiToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;downloadLatestHakchiToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;separateGamesForMultibootToolStripMenuItem.Name" xml:space="preserve">
     <value>separateGamesForMultibootToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;separateGamesForMultibootToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;alwaysCopyOriginalGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>alwaysCopyOriginalGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;alwaysCopyOriginalGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;useLinkedSyncToolStripMenuItem.Name" xml:space="preserve">
     <value>useLinkedSyncToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;useLinkedSyncToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem16.Name" xml:space="preserve">
     <value>toolStripMenuItem16</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem16.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cloverconHackToolStripMenuItem.Name" xml:space="preserve">
     <value>cloverconHackToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;cloverconHackToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resetUsingCombinationOfButtonsToolStripMenuItem.Name" xml:space="preserve">
     <value>resetUsingCombinationOfButtonsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;resetUsingCombinationOfButtonsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;selectButtonCombinationToolStripMenuItem.Name" xml:space="preserve">
     <value>selectButtonCombinationToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;selectButtonCombinationToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;enableAutofireToolStripMenuItem.Name" xml:space="preserve">
     <value>enableAutofireToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;enableAutofireToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;useXYOnClassicControllerAsAutofireABToolStripMenuItem.Name" xml:space="preserve">
     <value>useXYOnClassicControllerAsAutofireABToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;useXYOnClassicControllerAsAutofireABToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;upABStartOnSecondControllerToolStripMenuItem.Name" xml:space="preserve">
     <value>upABStartOnSecondControllerToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;upABStartOnSecondControllerToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;globalCommandLineArgumentsexpertsOnluToolStripMenuItem.Name" xml:space="preserve">
     <value>globalCommandLineArgumentsexpertsOnluToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;globalCommandLineArgumentsexpertsOnluToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;kachikachiToolStripMenuItem.Name" xml:space="preserve">
     <value>kachikachiToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;kachikachiToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;canoeToolStripMenuItem.Name" xml:space="preserve">
     <value>canoeToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;canoeToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;retroarchToolStripMenuItem.Name" xml:space="preserve">
     <value>retroarchToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;retroarchToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;epilepsyProtectionToolStripMenuItem.Name" xml:space="preserve">
     <value>epilepsyProtectionToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;epilepsyProtectionToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem5.Name" xml:space="preserve">
     <value>toolStripMenuItem5</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;saveSettingsToNESMiniNowToolStripMenuItem.Name" xml:space="preserve">
     <value>saveSettingsToNESMiniNowToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;saveSettingsToNESMiniNowToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolsToolStripMenuItem.Name" xml:space="preserve">
     <value>toolsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;toolsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;saveStateManagerToolStripMenuItem.Name" xml:space="preserve">
     <value>saveStateManagerToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;saveStateManagerToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;importGamesFromMiniToolStripMenuItem.Name" xml:space="preserve">
     <value>importGamesFromMiniToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;importGamesFromMiniToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;takeScreenshotToolStripMenuItem.Name" xml:space="preserve">
     <value>takeScreenshotToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;takeScreenshotToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;saveDmesgOutputToolStripMenuItem.Name" xml:space="preserve">
     <value>saveDmesgOutputToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;saveDmesgOutputToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem6.Name" xml:space="preserve">
     <value>toolStripMenuItem6</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem6.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;openFTPInExplorerToolStripMenuItem.Name" xml:space="preserve">
     <value>openFTPInExplorerToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;openFTPInExplorerToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;openTelnetToolStripMenuItem.Name" xml:space="preserve">
     <value>openTelnetToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;openTelnetToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem8.Name" xml:space="preserve">
     <value>toolStripMenuItem8</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;bootImageToolStripMenuItem.Name" xml:space="preserve">
     <value>bootImageToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;bootImageToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;changeBootImageToolStripMenuItem.Name" xml:space="preserve">
     <value>changeBootImageToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;changeBootImageToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;disableBootImageToolStripMenuItem.Name" xml:space="preserve">
     <value>disableBootImageToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;disableBootImageToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resetDefaultBootImageToolStripMenuItem.Name" xml:space="preserve">
     <value>resetDefaultBootImageToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;resetDefaultBootImageToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;rebootToolStripMenuItem.Name" xml:space="preserve">
     <value>rebootToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;rebootToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;switchRunningFirmwareToolStripMenuItem.Name" xml:space="preserve">
     <value>switchRunningFirmwareToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;switchRunningFirmwareToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;formatSDCardToolStripMenuItem.Name" xml:space="preserve">
     <value>formatSDCardToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;formatSDCardToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem18.Name" xml:space="preserve">
     <value>toolStripMenuItem18</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem18.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;prepareArtDirectoryToolStripMenuItem.Name" xml:space="preserve">
     <value>prepareArtDirectoryToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;prepareArtDirectoryToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;bluetoothToolStripMenuItem.Name" xml:space="preserve">
     <value>bluetoothToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;bluetoothToolStripMenuItem.Type" xml:space="preserve">
-    <value>com.clusterrr.hakchi_gui.Wireless.Bluetooth.BluetoothMenuItem, hakchi, Version=3.9.3.0, Culture=neutral, PublicKeyToken=null</value>
+    <value>com.clusterrr.hakchi_gui.Wireless.Bluetooth.BluetoothMenuItem, hakchi, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;helpToolStripMenuItem.Name" xml:space="preserve">
     <value>helpToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;helpToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;gitHubPageWithActualReleasesToolStripMenuItem.Name" xml:space="preserve">
     <value>gitHubPageWithActualReleasesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;gitHubPageWithActualReleasesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;joinOurDiscordServerToolStripMenuItem.Name" xml:space="preserve">
     <value>joinOurDiscordServerToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;joinOurDiscordServerToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;rRockinTheClassicsToolStripMenuItem.Name" xml:space="preserve">
     <value>rRockinTheClassicsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;rRockinTheClassicsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;donateToolStripMenuItem.Name" xml:space="preserve">
     <value>donateToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;donateToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;fAQToolStripMenuItem.Name" xml:space="preserve">
     <value>fAQToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;fAQToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem22.Name" xml:space="preserve">
     <value>toolStripMenuItem22</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem22.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;technicalInformationToolStripMenuItem.Name" xml:space="preserve">
     <value>technicalInformationToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;technicalInformationToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;messageOfTheDayToolStripMenuItem.Name" xml:space="preserve">
     <value>messageOfTheDayToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;messageOfTheDayToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;aboutToolStripMenuItem.Name" xml:space="preserve">
     <value>aboutToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;aboutToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;openFileDialogNes.Name" xml:space="preserve">
     <value>openFileDialogNes</value>
   </data>
   <data name="&gt;&gt;openFileDialogNes.Type" xml:space="preserve">
-    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;explorerToolStripMenuItem.Name" xml:space="preserve">
     <value>explorerToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;explorerToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
     <value>toolStripSeparator2</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;addPrefixToolStripMenuItem.Name" xml:space="preserve">
     <value>addPrefixToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;addPrefixToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;removePrefixToolStripMenuItem.Name" xml:space="preserve">
     <value>removePrefixToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;removePrefixToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem14.Name" xml:space="preserve">
     <value>toolStripMenuItem14</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem14.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;setRegionToolStripMenuItem.Name" xml:space="preserve">
     <value>setRegionToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;setRegionToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator3.Name" xml:space="preserve">
     <value>toolStripSeparator3</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;scrapeSelectedGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>scrapeSelectedGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;scrapeSelectedGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;scanForNewBoxArtForSelectedGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>scanForNewBoxArtForSelectedGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;scanForNewBoxArtForSelectedGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;downloadBoxArtForSelectedGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>downloadBoxArtForSelectedGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;downloadBoxArtForSelectedGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;deleteSelectedGamesBoxArtToolStripMenuItem.Name" xml:space="preserve">
     <value>deleteSelectedGamesBoxArtToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;deleteSelectedGamesBoxArtToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem15.Name" xml:space="preserve">
     <value>toolStripMenuItem15</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem15.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;archiveSelectedGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>archiveSelectedGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;archiveSelectedGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;compressSelectedGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>compressSelectedGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;compressSelectedGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;decompressSelectedGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>decompressSelectedGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;decompressSelectedGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;deleteSelectedGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>deleteSelectedGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;deleteSelectedGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem17.Name" xml:space="preserve">
     <value>toolStripMenuItem17</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem17.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;sFROMToolToolStripMenuItem1.Name" xml:space="preserve">
     <value>sFROMToolToolStripMenuItem1</value>
   </data>
   <data name="&gt;&gt;sFROMToolToolStripMenuItem1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;editROMHeaderToolStripMenuItem.Name" xml:space="preserve">
     <value>editROMHeaderToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;editROMHeaderToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem9.Name" xml:space="preserve">
     <value>toolStripMenuItem9</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem9.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resetROMHeaderToolStripMenuItem.Name" xml:space="preserve">
     <value>resetROMHeaderToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;resetROMHeaderToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;repairGamesToolStripMenuItem.Name" xml:space="preserve">
     <value>repairGamesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;repairGamesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem19.Name" xml:space="preserve">
     <value>toolStripMenuItem19</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem19.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;selectEmulationCoreToolStripMenuItem.Name" xml:space="preserve">
     <value>selectEmulationCoreToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;selectEmulationCoreToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;openFileDialogImage.Name" xml:space="preserve">
     <value>openFileDialogImage</value>
   </data>
   <data name="&gt;&gt;openFileDialogImage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;timerCalculateGames.Name" xml:space="preserve">
     <value>timerCalculateGames</value>
   </data>
   <data name="&gt;&gt;timerCalculateGames.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;timerConnectionCheck.Name" xml:space="preserve">
     <value>timerConnectionCheck</value>
   </data>
   <data name="&gt;&gt;timerConnectionCheck.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;saveDumpFileDialog.Name" xml:space="preserve">
     <value>saveDumpFileDialog</value>
   </data>
   <data name="&gt;&gt;saveDumpFileDialog.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SaveFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.SaveFileDialog, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;openDumpFileDialog.Name" xml:space="preserve">
     <value>openDumpFileDialog</value>
   </data>
   <data name="&gt;&gt;openDumpFileDialog.Type" xml:space="preserve">
-    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;gameName.Name" xml:space="preserve">
     <value>gameName</value>
   </data>
   <data name="&gt;&gt;gameName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;timerShowSelected.Name" xml:space="preserve">
     <value>timerShowSelected</value>
   </data>
   <data name="&gt;&gt;timerShowSelected.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;disablePagefoldersToolStripMenuItem.Name" xml:space="preserve">
     <value>disablePagefoldersToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;disablePagefoldersToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;customToolStripMenuItem.Name" xml:space="preserve">
     <value>customToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;customToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem3.Name" xml:space="preserve">
     <value>toolStripMenuItem3</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;automaticToolStripMenuItem.Name" xml:space="preserve">
     <value>automaticToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;automaticToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;automaticOriginalToolStripMenuItem.Name" xml:space="preserve">
     <value>automaticOriginalToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;automaticOriginalToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;pagesToolStripMenuItem.Name" xml:space="preserve">
     <value>pagesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;pagesToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;pagesOriginalToolStripMenuItem.Name" xml:space="preserve">
     <value>pagesOriginalToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;pagesOriginalToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;foldersToolStripMenuItem.Name" xml:space="preserve">
     <value>foldersToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;foldersToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;foldersOriginalToolStripMenuItem.Name" xml:space="preserve">
     <value>foldersOriginalToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;foldersOriginalToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;foldersSplitByFirstLetterToolStripMenuItem.Name" xml:space="preserve">
     <value>foldersSplitByFirstLetterToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;foldersSplitByFirstLetterToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;foldersSplitByFirstLetterOriginalToolStripMenuItem.Name" xml:space="preserve">
     <value>foldersSplitByFirstLetterOriginalToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;foldersSplitByFirstLetterOriginalToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem4.Name" xml:space="preserve">
     <value>toolStripMenuItem4</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;maximumGamesPerFolderToolStripMenuItem.Name" xml:space="preserve">
     <value>maximumGamesPerFolderToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;maximumGamesPerFolderToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;backFolderButtonPositionToolStripMenuItem.Name" xml:space="preserve">
     <value>backFolderButtonPositionToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;backFolderButtonPositionToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;leftmostToolStripMenuItem.Name" xml:space="preserve">
     <value>leftmostToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;leftmostToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;rightmostToolStripMenuItem.Name" xml:space="preserve">
     <value>rightmostToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;rightmostToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;folderImagesSetToolStripMenuItem.Name" xml:space="preserve">
     <value>folderImagesSetToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;folderImagesSetToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem20.Name" xml:space="preserve">
     <value>toolStripMenuItem20</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem20.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;syncStructureForAllGamesCollectionsToolStripMenuItem.Name" xml:space="preserve">
     <value>syncStructureForAllGamesCollectionsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;syncStructureForAllGamesCollectionsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;timerUpdate.Name" xml:space="preserve">
     <value>timerUpdate</value>
   </data>
   <data name="&gt;&gt;timerUpdate.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MainForm</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
