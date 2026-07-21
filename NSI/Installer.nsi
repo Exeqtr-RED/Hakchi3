@@ -3,18 +3,22 @@
 !include "FileFunc.nsh"
 
 ; Display Version
-!system '..\hakchi_gui\bin\Debug\net48\hakchi.exe --versionFormat "!define DisplayVersion {0}" --versionFile version.nsh'
+; ИСПРАВЛЕНИЕ 1: Изменен путь с Debug\net48 на Release\net8.0-windows
+!system '..\hakchi_gui\bin\Release\net8.0-windows\hakchi.exe --versionFormat "!define DisplayVersion {0}" --versionFile version.nsh'
 !include ".\version.nsh"
 !system 'del version.nsh'
 
 ; Create zip files
-!system '..\Zipper\bin\Release\Zipper.exe ..\hakchi_gui\bin\Debug\net48 ..\hakchi_gui\bin\hakchi2-ce-${DisplayVersion}-portable.zip'
+; ИСПРАВЛЕНИЕ 2: Изменен путь исходников. ИСПРАВЛЕНИЕ 3: Название архива hakchi3
+!system '..\Zipper\bin\Release\net48\Zipper.exe ..\hakchi_gui\bin\Release\net8.0-windows ..\hakchi_gui\bin\hakchi3-${DisplayVersion}-portable.zip'
+; ВНИМАНИЕ: Если ты мигрировал утилиту Zipper на .NET 8, поменяй в строке выше net48 на net8.0-windows
 
 ; The icon of the installer
 Icon "..\hakchi_gui\icon_app.ico"
 
 ; The file to write
-OutFile "..\hakchi_gui\bin\hakchi2-ce-${DisplayVersion}-installer.exe"
+; ИСПРАВЛЕНИЕ 4: Переименовано в hakchi3
+OutFile "..\hakchi_gui\bin\hakchi3-${DisplayVersion}-installer.exe"
 
 ; The default installation directory
 Var defaultInstDir
@@ -24,11 +28,12 @@ Var launchExe
 var launchArgs
 
 ; The name of the installer
-Name "Hakchi2 CE ${DisplayVersion}"
+; ИСПРАВЛЕНИЕ 5: Имя инсталлятора
+Name "Hakchi3 ${DisplayVersion}"
 
-; Registry key to check for directory (so if you install again, it will
-; overwrite the old one automatically)
-InstallDirRegKey HKLM "Software\Team Shinkansen\Hakchi2 CE" "Install_Dir"
+; Registry key to check for directory
+; ИСПРАВЛЕНИЕ 6: Сменил ветку реестра, чтобы Hakchi3 не конфликтовал с Hakchi2 CE на ПК пользователя
+InstallDirRegKey HKLM "Software\Hakchi3" "Install_Dir"
 
 ; Request application privileges for Windows Vista
 RequestExecutionLevel admin
@@ -59,7 +64,7 @@ UninstPage instfiles
 Section "" section_mutex
   ${GetOptions} $CMDLINE "-MUTEX=" $mutex
   ${If} $mutex != ""
-    DetailPrint "Waiting for Hakchi2 CE to exit"
+    DetailPrint "Waiting for Hakchi3 to exit"
     mutexCheck:
     System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "$mutex") i .R0'
     IntCmp $R0 0 notRunning
@@ -70,10 +75,11 @@ Section "" section_mutex
     notRunning:
 SectionEnd
 
-Section "Hakchi2 CE ${DisplayVersion} (required)" section_main
+Section "Hakchi3 ${DisplayVersion} (required)" section_main
   SectionIn RO
   SetOutPath $INSTDIR
-  File /r "..\hakchi_gui\bin\Debug\net48\*"
+  ; ИСПРАВЛЕНИЕ 7: Берем файлы для инсталлятора из новой папки .NET 8
+  File /r "..\hakchi_gui\bin\Release\net8.0-windows\*"
   AccessControl::GrantOnFile "$INSTDIR\" "(BU)" "GenericRead + GenericWrite"
 SectionEnd
 
@@ -88,33 +94,33 @@ Section "" section_install
   FileClose $9
 
   ; Write the installation path into the registry
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi2 CE" "InstallLocation" "$INSTDIR"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi3" "InstallLocation" "$INSTDIR"
 
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi2 CE" "DisplayName" "Hakchi2 CE"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi2 CE" "DisplayVersion" "${DisplayVersion}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi2 CE" "Publisher" "Team Shinkansen"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi2 CE" "URLInfoAbout" "https://github.com/TeamShinkansen/hakchi2"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi2 CE" "HelpLink" "https://github.com/TeamShinkansen/hakchi2"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi2 CE" "URLUpdateInfo" "https://github.com/TeamShinkansen/hakchi2/releases"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi2 CE" "UninstallString" '"$INSTDIR\uninstall.exe"'
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi2 CE" "DisplayIcon" '"$INSTDIR\hakchi.exe"'
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi2 CE" "NoModify" 1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi2 CE" "NoRepair" 1
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi3" "DisplayName" "Hakchi3"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi3" "DisplayVersion" "${DisplayVersion}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi3" "Publisher" "Exeqtr-RED"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi3" "URLInfoAbout" "https://github.com/Exeqtr-RED/Hakchi3"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi3" "HelpLink" "https://github.com/Exeqtr-RED/Hakchi3"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi3" "URLUpdateInfo" "https://github.com/Exeqtr-RED/Hakchi3/releases"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi3" "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi3" "DisplayIcon" '"$INSTDIR\hakchi.exe"'
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi3" "NoModify" 1
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi3" "NoRepair" 1
   WriteUninstaller "uninstall.exe"
 SectionEnd
 
 Section "Start Menu Shortcuts" section_startmenu
   SetShellVarContext all
-  CreateDirectory "$SMPROGRAMS\Team Shinkansen\Hakchi2 CE"
-  CreateShortcut "$SMPROGRAMS\Team Shinkansen\Hakchi2 CE\Hakchi2 CE.lnk" "$INSTDIR\hakchi.exe" "/nonportable" "$INSTDIR\hakchi.exe" 0
-  CreateShortcut "$SMPROGRAMS\Team Shinkansen\Hakchi2 CE\Hakchi2 CE (Debug).lnk" "$INSTDIR\hakchi.exe" "/nonportable /debug" "$INSTDIR\hakchi.exe" 0
-  CreateShortcut "$SMPROGRAMS\Team Shinkansen\Hakchi2 CE\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+  CreateDirectory "$SMPROGRAMS\Hakchi3"
+  CreateShortcut "$SMPROGRAMS\Hakchi3\Hakchi3.lnk" "$INSTDIR\hakchi.exe" "/nonportable" "$INSTDIR\hakchi.exe" 0
+  CreateShortcut "$SMPROGRAMS\Hakchi3\Hakchi3 (Debug).lnk" "$INSTDIR\hakchi.exe" "/nonportable /debug" "$INSTDIR\hakchi.exe" 0
+  CreateShortcut "$SMPROGRAMS\Hakchi3\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
 SectionEnd
 
 Section /o "Desktop Shortcut" section_desktop
   SetShellVarContext all
-  CreateShortcut "$DESKTOP\Hakchi2 CE.lnk" "$INSTDIR\hakchi.exe" "/nonportable" "$INSTDIR\hakchi.exe" 0
+  CreateShortcut "$DESKTOP\Hakchi3.lnk" "$INSTDIR\hakchi.exe" "/nonportable" "$INSTDIR\hakchi.exe" 0
 SectionEnd
 
 Section "" section_launch
@@ -132,14 +138,15 @@ Section "Uninstall"
   SetShellVarContext all
 
   ; Remove registry keys
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi2 CE"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hakchi3"
 
   ; Remove files and directories used
-  Delete "$DESKTOP\Hakchi2 CE.lnk"
-  RMDir /r "$SMPROGRAMS\Team Shinkansen\Hakchi2 CE"
-  RMDir "$SMPROGRAMS\Team Shinkansen"
+  Delete "$DESKTOP\Hakchi3.lnk"
+  RMDir /r "$SMPROGRAMS\Hakchi3"
+  RMDir "$SMPROGRAMS\Hakchi3"
 
-  !include "debug-uninstall.nsh"
+  ; ИСПРАВЛЕНИЕ 8: Подключаем файл, который реально генерирует vcxproj в релизе
+  !include "release-uninstall.nsh"
 
   Delete "$INSTDIR\nonportable.flag"
   Delete "$INSTDIR\uninstall.exe"
@@ -148,7 +155,7 @@ SectionEnd
 ;--------------------------------
 
 Function .onInit
-  StrCpy $defaultInstDir "$PROGRAMFILES\Team Shinkansen\Hakchi2 CE"
+  StrCpy $defaultInstDir "$PROGRAMFILES\Hakchi3"
   StrCpy $InstDir $defaultInstDir
   IntOp $0 ${SF_SELECTED} | ${SF_RO}
   SectionSetFlags ${section_main} $0
@@ -156,7 +163,8 @@ FunctionEnd
 
 Function .onSelChange
   ${If} ${SectionIsSelected} ${section_portable}
-    StrCpy $InstDir "$EXEDIR\hakchi2-ce-${DisplayVersion}"
+    ; ИСПРАВЛЕНИЕ 9: Обновлено название папки портативной версии
+    StrCpy $InstDir "$EXEDIR\hakchi3-${DisplayVersion}"
 
     !insertmacro UnselectSection ${section_install}
     !insertmacro UnselectSection ${section_startmenu}
