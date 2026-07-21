@@ -85,10 +85,10 @@ jobs:
           $zipPath = "${{ github.workspace }}\hakchi_gui\bin\hakchi3-${{ env.displayVersion }}-portable.zip"
           
           # Создаем временную папку
-          New-Item -ItemType Directory -Path $tempDir -Force
+          New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
           
-          # Копируем всё, КРОМЕ .pdb и .xml (робокопи очень быстрый)
-          robocopy $source $tempDir /E /XF *.pdb *.xml /NFL /NDL /NJH /NJS
+          # Копируем всё, КРОМЕ .pdb и .xml (нативный PowerShell)
+          Copy-Item -Path "$source\*" -Destination $tempDir -Recurse -Exclude *.pdb, *.xml
           
           # Архивируем чистую папку
           Compress-Archive -Path "$tempDir\*" -DestinationPath $zipPath -CompressionLevel Optimal
