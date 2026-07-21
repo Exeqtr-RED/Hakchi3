@@ -29,10 +29,16 @@ jobs:
         with:
           submodules: true
 
-      - name: Install NSIS
-        uses: repolevedavaj/install-nsis@v1.0.2
-        with:
-          nsis-version: '3.10'
+      # ========== ИЗМЕНЁН ТОЛЬКО ЭТОТ ШАГ ==========
+      - name: Install NSIS (Portable)
+        shell: pwsh
+        run: |
+          $url = "https://sourceforge.net/projects/nsis/files/NSIS%203/3.10/nsis-3.10.zip/download"
+          $zip = "$env:TEMP\nsis.zip"
+          Invoke-WebRequest -Uri $url -OutFile $zip
+          Expand-Archive -Path $zip -DestinationPath "C:\Program Files\NSIS" -Force
+          echo "C:\Program Files\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Append
+      # ============================================
 
       - name: Set up .NET 8 SDK
         uses: actions/setup-dotnet@v4
@@ -104,7 +110,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: sarisia/actions-status-discord@v1
-        if: always()
-        with:
-          webhook: ${{ secrets.DISCORD_WORKFLOW_STATUS_WEBHOOK }}
+      # - uses: sarisia/actions-status-discord@v1
+      #   if: always()
+      #   with:
+      #     webhook: ${{ secrets.DISCORD_WORKFLOW_STATUS_WEBHOOK }}
