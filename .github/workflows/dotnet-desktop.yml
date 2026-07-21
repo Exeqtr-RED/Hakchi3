@@ -80,9 +80,21 @@ jobs:
 
       - name: Create Portable ZIP
         run: |
-          $source = "${{ github.workspace }}\hakchi_gui\bin\Release\net8.0-windows\*"
+          $source = "${{ github.workspace }}\hakchi_gui\bin\Release\net8.0-windows"
+          $tempDir = "${{ github.workspace }}\temp_portable"
           $zipPath = "${{ github.workspace }}\hakchi_gui\bin\hakchi3-${{ env.displayVersion }}-portable.zip"
-          Compress-Archive -Path $source -DestinationPath $zipPath -CompressionLevel Optimal -Exclude *.pdb, *.xml
+          
+          # Создаем временную папку
+          New-Item -ItemType Directory -Path $tempDir -Force
+          
+          # Копируем всё, КРОМЕ .pdb и .xml (робокопи очень быстрый)
+          robocopy $source $tempDir /E /XF *.pdb *.xml /NFL /NDL /NJH /NJS
+          
+          # Архивируем чистую папку
+          Compress-Archive -Path "$tempDir\*" -DestinationPath $zipPath -CompressionLevel Optimal
+          
+          # Удаляем временную папку
+          Remove-Item -Path $tempDir -Recurse -Force
         shell: pwsh
 
       - name: Upload Artifacts (Portable)
