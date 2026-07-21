@@ -1,6 +1,6 @@
 Additional Icon Pack 2.22 for Hakchi/CE/NESC/SNESC 
 
-These icons are intended to supplement the excellent original pack by NeoRame, which can be found in Cluster's original Hakchi2, Team Shinkansen's Hakchi2CE, KMFDManic's Xtras folder, and NeoRame's repo here: https://github.com/NeoRame/hakchi2/tree/master/folder_images
+These icons are intended to supplement the excellent original pack by NeoRame, which can be found in Cluster's original Hakchi3, Team Shinkansen's Hakchi2CE, KMFDManic's Xtras folder, and NeoRame's repo here: https://github.com/NeoRame/hakchi2/tree/master/folder_images
 
 There are tons of great icon packs out there, but the styles vary widely. I like the default icon style; something about having pixel representations of the original consoles, not squared off or cropped to a standard aspect ratio, is a look I find very appealing. I like the way I’m able to quickly recognize the silhouettes of the consoles when scrolling through the folders, and they match well with the SNESC's UI.
 
@@ -127,7 +127,7 @@ Folder icons included:
 These are free to use for whatever, share them, modify them, etc., I'd just like to be credited.
 As before, these are just .png's so they'll probably work with Retropie and similar setups as well.
 
-Per u/princess_daphie the version 1 icon set is now being distributed with Hakchi CE default icons, and KMFDManic AKA u/MDFMKanic has included them with his core extras, which is super awesome! Hopefully the 2.0 set will be considered a worthy update. Thanks so much to them, everyone else in Team Shinkansen, Cluster M, The Other Guys, and everyone in the community on r/minisnesmods for being so friendly and helpful, and working tirelessly to make magic on these great mini consoles.
+Per u/princess_daphie the version 1 icon set is now being distributed with Hakchi 3 default icons, and KMFDManic AKA u/MDFMKanic has included them with his core extras, which is super awesome! Hopefully the 2.0 set will be considered a worthy update. Thanks so much to them, everyone else in Team Shinkansen, Cluster M, The Other Guys, and everyone in the community on r/minisnesmods for being so friendly and helpful, and working tirelessly to make magic on these great mini consoles.
 
 
 

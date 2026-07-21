@@ -815,7 +815,7 @@
     <value>Пропуск {0}</value>
   </data>
   <data name="DownloadSfromTool" xml:space="preserve">
-    <value>Для использования SFROM Tool с hakchi2 CE вам необходимо:
+    <value>Для использования SFROM Tool с hakchi3 вам необходимо:
 - Посетить сайт /u/DarkAkuma
 - Скачать последнюю версию его инструмента
 - Установить пакет в {0}\sfrom_tool
@@ -1360,7 +1360,7 @@ http://darkakuma.z-net.us/p/sfromtool.html</value>
   <data name="folderListCss" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\folderlist.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="Hakchi2CEGames0" xml:space="preserve">
+  <data name="Hakchi3Games0" xml:space="preserve">
     <value>Игры Hakchi2 CE - {0}</value>
   </data>
   <data name="HTMLFiles" xml:space="preserve">

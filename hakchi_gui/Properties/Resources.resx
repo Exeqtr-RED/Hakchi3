@@ -205,7 +205,7 @@
     <value>Press OK to continue.</value>
   </data>
   <data name="ReplaceKernelQ" xml:space="preserve">
-    <value>You already have the kernel dump. If you REALLY want to replace the backup of your kernel and you REALLY understand what you are doing, delete the "hakchi2/dump" folder manually.</value>
+    <value>You already have the kernel dump. If you REALLY want to replace the backup of your kernel and you REALLY understand what you are doing, delete the "hakchi3/dump" folder manually.</value>
   </data>
   <data name="SelectAtLeast" xml:space="preserve">
     <value>Select at least one game.</value>
@@ -241,7 +241,7 @@
     <value>If you like this app, you can donate to me. You can find my PayPal in the "About" box.</value>
   </data>
   <data name="FirstRun" xml:space="preserve">
-    <value>Hello there! I'm very glad that you are using hakchi2!
+    <value>Hello there! I'm very glad that you are using hakchi3!
 
 It's very simple to use. Just click "Add more games", select some ROMs, press "Synchronize" to upload games to the console internal memory, or press "Export" to use USB HOST mode, and follow the instructions. Good luck!</value>
   </data>
@@ -270,7 +270,7 @@ It's very simple to use. Just click "Add more games", select some ROMs, press "S
     <value>Uninstalling...</value>
   </data>
   <data name="UninstallQ1" xml:space="preserve">
-    <value>Do you really want to remove all traces of hakchi2 and return your mini to its original state?</value>
+    <value>Do you really want to remove all traces of hakchi3 and return your mini to its original state?</value>
   </data>
   <data name="UninstallQ2" xml:space="preserve">
     <value>Do you want to flash the original kernel now?</value>
@@ -815,7 +815,7 @@ This process cannot be undone!</value>
     <value>Skipping {0}</value>
   </data>
   <data name="DownloadSfromTool" xml:space="preserve">
-    <value>In order to use SFROM Tool with hakchi2 CE, you need to:
+    <value>In order to use SFROM Tool with hakchi3, you need to:
 - Visit /u/DarkAkuma's website
 - Download the latest version of his tool
 - Install the package in {0}\sfrom_tool
@@ -1071,7 +1071,7 @@ http://darkakuma.z-net.us/p/sfromtool.html</value>
     <value>Processing game {0}</value>
   </data>
   <data name="RepairSelectedGamesQ" xml:space="preserve">
-    <value>Are you sure you want to attempt repair selected games? (This could break some games, especially if there weren't imported by hakchi2. Only attempt on broken games.)</value>
+    <value>Are you sure you want to attempt repair selected games? (This could break some games, especially if there weren't imported by hakchi3. Only attempt on broken games.)</value>
   </data>
   <data name="RunningFoldersManager" xml:space="preserve">
     <value>Running folders manager...</value>
@@ -1261,7 +1261,7 @@ Continue?</value>
 
 You can wait some more and if it comes back online, you should see "Recovery mode" in the title bar. In that case, you can try the same action again, or use "Tools &gt; Reboot" to get back to normal operation.
 
-The most common reason for console taking too long to reboot is a Firewall, such as Windows Firewall, you can add an exception for hakchi2 ce to fix this issue.
+The most common reason for console taking too long to reboot is a Firewall, such as Windows Firewall, you can add an exception for hakchi3 to fix this issue.
 
 Other reasons may include VPNs blocking traffic to the local network and Windows failing to detect the RNDIS driver correctly.</value>
   </data>
@@ -1360,8 +1360,8 @@ Other reasons may include VPNs blocking traffic to the local network and Windows
   <data name="folderListCss" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\folderlist.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="Hakchi2CEGames0" xml:space="preserve">
-    <value>Hakchi2 CE Games - {0}</value>
+  <data name="Hakchi3Games0" xml:space="preserve">
+    <value>Hakchi3 Games - {0}</value>
   </data>
   <data name="HTMLFiles" xml:space="preserve">
     <value>HTML Files</value>

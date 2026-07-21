@@ -951,7 +951,7 @@ namespace com.clusterrr.hakchi_gui
             htmlNode.SetAttribute("lang", ConfigIni.Instance.Language);
             htmlNode.AppendChild(headNode);
             headNode.AppendChild(titleNode);
-            titleNode.AppendChild(xml.CreateTextNode(String.Format(Resources.Hakchi2CEGames0, title)));
+            titleNode.AppendChild(xml.CreateTextNode(String.Format(Resources.Hakchi3Games0, title)));
             headNode.AppendChild(styleNode);
             styleNode.AppendChild(xml.CreateTextNode(Resources.folderListCss));
             htmlNode.AppendChild(bodyNode);

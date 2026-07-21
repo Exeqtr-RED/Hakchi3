@@ -2449,9 +2449,9 @@ namespace com.clusterrr.hakchi_gui.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Hakchi2 CE Games - {0}.
         /// </summary>
-        internal static string Hakchi2CEGames0 {
+        internal static string Hakchi3Games0 {
             get {
-                return ResourceManager.GetString("Hakchi2CEGames0", resourceCulture);
+                return ResourceManager.GetString("Hakchi3Games0", resourceCulture);
             }
         }
         

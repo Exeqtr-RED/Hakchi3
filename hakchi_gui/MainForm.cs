@@ -432,7 +432,7 @@ namespace com.clusterrr.hakchi_gui
                 return;
             }
 
-            string title = $"hakchi CE v{Shared.AppDisplayVersion}";
+            string title = $"hakchi3 v{Shared.AppDisplayVersion}";
 
             if (Program.ConsoleVisible)
             {

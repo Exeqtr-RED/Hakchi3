@@ -564,7 +564,7 @@ Todos los datos se borrarán y el kernel original se actualizará.
   <data name="CannotInteract" xml:space="preserve">
     <value>Se requiere actualización de Hakchi</value>
   </data>
-  <data name="Hakchi2CEGames0" xml:space="preserve">
+  <data name="Hakchi3Games0" xml:space="preserve">
     <value>Juegos de Hakchi2 CE - {0}</value>
   </data>
   <data name="Hello" xml:space="preserve">

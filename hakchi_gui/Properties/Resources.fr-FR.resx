@@ -989,7 +989,7 @@ Les autres raisons incluent VPNs bloquant le traffic vers le réseau local, et W
   <data name="Welcome" xml:space="preserve">
     <value>Bienvenue</value>
   </data>
-  <data name="Hakchi2CEGames0" xml:space="preserve">
+  <data name="Hakchi3Games0" xml:space="preserve">
     <value>Hakchi2 CE Jeux - {0}</value>
   </data>
   <data name="HTMLFiles" xml:space="preserve">
