@@ -1,15 +1,14 @@
-name: Build and Release .NET Desktop App
+﻿name: Build and Release .NET Desktop App
 
 on:
   push:
     tags:
-      - '*'
+      - '*'          # Запуск при создании любого тега → автоматический релиз
     branches:
-      - '*'
+      - 'main'       # (опционально) можно оставить только main, чтобы не тратить ресурсы на каждую ветку
   pull_request:
     branches:
-      - '*'
-
+      - 'main'       # Проверка PR в main
   workflow_dispatch:
 
 permissions:
@@ -71,6 +70,13 @@ jobs:
           Add-Content -Path $ENV:GITHUB_ENV -Value "displayVersion=$version"
           Write-Output $version
 
+      - name: Create Portable ZIP
+        run: |
+          $source = "${{ github.workspace }}\hakchi_gui\bin\Debug\net8.0\"
+          $zipPath = "${{ github.workspace }}\hakchi_gui\bin\hakchi3-${{ env.displayVersion }}-portable.zip"
+          Compress-Archive -Path $source -DestinationPath $zipPath -CompressionLevel Optimal
+        shell: pwsh
+
       - name: Upload Artifacts (Portable)
         uses: actions/upload-artifact@v4
         with:
@@ -89,7 +95,7 @@ jobs:
         with:
           name: Hakchi3 v${{ env.displayVersion }}
           tag_name: ${{ github.ref_name }}
-          draft: true
+          draft: false          # ← теперь релиз публикуется сразу
           prerelease: false
           generate_release_notes: true
           files: |
