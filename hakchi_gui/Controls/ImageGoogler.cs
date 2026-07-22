@@ -14,20 +14,22 @@ namespace com.clusterrr.hakchi_gui.Controls
 {
     public partial class ImageGoogler : UserControl, IDisposable
     {
+        private const string SearchUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0 Safari/537.36";
+
         public struct SearchQuery
         {
             public string Query;
             public string AdditionalVariables;
         }
+
         public delegate void ImageReceived(Image image);
         public delegate void ImageDeselected();
         public event ImageReceived OnImageSelected;
         public event ImageReceived OnImageDoubleClicked;
         public event ImageDeselected OnImageDeselected;
         public List<SearchQuery> Queries { get; } = new List<SearchQuery>();
-
         private Thread searchThread;
-        private CancellationTokenSource searchCts; // Добавлено для .NET 8
+        private CancellationTokenSource searchCts;
         private List<string> downloadedUrls = new List<string>();
 
         public void Deselect()
@@ -45,7 +47,6 @@ namespace com.clusterrr.hakchi_gui.Controls
             listView.Items.Clear();
             downloadedUrls.Clear();
 
-            // ИСПРАВЛЕНО: Замена Thread.Abort() на CancellationToken
             searchCts?.Cancel();
             searchCts = new CancellationTokenSource();
             var token = searchCts.Token;
@@ -53,105 +54,187 @@ namespace com.clusterrr.hakchi_gui.Controls
             searchThread = new Thread(() =>
             {
                 foreach (var image in customResults)
+                {
+                    if (token.IsCancellationRequested) return;
                     ShowImage(image);
+                }
 
                 foreach (var query in Queries)
+                {
+                    if (token.IsCancellationRequested) return;
                     SearchThread(query.Query, query.AdditionalVariables, token);
+                }
             });
             searchThread.Start();
         }
 
         public static string[] GetImageUrls(string query, string additionalVariables = "", int tryCount = 0)
         {
+            if (tryCount > 0)
+                Trace.WriteLine($"Retry #{tryCount}");
+
+            var urls = new List<string>();
+
             try
             {
-                if (tryCount > 0)
-                {
-                    Trace.WriteLine($"Retry #{tryCount}");
-                }
-
-                // ИСПРАВЛЕНО: HttpUtility заменен на WebUtility
-                var url = string.Format("https://www.google.com/search?q={0}&source=lnms&tbm=isch{1}", WebUtility.UrlEncode(query), additionalVariables.Length > 0 ? $"&{additionalVariables}" : "");
-                Trace.WriteLine("Web request: " + url);
-
-                var request = WebRequest.Create(url);
-                request.Credentials = CredentialCache.DefaultCredentials;
-                (request as HttpWebRequest).UserAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/118 Safari/537.36";
-                request.Timeout = 10000;
-                var response = request.GetResponse();
-                Stream dataStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
-                string responseFromServer = reader.ReadToEnd();
-                reader.Close();
-                response.Close();
-
-                var urls = new List<string>();
-                string search = @"\""ou\""\:\""(?<url>.+?)\""";
-                MatchCollection matches = Regex.Matches(responseFromServer, search);
-                foreach (Match match in matches)
-                {
-                    // ИСПРАВЛЕНО: HttpUtility заменен на WebUtility
-                    urls.Add(WebUtility.UrlDecode(match.Groups[1].Value.Replace("\\u00", "%")));
-                }
-
-                search = @"imgurl=(.*?)&";
-                matches = Regex.Matches(responseFromServer, search);
-                foreach (Match match in matches)
-                {
-                    urls.Add(WebUtility.UrlDecode(match.Groups[1].Value.Replace("\\u00", "%")));
-                }
-
-                search = "\\]\\n?,\\[\"([^\"]+)\",\\d+,\\d+]";
-                matches = Regex.Matches(responseFromServer, search);
-                foreach (Match match in matches)
-                {
-                    if (Uri.IsWellFormedUriString(match.Groups[1].Value, UriKind.Absolute))
-                    {
-                        urls.Add(WebUtility.UrlDecode(match.Groups[1].Value.Replace("\\u00", "%")));
-                    }
-                }
-
-                matches = Regex.Matches(
-                    responseFromServer,
-                    @"\[""[^""]+gstatic[^\[]+\[""(https?:\/\/[^""]+)"", *\d+, *\d+]",
-                    RegexOptions.Multiline
-                );
-
-                foreach (Match m in matches)
-                {
-                    string urlFound = JsonSerializer.Deserialize<string>($"\"{m.Groups[1].Value}\"");
-
-                    if (!urls.Contains(urlFound))
-                    {
-                        urls.Add(urlFound);
-                    }
-                }
-
-                if (urls.Count == 0)
-                {
-                    Trace.WriteLine("No results found");
-                }
-
-                return urls.ToArray();
+                urls.AddRange(GetDuckDuckGoImageUrls(query));
+                Trace.WriteLine($"DuckDuckGo image results: {urls.Count}");
             }
             catch (Exception ex)
             {
-                if (tryCount < 5)
+                Trace.WriteLine("DuckDuckGo image search failed: " + ex.Message);
+                Trace.WriteLine(ex.InnerException?.Message);
+            }
+
+            if (urls.Count == 0)
+            {
+                try
                 {
-                    Trace.WriteLine(ex?.Message);
-                    Trace.WriteLine(ex?.InnerException?.Message);
-                    return GetImageUrls(query, additionalVariables, tryCount + 1);
+                    urls.AddRange(GetBingImageUrls(query, additionalVariables));
+                    Trace.WriteLine($"Bing image results: {urls.Count}");
                 }
-                else
+                catch (Exception ex)
                 {
-                    Trace.WriteLine(ex?.Message);
-                    Trace.WriteLine(ex?.InnerException?.Message);
-                    return new string[] { };
+                    Trace.WriteLine("Bing image search failed: " + ex.Message);
+                    Trace.WriteLine(ex.InnerException?.Message);
                 }
             }
+
+            if (urls.Count == 0 && tryCount < 2)
+                return GetImageUrls(query, additionalVariables, tryCount + 1);
+
+            if (urls.Count == 0)
+                Trace.WriteLine("No image results found");
+
+            return urls.ToArray();
         }
 
-        // ИСПРАВЛЕНО: Добавлен токен для остановки потока
+        private static string[] GetDuckDuckGoImageUrls(string query)
+        {
+            var cookies = new CookieContainer();
+            string encodedQuery = WebUtility.UrlEncode(query);
+            string searchPageUrl = $"https://duckduckgo.com/?q={encodedQuery}";
+            Trace.WriteLine("Web request: " + searchPageUrl);
+
+            string searchPage = DownloadText(searchPageUrl, cookies);
+            Match vqdMatch = Regex.Match(searchPage, @"vqd=[""'](?<vqd>[^""']+)", RegexOptions.IgnoreCase);
+            if (!vqdMatch.Success)
+                vqdMatch = Regex.Match(searchPage, @"vqd=(?<vqd>[0-9-]+)", RegexOptions.IgnoreCase);
+
+            if (!vqdMatch.Success)
+                throw new InvalidDataException("DuckDuckGo did not return an image-search token.");
+
+            string vqd = vqdMatch.Groups["vqd"].Value;
+            string imageSearchUrl = $"https://duckduckgo.com/i.js?l=us-en&o=json&q={encodedQuery}&vqd={WebUtility.UrlEncode(vqd)}&f=,,,&p=1";
+            Trace.WriteLine("Web request: " + imageSearchUrl);
+
+            string json = DownloadText(imageSearchUrl, cookies, searchPageUrl, true);
+            var urls = new List<string>();
+
+            using (JsonDocument document = JsonDocument.Parse(json))
+            {
+                JsonElement results;
+                if (!document.RootElement.TryGetProperty("results", out results) || results.ValueKind != JsonValueKind.Array)
+                    return urls.ToArray();
+
+                foreach (JsonElement result in results.EnumerateArray())
+                {
+                    JsonElement imageUrl;
+                    if (result.TryGetProperty("image", out imageUrl))
+                        AddImageUrl(urls, imageUrl.GetString());
+
+                    if (urls.Count >= 60)
+                        break;
+                }
+            }
+
+            return urls.ToArray();
+        }
+
+        private static string[] GetBingImageUrls(string query, string additionalVariables)
+        {
+            var cookies = new CookieContainer();
+            DownloadText("https://www.bing.com/", cookies);
+
+            string encodedQuery = WebUtility.UrlEncode(query);
+            string filter = "";
+            if (!string.IsNullOrEmpty(additionalVariables) && additionalVariables.IndexOf("ic:trans", StringComparison.OrdinalIgnoreCase) >= 0)
+                filter = "&qft=+filterui:photo-transparent";
+
+            string url = "https://www.bing.com/images/async" +
+                $"?q={encodedQuery}&first=1&count=35&cw=1177&ch=758&relp=35" +
+                "&tsc=ImageBasicHover&datsrc=I&layout=RowBased_Landscape&mmasync=1&SFX=1" +
+                "&cc=US&setlang=en-US&adlt=off" + filter;
+            Trace.WriteLine("Web request: " + url);
+
+            string html = DownloadText(url, cookies, "https://www.bing.com/", true);
+            var urls = new List<string>();
+            MatchCollection matches = Regex.Matches(
+                html,
+                @"\sm=""(?<metadata>\{&quot;.*?\})""",
+                RegexOptions.IgnoreCase | RegexOptions.Singleline
+            );
+
+            foreach (Match match in matches)
+            {
+                try
+                {
+                    string metadata = WebUtility.HtmlDecode(match.Groups["metadata"].Value);
+                    using (JsonDocument document = JsonDocument.Parse(metadata))
+                    {
+                        JsonElement imageUrl;
+                        if (document.RootElement.TryGetProperty("murl", out imageUrl))
+                            AddImageUrl(urls, imageUrl.GetString());
+                    }
+                }
+                catch (JsonException)
+                {
+                    // Ignore malformed metadata records
+                }
+            }
+
+            return urls.ToArray();
+        }
+
+        private static string DownloadText(string url, CookieContainer cookies, string referer = null, bool ajaxRequest = false)
+        {
+            var request = (HttpWebRequest)WebRequest.Create(url);
+            request.Credentials = CredentialCache.DefaultCredentials;
+            request.CookieContainer = cookies;
+            request.UserAgent = SearchUserAgent;
+            request.Accept = "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8";
+            request.Headers[HttpRequestHeader.AcceptLanguage] = "en-US,en;q=0.9";
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            request.Timeout = 15000;
+            request.ReadWriteTimeout = 15000;
+            request.KeepAlive = false;
+
+            if (!string.IsNullOrEmpty(referer))
+                request.Referer = referer;
+            if (ajaxRequest)
+                request.Headers["X-Requested-With"] = "XMLHttpRequest";
+
+            using (var response = (HttpWebResponse)request.GetResponse())
+            using (Stream dataStream = response.GetResponseStream())
+            using (var reader = new StreamReader(dataStream))
+                return reader.ReadToEnd();
+        }
+
+        private static void AddImageUrl(List<string> urls, string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+                return;
+
+            url = WebUtility.HtmlDecode(url.Trim());
+            Uri uri;
+            if (!Uri.TryCreate(url, UriKind.Absolute, out uri))
+                return;
+            if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
+                return;
+            if (!urls.Any(existing => string.Equals(existing, url, StringComparison.OrdinalIgnoreCase)))
+                urls.Add(url);
+        }
+
         private void SearchThread(string query, string additionalVariables, CancellationToken token)
         {
             try
@@ -159,7 +242,6 @@ namespace com.clusterrr.hakchi_gui.Controls
                 var urls = GetImageUrls(query, additionalVariables);
                 foreach (var url in urls)
                 {
-                    // Проверяем, не была ли запрошена отмена (новый поиск)
                     if (token.IsCancellationRequested) return;
 
                     try
@@ -172,10 +254,13 @@ namespace com.clusterrr.hakchi_gui.Controls
                             ShowImage(image);
                         }
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine("Unable to download image: " + ex.Message);
+                    }
                 }
             }
-            catch { } // Убран catch (ThreadAbortException), так как он больше не работает в .NET 8
+            catch (OperationCanceledException) { }
         }
 
         protected void ShowImage(Image image)
@@ -193,20 +278,25 @@ namespace com.clusterrr.hakchi_gui.Controls
                 int i = imageList.Images.Count;
                 const int side = 256;
                 var imageRect = new Bitmap(side, side, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                var gr = Graphics.FromImage(imageRect);
-                gr.Clear(Color.White);
-                if (image.Height > image.Width)
-                    gr.DrawImage(image, new Rectangle((side - side * image.Width / image.Height) / 2, 0, side * image.Width / image.Height, side),
-                        new Rectangle(0, 0, image.Width, image.Height), GraphicsUnit.Pixel);
-                else
-                    gr.DrawImage(image, new Rectangle(0, (side - side * image.Height / image.Width) / 2, side, side * image.Height / image.Width),
-                        new Rectangle(0, 0, image.Width, image.Height), GraphicsUnit.Pixel);
-                gr.Flush();
+                using (var gr = Graphics.FromImage(imageRect))
+                {
+                    gr.Clear(Color.White);
+                    if (image.Height > image.Width)
+                        gr.DrawImage(image, new Rectangle((side - side * image.Width / image.Height) / 2, 0, side * image.Width / image.Height, side),
+                            new Rectangle(0, 0, image.Width, image.Height), GraphicsUnit.Pixel);
+                    else
+                        gr.DrawImage(image, new Rectangle(0, (side - side * image.Height / image.Width) / 2, side, side * image.Height / image.Width),
+                            new Rectangle(0, 0, image.Width, image.Height), GraphicsUnit.Pixel);
+                    gr.Flush();
+                }
+
                 listView.BeginUpdate();
                 imageList.Images.Add(imageRect);
-                var item = new ListViewItem(image.Width + "x" + image.Height);
-                item.ImageIndex = i;
-                item.Tag = image;
+                var item = new ListViewItem(image.Width + "x" + image.Height)
+                {
+                    ImageIndex = i,
+                    Tag = image
+                };
                 listView.Items.Add(item);
                 listView.EndUpdate();
                 listView.Update();
@@ -216,18 +306,18 @@ namespace com.clusterrr.hakchi_gui.Controls
 
         public static Image DownloadImage(string url)
         {
-            var request = HttpWebRequest.Create(url);
+            var request = (HttpWebRequest)WebRequest.Create(url);
             request.Credentials = CredentialCache.DefaultCredentials;
-            request.Timeout = 5000;
-            ((HttpWebRequest)request).UserAgent =
-                "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.4) Gecko/20070515 Firefox/2.0.0.4";
-            ((HttpWebRequest)request).KeepAlive = false;
-            var response = (HttpWebResponse)request.GetResponse();
-            Stream dataStream = response.GetResponseStream();
-            var image = Image.FromStream(dataStream);
-            dataStream.Dispose();
-            response.Close();
-            return image;
+            request.Timeout = 10000;
+            request.ReadWriteTimeout = 10000;
+            request.UserAgent = SearchUserAgent;
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            request.KeepAlive = false;
+
+            using (var response = (HttpWebResponse)request.GetResponse())
+            using (Stream dataStream = response.GetResponseStream())
+            using (var downloadedImage = Image.FromStream(dataStream))
+                return new Bitmap(downloadedImage);
         }
 
         public ImageGoogler()
@@ -253,13 +343,9 @@ namespace com.clusterrr.hakchi_gui.Controls
         {
             Image selected;
             if ((selected = GetSelectedImage()) != null)
-            {
                 this.OnImageSelected?.Invoke(selected);
-            }
             else
-            {
                 this.OnImageDeselected?.Invoke();
-            }
         }
     }
 }
