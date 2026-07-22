@@ -247,8 +247,8 @@ namespace com.clusterrr.hakchi_gui
 
                         Trace.WriteLine("Starting, version: " + Shared.AppDisplayVersion);
 
-                        // ИСПРАВЛЕНО: Убрана установка протокола, .NET 8 использует SystemDefault по умолчанию
-                        // System.Net.ServicePointManager.SecurityProtocol = (System.Net.SecurityProtocolType)4080;
+                        // ИСПРАВЛЕНО: Принудительно указываем .NET 8 использовать TLS 1.2 и 1.3 для совместимости со старыми серверами Hakchi
+                        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls13;
 
                         // ИСПРАВЛЕНО: Добавлена поддержка высокого DPI для .NET 8
                         Application.SetHighDpiMode(HighDpiMode.SystemAware);
