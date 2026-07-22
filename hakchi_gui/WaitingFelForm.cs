@@ -11,24 +11,67 @@ namespace com.clusterrr.hakchi_gui
     public partial class WaitingFelForm : Form
     {
         bool deviceFound = false;
+
+        private static string GetPnPUtilPath()
+        {
+            string windowsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+
+            // Hakchi is currently built as a 32-bit process. On 64-bit Windows,
+            // System32 is redirected to SysWOW64, which may not contain pnputil.exe.
+            // Sysnative is the supported alias that lets a 32-bit process access
+            // the real 64-bit System32 directory.
+            if (Environment.Is64BitOperatingSystem && !Environment.Is64BitProcess)
+            {
+                string sysnativePath = Path.Combine(windowsDirectory, "Sysnative", "pnputil.exe");
+                if (File.Exists(sysnativePath))
+                    return sysnativePath;
+            }
+
+            string system32Path = Path.Combine(windowsDirectory, "System32", "pnputil.exe");
+            if (File.Exists(system32Path))
+                return system32Path;
+
+            // Preserve PATH lookup as a last resort. DriverInstalled catches a
+            // launch failure and returns false instead of crashing the workflow.
+            return "pnputil.exe";
+        }
+
         public static bool DriverInstalled()
         {
             if (!Shared.isWindows)
                 return true;
 
-            var proc = new Process
+            try
             {
-                StartInfo = new ProcessStartInfo
+                using (var proc = new Process
                 {
-                    FileName = "pnputil.exe",
-                    Arguments = "-e",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = GetPnPUtilPath(),
+                        Arguments = "/enum-drivers",
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        CreateNoWindow = true
+                    }
+                })
+                {
+                    proc.Start();
+                    string output = proc.StandardOutput.ReadToEnd();
+                    string error = proc.StandardError.ReadToEnd();
+                    proc.WaitForExit();
+
+                    if (!string.IsNullOrWhiteSpace(error))
+                        Trace.WriteLine("pnputil: " + error.Trim());
+
+                    return output.IndexOf("USB\\VID_1F3A&PID_EFE8", StringComparison.OrdinalIgnoreCase) >= 0;
                 }
-            };
-            proc.Start();
-            return proc.StandardOutput.ReadToEnd().Contains("USB\\VID_1F3A&PID_EFE8");
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("Unable to check whether the classic driver is installed: " + ex);
+                return false;
+            }
         }
 
         public static int InstallDriver()
@@ -187,5 +230,3 @@ namespace com.clusterrr.hakchi_gui
         }
     }
 }
-
-
