@@ -78,14 +78,42 @@ jobs:
           }
         shell: pwsh
 
-      - name: Find Installer EXE
-        run: |
-          Write-Host "Ищем установщик во всех папках проекта..."
-          Get-ChildItem -Path "${{ github.workspace }}" -Filter "*installer*.exe" -Recurse | Select-Object FullName
-          Write-Host "---"
-          Write-Host "Ищем ВСЕ .exe файлы в папке bin (на случай если имя другое)..."
-          Get-ChildItem -Path "${{ github.workspace }}\hakchi_gui\bin" -Filter "*.exe" -Recurse | Select-Object FullName
+      - name: Locate and Prepare Installer
         shell: pwsh
+        run: |
+          Write-Host "Searching for the generated installer..."
+          $installer = $null
+          
+          # Ищем в стандартных папках, куда MSBuild обычно складывает готовый инсталлятор
+          $searchPaths = @(
+            "${{ github.workspace }}\Installer\bin\Release",
+            "${{ github.workspace }}\Installer\bin\${{ env.buildConfiguration }}",
+            "${{ github.workspace }}\Installer\${{ env.buildConfiguration }}",
+            "${{ github.workspace }}\hakchi_gui\bin\Release"
+          )
+          
+          foreach ($path in $searchPaths) {
+            if (Test-Path $path) {
+              # Ищем любой .exe, КРОМЕ самого приложения (hakchi.exe) и деинсталлятора
+              $found = Get-ChildItem -Path $path -Filter "*.exe" | Where-Object { $_.Name -ne "hakchi.exe" -and $_.Name -notlike "uninst*" } | Select-Object -First 1
+              if ($found) {
+                $installer = $found.FullName
+                Write-Host "Found it here: $installer"
+                break
+              }
+            }
+          }
+          
+          if ($installer) {
+            # Копируем найденный файл и даем ему правильное имя для артефактов и релиза
+            $targetPath = "${{ github.workspace }}\hakchi_gui\bin\hakchi3-${{ env.displayVersion }}-installer.exe"
+            Copy-Item -Path $installer -Destination $targetPath -Force
+            Write-Host "Copied to required path: $targetPath"
+          } else {
+            Write-Error "COULD NOT FIND INSTALLER EXE! Below is a list of ALL .exe files in the workspace to help debug:"
+            Get-ChildItem -Path "${{ github.workspace }}" -Filter "*.exe" -Recurse | Select-Object FullName
+            exit 1
+          }
 
       - name: Create Portable ZIP
         run: |
