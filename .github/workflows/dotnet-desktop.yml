@@ -47,10 +47,6 @@ jobs:
       - name: Restore NuGet packages
         run: dotnet restore ${{ env.solution }}
 
-      - name: Build Main Application
-        run: dotnet build "hakchi_gui/hakchi_gui.csproj" --configuration ${{ env.buildConfiguration }} --no-restore
-        shell: pwsh
-
       - name: Prepare GamesDB API Key File
         run: |
           New-Item -ItemType Directory -Path "${{ github.workspace }}\hakchi_gui\ApiKeys" -Force
@@ -58,6 +54,9 @@ jobs:
           Set-Content -Path "${{ github.workspace }}\hakchi_gui\ApiKeys\TheGamesDB.txt" -Value $env:GamesDBApiKey -NoNewLine
         env:
           GamesDBApiKey: ${{ secrets.GAMESDB_API_KEY }}
+
+      - name: Build Installer Project
+        run: msbuild "Installer/Installer.vcxproj" /p:Configuration=${{ env.buildConfiguration }} /p:Platform="${{ env.buildPlatform }}" /p:SolutionDir="${{ github.workspace }}\" /p:SolutionPath="${{ github.workspace }}\${{ env.solution }}"
 
       - name: Run Hakchi Version Script
         run: |
@@ -79,8 +78,14 @@ jobs:
           }
         shell: pwsh
 
-      - name: Build Installer Project
-        run: msbuild "Installer/Installer.vcxproj" /p:Configuration=${{ env.buildConfiguration }} /p:Platform="${{ env.buildPlatform }}" /p:SolutionDir="${{ github.workspace }}\" /p:SolutionPath="${{ github.workspace }}\${{ env.solution }}"
+      - name: Find Installer EXE
+        run: |
+          Write-Host "Ищем установщик во всех папках проекта..."
+          Get-ChildItem -Path "${{ github.workspace }}" -Filter "*installer*.exe" -Recurse | Select-Object FullName
+          Write-Host "---"
+          Write-Host "Ищем ВСЕ .exe файлы в папке bin (на случай если имя другое)..."
+          Get-ChildItem -Path "${{ github.workspace }}\hakchi_gui\bin" -Filter "*.exe" -Recurse | Select-Object FullName
+        shell: pwsh
 
       - name: Create Portable ZIP
         run: |
