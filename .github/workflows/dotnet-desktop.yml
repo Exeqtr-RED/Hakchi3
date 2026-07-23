@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4 
         with:
           submodules: true
 
@@ -47,6 +47,10 @@ jobs:
       - name: Restore NuGet packages
         run: dotnet restore ${{ env.solution }}
 
+      - name: Build Main Application
+        run: dotnet build "hakchi_gui/hakchi_gui.csproj" --configuration ${{ env.buildConfiguration }} --no-restore
+        shell: pwsh
+
       - name: Prepare GamesDB API Key File
         run: |
           New-Item -ItemType Directory -Path "${{ github.workspace }}\hakchi_gui\ApiKeys" -Force
@@ -54,9 +58,6 @@ jobs:
           Set-Content -Path "${{ github.workspace }}\hakchi_gui\ApiKeys\TheGamesDB.txt" -Value $env:GamesDBApiKey -NoNewLine
         env:
           GamesDBApiKey: ${{ secrets.GAMESDB_API_KEY }}
-
-      - name: Build Installer Project
-        run: msbuild "Installer/Installer.vcxproj" /p:Configuration=${{ env.buildConfiguration }} /p:Platform="${{ env.buildPlatform }}" /p:SolutionDir="${{ github.workspace }}\" /p:SolutionPath="${{ github.workspace }}\${{ env.solution }}"
 
       - name: Run Hakchi Version Script
         run: |
@@ -78,22 +79,21 @@ jobs:
           }
         shell: pwsh
 
+      - name: Build Installer Project
+        run: msbuild "Installer/Installer.vcxproj" /p:Configuration=${{ env.buildConfiguration }} /p:Platform="${{ env.buildPlatform }}" /p:SolutionDir="${{ github.workspace }}\" /p:SolutionPath="${{ github.workspace }}\${{ env.solution }}"
+
       - name: Create Portable ZIP
         run: |
           $source = "${{ github.workspace }}\hakchi_gui\bin\Release\net8.0-windows"
           $tempDir = "${{ github.workspace }}\temp_portable"
           $zipPath = "${{ github.workspace }}\hakchi_gui\bin\hakchi3-${{ env.displayVersion }}-portable.zip"
           
-          # Создаем временную папку
           New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
           
-          # Копируем всё, КРОМЕ .pdb и .xml (нативный PowerShell)
           Copy-Item -Path "$source\*" -Destination $tempDir -Recurse -Exclude *.pdb, *.xml
           
-          # Архивируем чистую папку
           Compress-Archive -Path "$tempDir\*" -DestinationPath $zipPath -CompressionLevel Optimal
           
-          # Удаляем временную папку
           Remove-Item -Path $tempDir -Recurse -Force
         shell: pwsh
 
