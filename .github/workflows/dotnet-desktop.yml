@@ -63,7 +63,6 @@ jobs:
       - name: Build Main Application
         shell: pwsh
         run: |
-          # Устанавливаем SolutionDir, чтобы пост-билд скрипты hakchi_gui не падали с ошибкой *Undefined*
           $env:SolutionDir = "${{ github.workspace }}\"
           msbuild "hakchi_gui.sln" /p:Configuration=Release /target:hakchi_gui
 
@@ -73,18 +72,29 @@ jobs:
           & "NSI\nsi-helper\bin\Release\net8.0\nsi-helper.exe" $appPath "NSI\release-uninstall.nsh"
         shell: pwsh
 
-      - name: Build Installer via NSIS
+      - name: Build Installer via NSIS (Force x64)
         shell: pwsh
         run: |
-          # Задаем переменную, которую ожидает Installer.nsi
           $env:HAKCHI_PATH = "${{ github.workspace }}\hakchi_gui\bin\Release\net8.0-windows"
           
-          # Запускаем NSIS напрямую и жестко ждем завершения
-          $process = Start-Process -FilePath "makensis.exe" -ArgumentList "${{ github.workspace }}\NSI\Installer.nsi" -NoNewWindow -PassThru -Wait
+          # ЯВНО вызываем 64-битный компилятор NSIS, чтобы условие ${RunningX64} в Installer.nsi прошло успешно
+          $nsisX64 = "C:\Program Files (x86)\NSIS\makensis.exe"
+          
+          if (-not (Test-Path $nsisX64)) {
+              Write-Error "NSIS x64 not found!"
+              exit 1
+          }
+          
+          $process = Start-Process -FilePath $nsisX64 -ArgumentList "/V4", "${{ github.workspace }}\NSI\Installer.nsi" -NoNewWindow -PassThru -Wait
           
           if ($process.ExitCode -ne 0) {
-            Write-Error "NSIS failed to build installer!"
+            Write-Error "NSIS failed to build installer! Exit code: $($process.ExitCode)"
             exit $process.ExitCode
+          }
+          
+          if (-not (Test-Path "${{ github.workspace }}\NSI\Hakchi3.exe")) {
+            Write-Error "NSIS finished, but Hakchi3.exe was NOT created. Check the NSIS log above."
+            exit 1
           }
 
       - name: Run Hakchi Version Script
@@ -125,7 +135,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: hakchi3-${{ env.displayVersion }}-installer
-          # Твой NSI скрипт по умолчанию кладет файл в папку NSI!
           path: ${{ github.workspace }}\NSI\Hakchi3.exe
 
       - name: Create GitHub Release
@@ -137,8 +146,9 @@ jobs:
           draft: false          
           prerelease: false
           generate_release_notes: true
+          # Указываем точные пути, где лежат файлы прямо сейчас
           files: |
-            NSI/Hakchi3.exe
-            hakchi3-${{ env.displayVersion }}-portable.zip
+            ${{ github.workspace }}/NSI/Hakchi3.exe
+            ${{ github.workspace }}/hakchi3-${{ env.displayVersion }}-portable.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
