@@ -20,7 +20,6 @@ jobs:
 
     env:
       solution: 'hakchi_gui.sln'
-      buildPlatform: 'Any CPU'
       buildConfiguration: 'Release'
 
     steps:
@@ -55,13 +54,36 @@ jobs:
         env:
           GamesDBApiKey: ${{ secrets.GAMESDB_API_KEY }}
 
-      - name: Build Installer Project (Safe Execution)
+      - name: Build Helper Tools
+        run: |
+          msbuild "NSI\nsi-helper\nsi-helper.csproj" /p:Configuration=Release
+          msbuild "Zipper\Zipper.csproj" /p:Configuration=Release
+        shell: pwsh
+
+      - name: Build Main Application
         shell: pwsh
         run: |
-          $process = Start-Process -FilePath "msbuild.exe" -ArgumentList "`"Installer/Installer.vcxproj`"", "/p:Configuration=Release", "/p:Platform=`"Any CPU`"", "/p:SolutionDir=${{ github.workspace }}\", "/p:SolutionPath=${{ github.workspace }}\${{ env.solution }}" -NoNewWindow -PassThru -Wait
+          # Устанавливаем SolutionDir, чтобы пост-билд скрипты hakchi_gui не падали с ошибкой *Undefined*
+          $env:SolutionDir = "${{ github.workspace }}\"
+          msbuild "hakchi_gui.sln" /p:Configuration=Release /target:hakchi_gui
+
+      - name: Generate Uninstall Script
+        run: |
+          $appPath = "${{ github.workspace }}\hakchi_gui\bin\Release\net8.0-windows"
+          & "NSI\nsi-helper\bin\Release\net8.0\nsi-helper.exe" $appPath "NSI\release-uninstall.nsh"
+        shell: pwsh
+
+      - name: Build Installer via NSIS
+        shell: pwsh
+        run: |
+          # Задаем переменную, которую ожидает Installer.nsi
+          $env:HAKCHI_PATH = "${{ github.workspace }}\hakchi_gui\bin\Release\net8.0-windows"
+          
+          # Запускаем NSIS напрямую и жестко ждем завершения
+          $process = Start-Process -FilePath "makensis.exe" -ArgumentList "${{ github.workspace }}\NSI\Installer.nsi" -NoNewWindow -PassThru -Wait
           
           if ($process.ExitCode -ne 0) {
-            Write-Error "MSBuild failed with exit code $($process.ExitCode)"
+            Write-Error "NSIS failed to build installer!"
             exit $process.ExitCode
           }
 
@@ -70,68 +92,26 @@ jobs:
           $exePath = "${{ github.workspace }}\hakchi_gui\bin\Release\net8.0-windows\hakchi.exe"
           $versionPath = "${{ github.workspace }}\displayVersion.txt"
           
-          if (-not (Test-Path $exePath)) { Write-Error "hakchi.exe not found at $exePath"; exit 1 }
-          
-          Start-Process -FilePath $exePath -ArgumentList @("--versionFormat", "{0}", "--versionFile", $versionPath) -Wait -NoNewWindow
+          Start-Process -FilePath $exePath -ArgumentList "--versionFormat", "{0}", "--versionFile", $versionPath -Wait -NoNewWindow
           
           if (Test-Path $versionPath) {
             $version = (Get-Content -Path $versionPath).Trim()
             Remove-Item -Path $versionPath
             Add-Content -Path $ENV:GITHUB_ENV -Value "displayVersion=$version"
-            Write-Output "Detected version: $version"
           } else {
-            Write-Error "Failed to generate displayVersion.txt"
-            exit 1
+            Add-Content -Path $ENV:GITHUB_ENV -Value "displayVersion=0.0.0-unknown"
           }
         shell: pwsh
-
-      - name: Locate and Prepare Installer
-        shell: pwsh
-        run: |
-          Write-Host "Searching for the generated installer..."
-          $installer = $null
-          
-          $searchPaths = @(
-            "${{ github.workspace }}\Release",
-            "${{ github.workspace }}\Installer\bin\Release",
-            "${{ github.workspace }}\Installer\bin\${{ env.buildConfiguration }}",
-            "${{ github.workspace }}\Installer\${{ env.buildConfiguration }}",
-            "${{ github.workspace }}\hakchi_gui\bin\Release"
-          )
-          
-          foreach ($path in $searchPaths) {
-            if (Test-Path $path) {
-              $found = Get-ChildItem -Path $path -Filter "*.exe" | Where-Object { $_.Name -ne "hakchi.exe" -and $_.Name -notlike "uninst*" -and $_.Name -notlike "nsi-helper*" -and $_.Name -notlike "Zipper*" } | Select-Object -First 1
-              if ($found) {
-                $installer = $found.FullName
-                Write-Host "Found it here: $installer"
-                break
-              }
-            }
-          }
-          
-          if ($installer) {
-            $targetPath = "${{ github.workspace }}\hakchi_gui\bin\hakchi3-${{ env.displayVersion }}-installer.exe"
-            Copy-Item -Path $installer -Destination $targetPath -Force
-            Write-Host "Copied to required path: $targetPath"
-          } else {
-            Write-Error "COULD NOT FIND INSTALLER EXE! Below is a list of ALL .exe files in the workspace to help debug:"
-            Get-ChildItem -Path "${{ github.workspace }}" -Filter "*.exe" -Recurse | Select-Object FullName
-            exit 1
-          }
 
       - name: Create Portable ZIP
         run: |
           $source = "${{ github.workspace }}\hakchi_gui\bin\Release\net8.0-windows"
           $tempDir = "${{ github.workspace }}\temp_portable"
-          $zipPath = "${{ github.workspace }}\hakchi_gui\bin\hakchi3-${{ env.displayVersion }}-portable.zip"
+          $zipPath = "${{ github.workspace }}\hakchi3-${{ env.displayVersion }}-portable.zip"
           
           New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
-          
           Copy-Item -Path "$source\*" -Destination $tempDir -Recurse -Exclude *.pdb, *.xml
-          
           Compress-Archive -Path "$tempDir\*" -DestinationPath $zipPath -CompressionLevel Optimal
-          
           Remove-Item -Path $tempDir -Recurse -Force
         shell: pwsh
 
@@ -139,13 +119,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: hakchi3-${{ env.displayVersion }}-portable
-          path: ${{ github.workspace }}\hakchi_gui\bin\hakchi3-${{ env.displayVersion }}-portable.zip
+          path: ${{ github.workspace }}\hakchi3-${{ env.displayVersion }}-portable.zip
 
       - name: Upload Artifacts (Installer)
         uses: actions/upload-artifact@v4
         with:
           name: hakchi3-${{ env.displayVersion }}-installer
-          path: ${{ github.workspace }}\hakchi_gui\bin\hakchi3-${{ env.displayVersion }}-installer.exe
+          # Твой NSI скрипт по умолчанию кладет файл в папку NSI!
+          path: ${{ github.workspace }}\NSI\Hakchi3.exe
 
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
@@ -157,7 +138,7 @@ jobs:
           prerelease: false
           generate_release_notes: true
           files: |
-            hakchi_gui/bin/hakchi3-${{ env.displayVersion }}-installer.exe
-            hakchi_gui/bin/hakchi3-${{ env.displayVersion }}-portable.zip
+            NSI/Hakchi3.exe
+            hakchi3-${{ env.displayVersion }}-portable.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
