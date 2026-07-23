@@ -77,24 +77,13 @@ jobs:
         run: |
           $env:HAKCHI_PATH = "${{ github.workspace }}\hakchi_gui\bin\Release\net8.0-windows"
           
-          # ЯВНО вызываем 64-битный компилятор NSIS, чтобы условие ${RunningX64} в Installer.nsi прошло успешно
+          # Явно вызываем 64-битный компилятор NSIS
           $nsisX64 = "C:\Program Files (x86)\NSIS\makensis.exe"
-          
-          if (-not (Test-Path $nsisX64)) {
-              Write-Error "NSIS x64 not found!"
-              exit 1
-          }
-          
           $process = Start-Process -FilePath $nsisX64 -ArgumentList "/V4", "${{ github.workspace }}\NSI\Installer.nsi" -NoNewWindow -PassThru -Wait
           
           if ($process.ExitCode -ne 0) {
-            Write-Error "NSIS failed to build installer! Exit code: $($process.ExitCode)"
+            Write-Error "NSIS failed! Exit code: $($process.ExitCode)"
             exit $process.ExitCode
-          }
-          
-          if (-not (Test-Path "${{ github.workspace }}\NSI\Hakchi3.exe")) {
-            Write-Error "NSIS finished, but Hakchi3.exe was NOT created. Check the NSIS log above."
-            exit 1
           }
 
       - name: Run Hakchi Version Script
@@ -135,7 +124,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: hakchi3-${{ env.displayVersion }}-installer
-          path: ${{ github.workspace }}\NSI\Hakchi3.exe
+          # Берем файл ровно оттуда, куда его положил NSIS в логах
+          path: ${{ github.workspace }}\hakchi_gui\bin\hakchi3-${{ env.displayVersion }}-installer.exe
 
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
@@ -146,9 +136,8 @@ jobs:
           draft: false          
           prerelease: false
           generate_release_notes: true
-          # Указываем точные пути, где лежат файлы прямо сейчас
           files: |
-            ${{ github.workspace }}/NSI/Hakchi3.exe
-            ${{ github.workspace }}/hakchi3-${{ env.displayVersion }}-portable.zip
+            hakchi_gui/bin/hakchi3-${{ env.displayVersion }}-installer.exe
+            hakchi3-${{ env.displayVersion }}-portable.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
