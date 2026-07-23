@@ -10,7 +10,7 @@
 
 ; Create zip files
 ; ИСПРАВЛЕНИЕ 2: Изменен путь исходников. ИСПРАВЛЕНИЕ 3: Название архива hakchi3
-!system '..\Zipper\bin\Release\net48\Zipper.exe ..\hakchi_gui\bin\Release\net8.0-windows ..\hakchi_gui\bin\hakchi3-${DisplayVersion}-portable.zip'
+!system '..\Zipper\bin\Release\net8.0-windows\Zipper.exe ..\hakchi_gui\bin\Release\net8.0-windows ..\hakchi_gui\bin\hakchi3-${DisplayVersion}-portable.zip'
 ; ВНИМАНИЕ: Если ты мигрировал утилиту Zipper на .NET 8, поменяй в строке выше net48 на net8.0-windows
 
 ; The icon of the installer
