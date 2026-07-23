@@ -55,8 +55,18 @@ jobs:
         env:
           GamesDBApiKey: ${{ secrets.GAMESDB_API_KEY }}
 
-      - name: Build Installer Project
-        run: msbuild "Installer/Installer.vcxproj" /p:Configuration=${{ env.buildConfiguration }} /p:Platform="${{ env.buildPlatform }}" /p:SolutionDir="${{ github.workspace }}\" /p:SolutionPath="${{ github.workspace }}\${{ env.solution }}"
+      - name: Build Installer Project (Safe Execution)
+        shell: pwsh
+        run: |
+          # Запускаем MSBuild, но перехватываем процесс, чтобы CI не оторвался от него
+          $process = Start-Process -FilePath "msbuild.exe" `
+            -ArgumentList "Installer/Installer.vcxproj", "/p:Configuration=Release", "/p:Platform=Any CPU", "/p:SolutionDir=${{ github.workspace }}\", "/p:SolutionPath=${{ github.workspace }}\${{ env.solution }}" `
+            -NoNewWindow -PassThru -Wait
+          
+          if ($process.ExitCode -ne 0) {
+            Write-Error "MSBuild failed with exit code $($process.ExitCode)"
+            exit $process.ExitCode
+          }
 
       - name: Run Hakchi Version Script
         run: |
@@ -84,8 +94,8 @@ jobs:
           Write-Host "Searching for the generated installer..."
           $installer = $null
           
-          # Ищем в стандартных папках, куда MSBuild обычно складывает готовый инсталлятор
           $searchPaths = @(
+            "${{ github.workspace }}\Release",
             "${{ github.workspace }}\Installer\bin\Release",
             "${{ github.workspace }}\Installer\bin\${{ env.buildConfiguration }}",
             "${{ github.workspace }}\Installer\${{ env.buildConfiguration }}",
@@ -94,8 +104,7 @@ jobs:
           
           foreach ($path in $searchPaths) {
             if (Test-Path $path) {
-              # Ищем любой .exe, КРОМЕ самого приложения (hakchi.exe) и деинсталлятора
-              $found = Get-ChildItem -Path $path -Filter "*.exe" | Where-Object { $_.Name -ne "hakchi.exe" -and $_.Name -notlike "uninst*" } | Select-Object -First 1
+              $found = Get-ChildItem -Path $path -Filter "*.exe" | Where-Object { $_.Name -ne "hakchi.exe" -and $_.Name -notlike "uninst*" -and $_.Name -notlike "nsi-helper*" -and $_.Name -notlike "Zipper*" } | Select-Object -First 1
               if ($found) {
                 $installer = $found.FullName
                 Write-Host "Found it here: $installer"
@@ -105,7 +114,6 @@ jobs:
           }
           
           if ($installer) {
-            # Копируем найденный файл и даем ему правильное имя для артефактов и релиза
             $targetPath = "${{ github.workspace }}\hakchi_gui\bin\hakchi3-${{ env.displayVersion }}-installer.exe"
             Copy-Item -Path $installer -Destination $targetPath -Force
             Write-Host "Copied to required path: $targetPath"
