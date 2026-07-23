@@ -5,7 +5,7 @@ namespace com.clusterrr.hakchi_gui
 {
     class HakchiWebClient : WebClient
     {
-        public static readonly string UserAgent = $"Hakchi3/{Shared.AppVersion.ToString()} (https://github.com/Exeqtr-RED/Hakchi2-CE-RU/tree/net8-migration)";
+        public static readonly string UserAgent = $"Hakchi3/{Shared.AppVersion.ToString()} (https://github.com/Exeqtr-RED/Hakchi3)";
         public string Method
         {
             get;

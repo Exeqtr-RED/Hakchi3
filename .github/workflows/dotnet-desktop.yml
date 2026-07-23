@@ -20,6 +20,8 @@ jobs:
 
     env:
       solution: 'hakchi_gui.sln'
+      # Добавил для теста. Удалить потом
+      buildPlatform: 'x64'
       buildConfiguration: 'Release'
 
     steps:

@@ -49,12 +49,12 @@
 			BoneSoft software for ProgressODoom.
 			Gert Driesen for SSH.NET.
 		</Description>
-		<Title>hakchi 3 RU</Title>
-		<Version>0.0.1</Version>
+		<Title>Hakchi3</Title>
+		<Version>0.1.9</Version>
 		<Authors>Exeqtr-RED</Authors>
 		<Company>Exeqtr-RED</Company>
 		<Copyright>Copyright © 2026</Copyright>
-		<RepositoryUrl>https://github.com/Exeqtr-RED/Hakchi2-CE-RU/tree/net8-migration</RepositoryUrl>
+		<RepositoryUrl>https://github.com/Exeqtr-RED/Hakchi3</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<CleanDependsOn>$(CleanDependsOn); CustomAfterClean </CleanDependsOn>

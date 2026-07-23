@@ -1,10 +1,10 @@
-# hakchi2 CE
+# hakchi3
 
 This is a fork of hakchi2 (by ClusterM) by princess_daphie, DanTheMan827, and skogaby. The aim of this fork is to not only provide new UI features and enhancements, but also bring the core of hakchi2 up to date with the rest of the modding ecosystem (i.e. USB host support, SD support).
 
 This application can add more games (game ROMs) to your NES/SNES Classic Mini or Famicom Mini. All you need is to connect it to a Windows PC via Micro-USB cable. No soldering or disassembling required.
 
-https://github.com/TeamShinkansen/hakchi2
+https://github.com/Exeqtr-RED/Hakchi3
 
 ### Features
 * Change any game settings (including command-line arguments)
