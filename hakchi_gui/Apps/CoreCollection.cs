@@ -109,22 +109,23 @@ namespace com.clusterrr.hakchi_gui
 
             // list base info files present in "libretro_cores.tgz"
             cores = new Dictionary<string, CoreInfo>();
-            using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(Shared.PathCombine(Program.BaseDirectoryInternal, "data", "libretro_cores.tar")))
-            using (var reader = extractor.ExtractAllEntries())
+            using (var archive = SharpCompress.Archives.Tar.TarArchive.OpenArchive(Shared.PathCombine(Program.BaseDirectoryInternal, "data", "libretro_cores.tar")))
             {
-                while (reader.MoveToNextEntry())
+                foreach (var entry in archive.Entries)
                 {
-                    var file = reader.Entry.Key;
+                    if (entry.IsDirectory) continue;
+                    var file = entry.Key;
 
                     Match m = Regex.Match(file, "^(?:[^/]*/)?(.*)_libretro\\.info");
                     if (m.Success && !string.IsNullOrEmpty(m.Groups[1].ToString()))
                     {
-                        var fileStream = reader.OpenEntryStream();
                         var bin = m.Groups[1].ToString();
-                        var core = parseInfoFile(fileStream, bin);
-                        fileStream.Close();
-                        if (core != null)
-                            cores[bin] = core;
+                        using (var fileStream = entry.OpenEntryStream())
+                        {
+                            var core = parseInfoFile(fileStream, bin);
+                            if (core != null)
+                                cores[bin] = core;
+                        }
                     }
                 }
             }
@@ -147,7 +148,7 @@ namespace com.clusterrr.hakchi_gui
                     }
                 }
             }
-            
+
             // list user-added info files present in /info
             if (!Directory.Exists(Path.Combine(Program.BaseDirectoryExternal, "info")))
                 Directory.CreateDirectory(Path.Combine(Program.BaseDirectoryExternal, "info"));
@@ -262,7 +263,7 @@ namespace com.clusterrr.hakchi_gui
         public static CoreInfo GetCoreFromExec(string exec)
         {
             exec = exec.ToLower().Trim();
-            foreach(var core in cores)
+            foreach (var core in cores)
             {
                 if (exec.StartsWith(core.Value.QualifiedBin))
                 {
@@ -288,10 +289,10 @@ namespace com.clusterrr.hakchi_gui
             var cores = GetCoresFromExtension(ext);
             if (cores != null)
             {
-                foreach(var core in cores)
+                foreach (var core in cores)
                 {
                     if (core.Systems != null)
-                        foreach(var system in core.Systems)
+                        foreach (var system in core.Systems)
                             systems.Add(system);
                 }
             }
@@ -373,10 +374,10 @@ namespace com.clusterrr.hakchi_gui
                 // load extensions index
                 var indexStrings = JsonConvert.DeserializeObject<Dictionary<string, IEnumerable<string>>>(File.ReadAllText(string.Format(CollectionFilename, "_ext")));
                 extIndex.Clear();
-                foreach(var pair in indexStrings)
+                foreach (var pair in indexStrings)
                 {
                     var list = new List<CoreInfo>();
-                    foreach(var core in pair.Value)
+                    foreach (var core in pair.Value)
                     {
                         list.Add(cores[core]);
                     }

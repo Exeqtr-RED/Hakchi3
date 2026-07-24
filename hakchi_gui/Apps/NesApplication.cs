@@ -38,16 +38,15 @@ namespace com.clusterrr.hakchi_gui
             try
             {
                 string desktopEntriesArchiveFile = Path.Combine(Path.Combine(Program.BaseDirectoryInternal, "data"), "desktop_entries.tar");
-                using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(desktopEntriesArchiveFile))
-                using (var reader = extractor.ExtractAllEntries())
-                    while (reader.MoveToNextEntry())
+                using (var archive = SharpCompress.Archives.Tar.TarArchive.OpenArchive(desktopEntriesArchiveFile))
+                    foreach (var entry in archive.Entries)
                     {
-                        if (reader.Entry.IsDirectory)
+                        if (entry.IsDirectory)
                             continue;
 
-                        hakchi.ConsoleType c = hakchi.SystemCodeToConsoleType[reader.Entry.Key.Substring(2, reader.Entry.Key.IndexOf('/', 2) - 2)];
-                        DefaultGames[c].Add(Path.GetFileNameWithoutExtension(reader.Entry.Key));
-                        using (var str = reader.OpenEntryStream())
+                        hakchi.ConsoleType c = hakchi.SystemCodeToConsoleType[entry.Key.Substring(2, entry.Key.IndexOf('/', 2) - 2)];
+                        DefaultGames[c].Add(Path.GetFileNameWithoutExtension(entry.Key));
+                        using (var str = entry.OpenEntryStream())
                         {
                             var desktopFile = new DesktopFile();
                             desktopFile.Load(str);

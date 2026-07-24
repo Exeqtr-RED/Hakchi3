@@ -86,22 +86,19 @@ namespace com.clusterrr.hakchi_gui
                             hakchi.Shell.Execute($"du {paths}", null, sizeStream);
                             sizeStream.Seek(0, SeekOrigin.Begin);
 
-                            using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(desktopTarStream))
-                            using (var reader = extractor.ExtractAllEntries())
+                            using (var archive = SharpCompress.Archives.Tar.TarArchive.OpenArchive(desktopTarStream))
                             {
-
-                                while (reader.MoveToNextEntry())
+                                foreach (var entry in archive.Entries)
                                 {
-                                    var entry = reader.Entry;
+                                    if (entry.IsDirectory) continue;
                                     Trace.WriteLine(entry.Key);
-                                    using (var entryStream = reader.OpenEntryStream())
+                                    using (var entryStream = entry.OpenEntryStream())
                                     {
                                         var key = Path.GetDirectoryName($"/{entry.Key}").Replace('\\', '/');
                                         var desktop = new DesktopFile(entryStream);
 
                                         if (desktop.IconPath.EndsWith("/.storage"))
                                         {
-                                            // This is a linked game
                                             key = $"{mountpoint}{desktop.IconPath}/{desktop.Code}";
                                         }
 

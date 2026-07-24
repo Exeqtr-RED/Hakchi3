@@ -179,7 +179,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                     }
                 }
                 tasker.SetProgress(++i, Games.Count);
-                Thread.Sleep(500); // not so fast, Google don't like it
+                Thread.Sleep(500);
             }
             return Tasker.Conclusion.Success;
         }
@@ -324,22 +324,21 @@ namespace com.clusterrr.hakchi_gui.Tasks
             try
             {
                 var defaultGames = ResetAllOriginalGames ? NesApplication.AllDefaultGames.Select(g => g.Key) : NesApplication.CurrentDefaultGames;
-                using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(desktopEntriesArchiveFile))
-                using (var reader = extractor.ExtractAllEntries())
+                using (var archive = SharpCompress.Archives.Tar.TarArchive.OpenArchive(desktopEntriesArchiveFile))
                 {
                     int i = 0;
-                    while (reader.MoveToNextEntry())
+                    foreach (var entry in archive.Entries)
                     {
-                        if (reader.Entry.IsDirectory)
+                        if (entry.IsDirectory)
                             continue;
 
-                        var code = Path.GetFileNameWithoutExtension(reader.Entry.Key);
+                        var code = Path.GetFileNameWithoutExtension(entry.Key);
                         if (!defaultGames.Contains(code))
                             continue;
 
-                        var ext = Path.GetExtension(reader.Entry.Key).ToLower();
-                        if (ext != ".desktop") // sanity check
-                            throw new FileLoadException($"invalid file \"{reader.Entry.Key}\" found in desktop_entries.tar data file.");
+                        var ext = Path.GetExtension(entry.Key).ToLower();
+                        if (ext != ".desktop")
+                            throw new FileLoadException($"invalid file \"{entry.Key}\" found in desktop_entries.tar data file.");
 
                         string path = Path.Combine(originalGamesPath, code);
                         string outputFile = Path.Combine(path, code + ".desktop");
@@ -355,10 +354,10 @@ namespace com.clusterrr.hakchi_gui.Tasks
                         {
                             Directory.CreateDirectory(path);
 
-                            // extract .desktop file from archive
                             using (var o = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                            using (var s = entry.OpenEntryStream())
                             {
-                                reader.WriteEntryTo(o);
+                                s.CopyTo(o);
                                 o.Flush();
                                 if (!this.ResetAllOriginalGames && !ConfigIni.Instance.OriginalGames.Contains(code))
                                 {
@@ -366,7 +365,6 @@ namespace com.clusterrr.hakchi_gui.Tasks
                                 }
                             }
 
-                            // create game temporarily to perform cover search
                             Trace.WriteLine(string.Format($"Resetting game \"{NesApplication.AllDefaultGames[code].Name}\"."));
                             var game = NesApplication.FromDirectory(path);
                             game.FindCover(code + ".desktop");
@@ -393,7 +391,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
             long gameCount = Games.Count;
 
             tasker.SetTitle(gameCount > 1 ? Resources.ArchivingGames : Resources.ArchivingGame);
-            
+
             string directory = null;
 
             if (gameCount > 1)
@@ -429,7 +427,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                 else
                 {
                     var archivePath = Path.Combine(directory, fileName);
-                    if (File.Exists(archivePath) &&  tasker.ShowMessage(Resources.ReplaceFileQ, String.Format(Resources.ReplaceFollowingFileQ, archivePath), Resources.sign_question, new MessageForm.Button[] { MessageForm.Button.Yes, MessageForm.Button.No }) == MessageForm.Button.No)
+                    if (File.Exists(archivePath) && tasker.ShowMessage(Resources.ReplaceFileQ, String.Format(Resources.ReplaceFollowingFileQ, archivePath), Resources.sign_question, new MessageForm.Button[] { MessageForm.Button.Yes, MessageForm.Button.No }) == MessageForm.Button.No)
                     {
                         continue;
                     }
