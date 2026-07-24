@@ -62,7 +62,7 @@ namespace com.clusterrr.hakchi_gui
                     throw new FileNotFoundException($"Required file not found: {baseHmodsPath}");
                 }
 
-                using (var extractor = ArchiveFactory.Open(baseHmodsPath))
+                using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(baseHmodsPath))
                 {
                     var hakchiEntry = extractor.Entries.FirstOrDefault(e => e.Key == "./hakchi.hmod" || e.Key == "hakchi.hmod");
 
@@ -95,7 +95,7 @@ namespace com.clusterrr.hakchi_gui
             {
                 using Stream hakchiHmod = HmodStream;
                 MemoryStream tar = new MemoryStream();
-                using var extractor = ArchiveFactory.Open(hakchiHmod);
+                using var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(hakchiHmod);
                 var firstEntry = extractor.Entries.FirstOrDefault();
                 if (firstEntry == null)
                 {
@@ -105,7 +105,7 @@ namespace com.clusterrr.hakchi_gui
                 using var entryStream = firstEntry.OpenEntryStream();
                 entryStream.CopyTo(tar);
                 tar.Position = 0;
-                return SharpCompress.Archives.Tar.TarArchive.Open(tar);
+                return SharpCompress.Archives.Tar.TarArchive.OpenArchive(tar);
             }
 
             private MemoryStream ArchiveFile(string filename)
