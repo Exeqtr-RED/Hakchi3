@@ -1112,7 +1112,7 @@
             gitHubPageWithActualReleasesToolStripMenuItem.Image = Properties.Resources.github;
             gitHubPageWithActualReleasesToolStripMenuItem.Name = "gitHubPageWithActualReleasesToolStripMenuItem";
             resources.ApplyResources(gitHubPageWithActualReleasesToolStripMenuItem, "gitHubPageWithActualReleasesToolStripMenuItem");
-            gitHubPageWithActualReleasesToolStripMenuItem.Tag = "https://github.com/TeamShinkansen/hakchi2/releases";
+            gitHubPageWithActualReleasesToolStripMenuItem.Tag = "https://github.com/Exeqtr-RED/Hakchi3";
             gitHubPageWithActualReleasesToolStripMenuItem.Click += openWebsiteLink;
             // 
             // joinOurDiscordServerToolStripMenuItem

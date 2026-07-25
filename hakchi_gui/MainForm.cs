@@ -2484,7 +2484,7 @@ internal static
             }
         }
 
-        private void openWebsiteLink(Object sender, EventArgs e) => Process.Start((string)((ToolStripMenuItem)sender).Tag);
+        private void openWebsiteLink(Object sender, EventArgs e) => Process.Start(new ProcessStartInfo((string)((ToolStripMenuItem)sender).Tag) { UseShellExecute = true });
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
