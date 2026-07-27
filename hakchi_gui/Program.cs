@@ -82,6 +82,9 @@ namespace com.clusterrr.hakchi_gui
         [STAThread]
         static void Main(string[] args)
         {
+            // .NET 8 не включает legacy code pages по умолчанию
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
             var stdout = Console.OpenStandardOutput();
 
             int versionFormatArgIndex;

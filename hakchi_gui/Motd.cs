@@ -25,9 +25,12 @@ namespace com.clusterrr.hakchi_gui
                 panel1.Controls.Add(webBrowser);
                 Color color = this.BackColor;
                 string text = Markdown.ToHtml(message);
+                var css = Properties.Resources.motdTemplateCSS;
+                var tmpl = Properties.Resources.motdTemplateHTML;
+                Trace.WriteLine($"[MOTD] CSS length={css?.Length ?? -1}, Template length={tmpl?.Length ?? -1}");
                 this.html = String.Format(
-                    Properties.Resources.motdTemplateHTML,
-                    Properties.Resources.motdTemplateCSS,
+                    tmpl,
+                    css,
                     this.Text,
                     text,
                     $"rgb({color.R},{color.G},{color.B})");

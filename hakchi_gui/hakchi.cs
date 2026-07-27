@@ -117,7 +117,7 @@ namespace com.clusterrr.hakchi_gui
                 }
 
                 // Now iterate the inner TAR to find the requested file
-                tar.Position = 0;
+                tar.SetLength(tar.Position); tar.Position = 0;
                 bool found = false;
                 using (var tarReader = SharpCompress.Readers.ReaderFactory.OpenReader(tar))
                 {
