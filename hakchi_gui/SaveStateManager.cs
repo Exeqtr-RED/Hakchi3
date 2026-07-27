@@ -281,19 +281,22 @@ namespace com.clusterrr.hakchi_gui
                 {
                     hakchi.Shell.Execute("cd /var/lib/clover/profiles/0 && tar -cz " + code, null, save, null, 10000, true);
                     save.Seek(0, SeekOrigin.Begin);
-                    using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(save))
+                    using (var extractor = SharpCompress.Readers.ReaderFactory.OpenReader(save))
                     {
+                        if (!extractor.MoveToNextEntry())
+                            throw new InvalidOperationException("Archive contains no entries");
                         using (var tar = new MemoryStream())
                         {
-                            extractor.Entries.First().OpenEntryStream().CopyTo(tar);
-                            using (var extractorTar = SharpCompress.Archives.Tar.TarArchive.OpenArchive(tar))
+                            extractor.WriteEntryTo(tar);
+                            tar.Position = 0;
+                            using (var tarReader = SharpCompress.Readers.ReaderFactory.OpenReader(tar))
                             {
-                                foreach (var f in extractorTar.Entries)
+                                while (tarReader.MoveToNextEntry())
                                 {
-                                    if (Path.GetExtension(f.Key).ToLower() == ".png")
+                                    if (Path.GetExtension(tarReader.Entry.Key).ToLower() == ".png")
                                     {
                                         var o = new MemoryStream();
-                                        f.OpenEntryStream().CopyTo(o);
+                                        tarReader.WriteEntryTo(o);
                                         o.Seek(0, SeekOrigin.Begin);
                                         images.Add(Image.FromStream(o));
                                     }

@@ -37,7 +37,7 @@ namespace com.clusterrr.hakchi_gui
             labelStatus.Text = NoSelection;
         }
 
-        public GameImporterForm(List<FoundGame> games): this()
+        public GameImporterForm(List<FoundGame> games) : this()
         {
             foreach (var game in games.OrderBy(e => e.Desktop.Name))
             {
@@ -86,22 +86,21 @@ namespace com.clusterrr.hakchi_gui
                             hakchi.Shell.Execute($"du {paths}", null, sizeStream);
                             sizeStream.Seek(0, SeekOrigin.Begin);
 
-                            using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(desktopTarStream))
-                            using (var reader = extractor.ExtractAllEntries())
+                            using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(desktopTarStream))
                             {
-
                                 while (reader.MoveToNextEntry())
                                 {
-                                    var entry = reader.Entry;
-                                    Trace.WriteLine(entry.Key);
-                                    using (var entryStream = reader.OpenEntryStream())
+                                    if (reader.Entry.IsDirectory) continue;
+                                    Trace.WriteLine(reader.Entry.Key);
+                                    using (var entryStream = new MemoryStream())
                                     {
-                                        var key = Path.GetDirectoryName($"/{entry.Key}").Replace('\\', '/');
+                                        reader.WriteEntryTo(entryStream);
+                                        entryStream.Position = 0;
+                                        var key = Path.GetDirectoryName($"/{reader.Entry.Key}").Replace('\\', '/');
                                         var desktop = new DesktopFile(entryStream);
 
                                         if (desktop.IconPath.EndsWith("/.storage"))
                                         {
-                                            // This is a linked game
                                             key = $"{mountpoint}{desktop.IconPath}/{desktop.Code}";
                                         }
 
@@ -158,7 +157,7 @@ namespace com.clusterrr.hakchi_gui
             if (listViewGames.SelectedItems.Count == 0)
             {
                 labelStatus.Text = NoSelection;
-            } 
+            }
             else
             {
                 labelStatus.Text = string.Format(listViewGames.SelectedItems.Count == 1 ? SingleSelection : MultiSelection, listViewGames.SelectedItems.Count, Shared.SizeSuffix(totalSize));

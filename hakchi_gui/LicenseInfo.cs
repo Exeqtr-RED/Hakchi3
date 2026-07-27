@@ -1,30 +1,33 @@
 ﻿using com.clusterrr.hakchi_gui.Properties;
-using SharpCompress.Archives;
 using System.Collections.Generic;
 using System.IO;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public class LicenseInfo: TextInfo
+    public class LicenseInfo : TextInfo
     {
-        public LicenseInfo(): base()
+        public LicenseInfo() : base()
         {
             this.Text = Resources.LicenseInformation;
             var licenses = new List<string>();
 
             using (var licenseMs = new MemoryStream(Properties.Resources.LicensesTar))
-            using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(licenseMs))
-            using (var reader = extractor.ExtractAllEntries())
+            using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(licenseMs))
             {
                 while (reader.MoveToNextEntry())
                 {
-                    using (var entryStream = reader.OpenEntryStream())
-                    using (var sr = new StreamReader(entryStream))
+                    if (reader.Entry.IsDirectory) continue;
+                    using (var ms = new MemoryStream())
                     {
-                        var license = sr.ReadToEnd();
-                        if (license.Length > 0)
+                        reader.WriteEntryTo(ms);
+                        ms.Position = 0;
+                        using (var sr = new StreamReader(ms))
                         {
-                            licenses.Add(license);
+                            var license = sr.ReadToEnd();
+                            if (license.Length > 0)
+                            {
+                                licenses.Add(license);
+                            }
                         }
                     }
                 }

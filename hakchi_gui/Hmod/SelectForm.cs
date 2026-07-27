@@ -1,5 +1,6 @@
 ﻿using SharpCompress.Archives;
 using SharpCompress.Common;
+using SharpCompress.Readers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,7 +40,7 @@ namespace com.clusterrr.hakchi_gui.Hmod
 
             hmods.AddRange(Hmod.GetMods(hakchi.CanInteract && onlyInstalledMods, null, this));
 
-            if(!onlyInstalledMods)
+            if (!onlyInstalledMods)
             {
                 CoreCollection.HmodInfo = hmods.ToArray();
                 CoreCollection.Load();
@@ -196,15 +197,26 @@ namespace com.clusterrr.hakchi_gui.Hmod
                 else if (ext == ".7z" || ext == ".zip" || ext == ".rar" || ext == ".tar")
                 {
                     var newHmods = new List<string>();
-                    using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(file))
+                    TempHelpers.doWithTempFolder(temp =>
                     {
-                        TempHelpers.doWithTempFolder(temp =>
+                        if (ext == ".7z")
                         {
-                            extractor.WriteToDirectory(temp, new ExtractionOptions() { ExtractFullPath = true });
-                            AddMods(Directory.EnumerateDirectories(temp, "*.hmod", SearchOption.AllDirectories).ToArray(), true);
-                            AddMods(Directory.EnumerateFiles(temp, "*.hmod", SearchOption.AllDirectories).ToArray(), true);
-                        }, true, usermodsDirectory);
-                    }
+                            using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(file))
+                            {
+                                extractor.WriteToDirectory(temp, new ExtractionOptions() { ExtractFullPath = true });
+                            }
+                        }
+                        else
+                        {
+                            using (var archiveStream = File.OpenRead(file))
+                            using (var extractor = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
+                            {
+                                extractor.WriteAllToDirectory(temp, new ExtractionOptions() { ExtractFullPath = true });
+                            }
+                        }
+                        AddMods(Directory.EnumerateDirectories(temp, "*.hmod", SearchOption.AllDirectories).ToArray(), true);
+                        AddMods(Directory.EnumerateFiles(temp, "*.hmod", SearchOption.AllDirectories).ToArray(), true);
+                    }, true, usermodsDirectory);
                 }
             }
 
@@ -236,7 +248,7 @@ namespace com.clusterrr.hakchi_gui.Hmod
             if (e.Item != null && listViewHmods.SelectedItems.Count > 0)
             {
                 Hmod hmod = (Hmod)(listViewHmods.SelectedItems[0].Tag);
-                if(hmodDisplayed != hmod.RawName)
+                if (hmodDisplayed != hmod.RawName)
                     readmeControl1.setReadme(hmod.Name, hmod.Readme);
             }
             else
@@ -260,7 +272,7 @@ namespace com.clusterrr.hakchi_gui.Hmod
 
         private void showModInExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(listViewHmods.SelectedItems.Count > 0)
+            if (listViewHmods.SelectedItems.Count > 0)
             {
                 Hmod selectedHmod = (Hmod)(listViewHmods.SelectedItems[0].Tag);
                 if (selectedHmod.PresentInUserMods())
@@ -273,7 +285,7 @@ namespace com.clusterrr.hakchi_gui.Hmod
 
         private void deleteModFromDiskToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach(ListViewItem selectedItem in listViewHmods.SelectedItems)
+            foreach (ListViewItem selectedItem in listViewHmods.SelectedItems)
             {
                 Hmod selectedHmod = (Hmod)(selectedItem.Tag);
                 if (selectedHmod.PresentInUserMods())
@@ -295,7 +307,7 @@ namespace com.clusterrr.hakchi_gui.Hmod
         private void modListMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             bool isHmodSelected = (listViewHmods.SelectedItems.Count > 0);
-            
+
             deleteModFromDiskToolStripMenuItem.Visible = !onlyInstalledMods && isHmodSelected;
             showModInExplorerToolStripMenuItem.Visible = (listViewHmods.SelectedItems.Count == 1 && ((Hmod)(listViewHmods.SelectedItems[0].Tag)).PresentInUserMods());
         }

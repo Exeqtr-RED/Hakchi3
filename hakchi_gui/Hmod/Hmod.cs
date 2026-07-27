@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui.Hmod
 {
-    public struct Hmod
+    public readonly partial struct Hmod
     {
         public readonly string Name;
         public readonly string HmodPath;
@@ -25,6 +25,7 @@ namespace com.clusterrr.hakchi_gui.Hmod
         public readonly Dictionary<string, string> LibretroInfo;
         public readonly DateTime LastModified;
         public readonly bool isInstalled;
+
         public static string UserModsDirectory
         {
             get
@@ -32,7 +33,9 @@ namespace com.clusterrr.hakchi_gui.Hmod
                 return Path.Combine(Program.BaseDirectoryExternal, "user_mods");
             }
         }
-        public static Regex BadCharsRegex = new Regex(@"[^a-zA-Z0-9_\-\.]", RegexOptions.Compiled);
+
+        [GeneratedRegex(@"[^a-zA-Z0-9_\-\.]", RegexOptions.Compiled)]
+        private static partial Regex BadCharsRegex();
 
         public Hmod(string mod, string[] installedHmods = null)
         {
@@ -44,11 +47,10 @@ namespace com.clusterrr.hakchi_gui.Hmod
             RawName = mod;
             this.HmodPath = null;
             this.isFile = false;
-            
+
             string usermodsDirectory = Path.Combine(Program.BaseDirectoryExternal, "user_mods");
             string cacheDir = Shared.PathCombine(Program.BaseDirectoryExternal, "cache", "readme_cache");
             string cacheFile = Path.Combine(cacheDir, $"{mod}.xml");
-
 
             Dictionary<string, string> readmeData = new Dictionary<string, string>();
             Dictionary<string, string> libretroInfo = new Dictionary<string, string>();
@@ -65,7 +67,7 @@ namespace com.clusterrr.hakchi_gui.Hmod
                                  orderby f.LastWriteTimeUtc descending
                                  select f.LastWriteTimeUtc);
 
-                    if (files.Count() > 0)
+                    if (files.Any())
                         LastModified = files.First();
 
                     isFile = false;
@@ -122,12 +124,14 @@ namespace com.clusterrr.hakchi_gui.Hmod
                             {
                                 foreach (var readmeFilename in HmodReadme.readmeFiles)
                                 {
-                                    if (reader.Entry.Key.ToLower() != readmeFilename && reader.Entry.Key.ToLower() != $"./{readmeFilename}")
+                                    if (!string.Equals(reader.Entry.Key, readmeFilename, StringComparison.OrdinalIgnoreCase) &&
+                                        !string.Equals(reader.Entry.Key, $"./{readmeFilename}", StringComparison.OrdinalIgnoreCase))
                                         continue;
 
-                                    using (var o = new MemoryStream())
-                                    using (var e = reader.OpenEntryStream())
+                                    // Фигурные скобки обязательны, чтобы MemoryStream освобождался сразу в цикле, а не в конце метода
                                     {
+                                        using var o = new MemoryStream();
+                                        using var e = reader.OpenEntryStream();
                                         e.CopyTo(o);
                                         readmeData.Add(readmeFilename, Encoding.UTF8.GetString(o.ToArray()));
                                     }
@@ -135,9 +139,9 @@ namespace com.clusterrr.hakchi_gui.Hmod
 
                                 if (reader.Entry.Key.ToLower().EndsWith("_libretro.info"))
                                 {
-                                    using (var o = new MemoryStream())
-                                    using (var e = reader.OpenEntryStream())
                                     {
+                                        using var o = new MemoryStream();
+                                        using var e = reader.OpenEntryStream();
                                         e.CopyTo(o);
                                         libretroInfo.Add(reader.Entry.Key, Encoding.UTF8.GetString(o.ToArray()));
                                     }
@@ -172,9 +176,8 @@ namespace com.clusterrr.hakchi_gui.Hmod
             {
             }
 
-            string readme;
             bool markdown = false;
-            if (readmeData.TryGetValue("readme.md", out readme))
+            if (readmeData.TryGetValue("readme.md", out string readme))
             {
                 markdown = true;
             }
@@ -219,11 +222,13 @@ namespace com.clusterrr.hakchi_gui.Hmod
 
         public static string GetCleanName(string modName, bool allowReplacement = false)
         {
+#pragma warning disable IDE0251 // Подавление бага анализатора (он просит readonly, но компилятор ругается CS0106)
             var userModsDirectory = UserModsDirectory;
+#pragma warning restore IDE0251
             var count = 0;
-            var cleanName = BadCharsRegex.Replace(modName, "_");
-            var output = Path.Combine(userModsDirectory, $"{cleanName}.hmod"); ;
-            
+            var cleanName = BadCharsRegex().Replace(modName, "_");
+            var output = Path.Combine(userModsDirectory, $"{cleanName}.hmod");
+
             if (allowReplacement == false)
             {
                 while (File.Exists(output) || Directory.Exists(output))
@@ -238,9 +243,8 @@ namespace com.clusterrr.hakchi_gui.Hmod
         public static List<Hmod> GetMods(bool onlyInstalled = false, string[] installed = null, Form taskerParent = null)
         {
             var usermodsDirectory = UserModsDirectory;
-            var installedMods = installed  ?? hakchi.GetPackList() ?? new string[] { };
+            var installedMods = installed ?? hakchi.GetPackList() ?? Array.Empty<string>();
             var modsList = new List<string>();
-
 
             if (onlyInstalled)
             {
@@ -250,12 +254,12 @@ namespace com.clusterrr.hakchi_gui.Hmod
             {
                 if (Directory.Exists(usermodsDirectory))
                 {
-                    foreach (var mod in Directory.GetDirectories(usermodsDirectory, "*.hmod", SearchOption.TopDirectoryOnly).Select(m => Path.GetFileNameWithoutExtension(m)).Where(m => BadCharsRegex.IsMatch(m)))
+                    foreach (var mod in Directory.GetDirectories(usermodsDirectory, "*.hmod", SearchOption.TopDirectoryOnly).Select(m => Path.GetFileNameWithoutExtension(m)).Where(m => BadCharsRegex().IsMatch(m)))
                     {
                         Directory.Move(Path.Combine(usermodsDirectory, $"{mod}.hmod"), Path.Combine(usermodsDirectory, $"{GetCleanName(mod)}.hmod"));
                     }
 
-                    foreach (var mod in Directory.GetFiles(usermodsDirectory, "*.hmod", SearchOption.TopDirectoryOnly).Select(m => Path.GetFileNameWithoutExtension(m)).Where(m => BadCharsRegex.IsMatch(m)))
+                    foreach (var mod in Directory.GetFiles(usermodsDirectory, "*.hmod", SearchOption.TopDirectoryOnly).Select(m => Path.GetFileNameWithoutExtension(m)).Where(m => BadCharsRegex().IsMatch(m)))
                     {
                         File.Move(Path.Combine(usermodsDirectory, $"{mod}.hmod"), Path.Combine(usermodsDirectory, $"{GetCleanName(mod)}.hmod"));
                     }
@@ -269,19 +273,21 @@ namespace com.clusterrr.hakchi_gui.Hmod
                 }
             }
 
-            using (Tasker tasker = new Tasker(taskerParent))
+            using var tasker = new Tasker(taskerParent);
+            tasker.AttachView(new Tasks.TaskerForm());
+
+            var modObject = new ModTasks.ModObject
             {
-                tasker.AttachView(new Tasks.TaskerForm());
-                var modObject = new ModTasks.ModObject();
-                modObject.HmodsToLoad = modsList;
-                modObject.InstalledHmods = installedMods ?? new string[] { };
-                tasker.SetTitle(Resources.LoadingHmods);
-                tasker.SetStatusImage(Resources.sign_brick);
-                tasker.SyncObject = modObject;
-                tasker.AddTask(ModTasks.GetHmods);
-                tasker.Start();
-                return modObject.LoadedHmods;
-            }
+                HmodsToLoad = modsList,
+                InstalledHmods = installedMods ?? Array.Empty<string>()
+            };
+
+            tasker.SetTitle(Resources.LoadingHmods);
+            tasker.SetStatusImage(Resources.sign_brick);
+            tasker.SyncObject = modObject;
+            tasker.AddTask(ModTasks.GetHmods);
+            tasker.Start();
+            return modObject.LoadedHmods;
         }
     }
 }

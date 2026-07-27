@@ -5,6 +5,7 @@ using com.clusterrr.hakchi_gui.ModHub.Repository;
 using com.clusterrr.hakchi_gui.Properties;
 using com.clusterrr.hakchi_gui.Tasks;
 using SharpCompress.Archives;
+using SharpCompress.Readers;
 using SpineGen.DrawingBitmaps;
 using System;
 using System.Collections;
@@ -2484,7 +2485,7 @@ internal static
             }
         }
 
-        private void openWebsiteLink(Object sender, EventArgs e) => Process.Start((string)((ToolStripMenuItem)sender).Tag);
+        private void openWebsiteLink(Object sender, EventArgs e) => Process.Start(new ProcessStartInfo((string)((ToolStripMenuItem)sender).Tag) { UseShellExecute = true });
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2660,9 +2661,10 @@ internal static
                 }
                 if (Path.GetFileName(files[0]).ToLower().StartsWith("sfrom_tool") && (ext == ".rar" || ext == ".zip" || ext == ".rar"))
                 {
-                    using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(files[0]))
+                    using (var archiveStream = File.OpenRead(files[0]))
+                    using (var extractor = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
                     {
-                        extractor.WriteToDirectory(Path.Combine(Program.BaseDirectoryExternal, "sfrom_tool"), new SharpCompress.Common.ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                        extractor.WriteAllToDirectory(Path.Combine(Program.BaseDirectoryExternal, "sfrom_tool"), new SharpCompress.Common.ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
                     }
                     enableSFROMToolToolStripMenuItem.Checked = true;
                     enableSFROMToolToolStripMenuItem_Click(sender, e);
@@ -2709,22 +2711,36 @@ internal static
                 }
                 else if (ext == ".7z" || ext == ".zip" || ext == ".rar")
                 {
-                    using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(file))
+                    bool isMod = false;
+                    if (ext == ".7z")
                     {
-                        bool isMod = false;
-                        foreach (var f in extractor.Entries)
-                            if (Path.GetExtension(f.Key).ToLower() == ".hmod")
-                            {
-                                modsToInstall.Add(file);
-                                isMod = true;
-                                break;
-                            }
-
-                        if (!isMod)
+                        using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(file))
                         {
-                            filesToAdd.Add(file);
+                            foreach (var f in extractor.Entries)
+                                if (Path.GetExtension(f.Key).ToLower() == ".hmod")
+                                {
+                                    isMod = true;
+                                    break;
+                                }
                         }
                     }
+                    else
+                    {
+                        using (var archiveStream = File.OpenRead(file))
+                        using (var extractor = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
+                        {
+                            while (extractor.MoveToNextEntry())
+                                if (Path.GetExtension(extractor.Entry.Key).ToLower() == ".hmod")
+                                {
+                                    isMod = true;
+                                    break;
+                                }
+                        }
+                    }
+                    if (isMod)
+                        modsToInstall.Add(file);
+                    else
+                        filesToAdd.Add(file);
                 }
                 else if (File.Exists(file))
                 {

@@ -6,6 +6,7 @@
 		<AssemblyName>hakchi</AssemblyName>
 		<RootNamespace>com.clusterrr.hakchi_gui</RootNamespace>
 		<UseWindowsForms>true</UseWindowsForms>
+		<GenerateResourceDesignTimeOutput>True</GenerateResourceDesignTimeOutput>
 		<StartupObject>com.clusterrr.hakchi_gui.Program</StartupObject>
 		<ApplicationIcon>icon_app.ico</ApplicationIcon>
 		<Description>
@@ -50,7 +51,7 @@
 			Gert Driesen for SSH.NET.
 		</Description>
 		<Title>Hakchi3</Title>
-		<Version>0.1.9</Version>
+		<Version>0.2.1</Version>
 		<Authors>Exeqtr-RED</Authors>
 		<Company>Exeqtr-RED</Company>
 		<Copyright>Copyright © 2026</Copyright>

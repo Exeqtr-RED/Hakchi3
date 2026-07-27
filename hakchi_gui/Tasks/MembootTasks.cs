@@ -16,13 +16,14 @@ using static com.clusterrr.hakchi_gui.Tasks.Tasker;
 namespace com.clusterrr.hakchi_gui.Tasks
 {
     public enum UbootType { Normal, SD }
-    public class MembootTasks: Tasker.ITaskCollection
+    public class MembootTasks : Tasker.ITaskCollection
     {
         // Constants
         public const int MembootWaitDelay = 120000;
 
         // Enums
-        public enum MembootTaskType {
+        public enum MembootTaskType
+        {
             InstallHakchi,
             ResetHakchi,
             UninstallHakchi,
@@ -41,7 +42,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
             FactoryReset,
             DumpStockKernel,
         }
-        
+
         public enum HakchiTasks { Install, Reset, Uninstall }
         public enum NandTasks { DumpNand, DumpSystemPartition, FlashSystemPartition, DumpUserPartition, FlashUserPartition, FormatUserPartition }
 
@@ -226,7 +227,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
 
                 case MembootTaskType.ProcessMods:
                     bool unmountAfter = userRecovery && hakchi.Shell.Execute("hakchi eval 'mountpoint -q \"$mountpoint/var/lib/\"'") == 0;
-                    
+
                     taskList.Add(ShellTasks.MountBase);
                     taskList.AddRange(new ModTasks(hmodsInstall, hmodsUninstall).Tasks);
 
@@ -637,7 +638,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
 
             stockKernel.Seek(0, SeekOrigin.Begin);
             hakchi.Shell.Execute("cat > /kernel.img", stockKernel, null, null, 0, true);
-            
+
             if (hakchi.Shell.Execute("sntool check /kernel.img") != 0)
                 throw new Exception(Resources.KernelCheckFailed);
 
@@ -798,7 +799,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                 return Conclusion.Success;
             };
         }
-        
+
         public static TaskFunc RunCommand(string command, Stream stdin = null, Stream stdout = null, Stream stderr = null, int timeout = 0, bool throwOnNonZero = false)
         {
             return (Tasker tasker, Object syncObject) =>
@@ -828,12 +829,14 @@ namespace com.clusterrr.hakchi_gui.Tasks
                         {
                             var tempFilename = Path.Combine(tempFolder, "dump.bin");
 
-                            using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(nandDump))
-                            using (var entryStream = extractor.Entries.First().OpenEntryStream())
+                            using (var archiveStream = File.OpenRead(nandDump))
+                            using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
                             using (var extractedFile = File.Create(tempFilename))
                             {
                                 tasker.SetStatus(Resources.ExtractingToTemporaryFolder);
-                                entryStream.CopyTo(extractedFile);
+                                if (!reader.MoveToNextEntry())
+                                    throw new InvalidOperationException("Archive contains no entries");
+                                reader.WriteEntryTo(extractedFile);
                                 nandDump = tempFilename;
                             }
                         }
@@ -952,7 +955,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                             case NandTasks.DumpSystemPartition:
                                 if (systemIsHsqs)
                                 {
-                                    Shared.ShellPipe($"dd if={osDecryptedDevice} bs=128K count={(partitionSize / 1024) / 4 }", null, file, throwOnNonZero: true);
+                                    Shared.ShellPipe($"dd if={osDecryptedDevice} bs=128K count={(partitionSize / 1024) / 4}", null, file, throwOnNonZero: true);
                                 }
                                 else
                                 {
@@ -994,7 +997,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                                 break;
 
                             case NandTasks.FlashSystemPartition:
-                                if (isTar || (hakchi.IsMdPartitioning  && !isExtFs))
+                                if (isTar || (hakchi.IsMdPartitioning && !isExtFs))
                                 {
                                     using (var eventStream = new EventStream())
                                     {
@@ -1018,7 +1021,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                                         if (isTar)
                                         {
                                             hakchi.Shell.Execute($"tar -xvf - -C /tmp/rootfs", file, eventStream, null, throwOnNonZero: true);
-                                        } 
+                                        }
                                         else if (isHsqs)
                                         {
                                             tasker.SetStatus(Resources.FlashingNand);
@@ -1036,7 +1039,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                                 {
                                     Shared.ShellPipe($"dd of={osDecryptedDevice} bs=128K", file, throwOnNonZero: true);
                                 }
-                                
+
                                 if (hasKeyfile)
                                     hakchi.Shell.Execute("cryptsetup close root-crypt", throwOnNonZero: true);
                                 break;
@@ -1086,7 +1089,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
             return (Tasker tasker, Object syncObject) =>
             {
                 tasker.SetStatus(Resources.FlashingUboot);
-                
+
                 MemoryStream flashLog = new MemoryStream();
                 var splitStream = new SplitterStream(flashLog).AddStreams(Program.debugStreams);
                 if (hakchi.Shell.Execute($"sntool sd {(type == UbootType.SD ? "enable" : "disable")}", null, splitStream, splitStream) != 0)

@@ -124,8 +124,9 @@ namespace com.clusterrr.hakchi_gui.Tasks
                             }
 
                         }
-                        else
+                        else if (ext == ".7z")
                         {
+                            // 7zip supports random access; keep using Archive API
                             using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(sourceFileName))
                             {
                                 var filesInArchive = extractor.Entries;
@@ -197,7 +198,104 @@ namespace com.clusterrr.hakchi_gui.Tasks
                                 }
                             }
                         }
-                        
+                        else // .zip or .rar - use Reader API (streaming, two-pass)
+                        {
+                            // Pass 1: collect all entry keys (and isDirectory flags)
+                            var filesInArchive = new List<KeyValuePair<string, bool>>(); // key, isDirectory
+                            using (var archiveStream = File.OpenRead(sourceFileName))
+                            using (var archiveReader = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
+                            {
+                                while (archiveReader.MoveToNextEntry())
+                                {
+                                    filesInArchive.Add(new KeyValuePair<string, bool>(archiveReader.Entry.Key, archiveReader.Entry.IsDirectory));
+                                }
+                            }
+
+                            var gameFilesInArchive = new List<string>();
+                            foreach (var f in filesInArchive)
+                            {
+                                if (!f.Value) // !IsDirectory
+                                {
+                                    var e = Path.GetExtension(f.Key).ToLower();
+                                    if (e == ".desktop")
+                                    {
+                                        gameFilesInArchive.Clear();
+                                        gameFilesInArchive.Add(f.Key);
+                                        break;
+                                    }
+                                    else if (CoreCollection.Extensions.Contains(e))
+                                    {
+                                        gameFilesInArchive.Add(f.Key);
+                                    }
+                                }
+                            }
+                            if (gameFilesInArchive.Count == 1) // Only one known file (or app)
+                            {
+                                fileName = gameFilesInArchive[0];
+                            }
+                            else if (gameFilesInArchive.Count > 1) // Many known files, need to select
+                            {
+                                var r = SelectFile(tasker, gameFilesInArchive.ToArray());
+                                if (r == DialogResult.OK)
+                                    fileName = selectedFile;
+                                else if (r == DialogResult.Ignore)
+                                    fileName = sourceFileName;
+                                else continue;
+                            }
+                            else if (filesInArchive.Count == 1) // No known files but only one another file
+                            {
+                                fileName = filesInArchive[0].Key;
+                            }
+                            else // Need to select
+                            {
+                                var r = SelectFile(tasker, filesInArchive.Select(f => f.Key).ToArray());
+                                if (r == DialogResult.OK)
+                                    fileName = selectedFile;
+                                else if (r == DialogResult.Ignore)
+                                    fileName = sourceFileName;
+                                else continue;
+                            }
+                            if (fileName != sourceFileName)
+                            {
+                                var o = new MemoryStream();
+                                if (Path.GetExtension(fileName).ToLower() == ".desktop" // App in archive, need the whole directory
+                                    || filesInArchive.Select(f => f.Key).Contains(Path.GetFileNameWithoutExtension(fileName) + ".jpg") // Or it has cover in archive
+                                    || filesInArchive.Select(f => f.Key).Contains(Path.GetFileNameWithoutExtension(fileName) + ".png")
+                                    || filesInArchive.Select(f => f.Key).Contains(Path.GetFileNameWithoutExtension(fileName) + ".ips") // Or IPS file
+                                    )
+                                {
+                                    tmp = Path.Combine(tempDirectory, fileName);
+                                    Directory.CreateDirectory(tmp);
+                                    // Pass 2: extract all entries to tmp
+                                    using (var archiveStream = File.OpenRead(sourceFileName))
+                                    using (var archiveReader = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
+                                    {
+                                        archiveReader.WriteAllToDirectory(tmp, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                                    }
+                                    fileName = Path.Combine(tmp, fileName);
+                                }
+                                else
+                                {
+                                    // Pass 2: extract only the matching entry to o
+                                    using (var archiveStream = File.OpenRead(sourceFileName))
+                                    using (var archiveReader = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
+                                    {
+                                        while (archiveReader.MoveToNextEntry())
+                                        {
+                                            if (archiveReader.Entry.Key == fileName)
+                                            {
+                                                archiveReader.WriteEntryTo(o);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    rawData = new byte[o.Length];
+                                    o.Seek(0, SeekOrigin.Begin);
+                                    o.Read(rawData, 0, (int)o.Length);
+                                }
+                            }
+                        }
+
                     }
                     app = NesApplication.Import(fileName, sourceFileName, rawData, asIs);
 
@@ -283,12 +381,13 @@ namespace com.clusterrr.hakchi_gui.Tasks
                             idList.Add(app.Metadata.OriginalCrc32, data.GamesDB.HashLookup[app.Metadata.OriginalCrc32].TgdbId.First());
                         }
                     }
-                }   
+                }
 
                 var api = Program.TheGamesDBAPI;
                 var infoList = new Dictionary<int, IScraperData>();
 
-                foreach (var chunk in idList.Values.Distinct().ToList().ChunkBy(20)){
+                foreach (var chunk in idList.Values.Distinct().ToList().ChunkBy(20))
+                {
                     var apiResponse = api.GetInfoByID(chunk.ToArray());
 
                     while (true)
@@ -311,7 +410,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                 }
 
                 var counter = 0;
-                
+
                 foreach (var app in NewGames)
                 {
                     tasker.SetProgress(++counter, NewGames.Count);

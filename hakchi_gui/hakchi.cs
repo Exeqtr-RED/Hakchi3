@@ -62,64 +62,80 @@ namespace com.clusterrr.hakchi_gui
                     throw new FileNotFoundException($"Required file not found: {baseHmodsPath}");
                 }
 
-                using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(baseHmodsPath))
+                DateTime? hakchiEntryLastModified = null;
+                bool hakchiEntryFound = false;
+                using (var archiveStream = File.OpenRead(baseHmodsPath))
+                using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
                 {
-                    var hakchiEntry = extractor.Entries.FirstOrDefault(e => e.Key == "./hakchi.hmod" || e.Key == "hakchi.hmod");
+                    while (reader.MoveToNextEntry())
+                    {
+                        if (reader.Entry.Key == "./hakchi.hmod" || reader.Entry.Key == "hakchi.hmod")
+                        {
+                            hakchiEntryFound = true;
+                            hakchiEntryLastModified = reader.Entry.LastModifiedTime;
 
-                    if (hakchiEntry == null)
-                    {
-                        throw new InvalidOperationException($"hakchi.hmod not found in {baseHmodsPath}");
+                            if (File.Exists(latestHmodFile) && File.GetLastWriteTime(latestHmodFile) > hakchiEntryLastModified)
+                            {
+                                using var file = File.OpenRead(latestHmodFile);
+                                hakchiHmod.LastModified = File.GetLastWriteTime(latestHmodFile);
+                                hakchiHmod.Location = Hmod.HmodLocation.HakchiLatest;
+                                file.CopyTo(hakchiHmod.HmodStream);
+                            }
+                            else
+                            {
+                                hakchiHmod.LastModified = hakchiEntryLastModified.Value;
+                                hakchiHmod.Location = Hmod.HmodLocation.Basehmods;
+                                reader.WriteEntryTo(hakchiHmod.HmodStream);
+                            }
+                            break;
+                        }
                     }
-
-                    if (File.Exists(latestHmodFile) && File.GetLastWriteTime(latestHmodFile) > hakchiEntry.LastModifiedTime)
-                    {
-                        using var file = File.OpenRead(latestHmodFile);
-                        hakchiHmod.LastModified = File.GetLastWriteTime(latestHmodFile);
-                        hakchiHmod.Location = Hmod.HmodLocation.HakchiLatest;
-                        file.CopyTo(hakchiHmod.HmodStream);
-                    }
-                    else
-                    {
-                        hakchiHmod.LastModified = hakchiEntry.LastModifiedTime.Value;
-                        hakchiHmod.Location = Hmod.HmodLocation.Basehmods;
-                        using var entryStream = hakchiEntry.OpenEntryStream();
-                        entryStream.CopyTo(hakchiHmod.HmodStream);
-                    }
+                }
+                if (!hakchiEntryFound)
+                {
+                    throw new InvalidOperationException($"hakchi.hmod not found in {baseHmodsPath}");
                 }
                 hakchiHmod.HmodStream.Seek(0, SeekOrigin.Begin);
 
                 return hakchiHmod;
             }
 
-            public IArchive Archive()
-            {
-                using Stream hakchiHmod = HmodStream;
-                MemoryStream tar = new MemoryStream();
-                using var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(hakchiHmod);
-                var firstEntry = extractor.Entries.FirstOrDefault();
-                if (firstEntry == null)
-                {
-                    throw new InvalidOperationException("Archive contains no entries");
-                }
-
-                using var entryStream = firstEntry.OpenEntryStream();
-                entryStream.CopyTo(tar);
-                tar.Position = 0;
-                return SharpCompress.Archives.Tar.TarArchive.OpenArchive(tar);
-            }
-
             private MemoryStream ArchiveFile(string filename)
             {
                 var image = new MemoryStream();
-                using var archive = Archive();
-                var entry = archive.Entries.FirstOrDefault(e => e.Key == filename);
-                if (entry == null)
+
+                // .hmod is a GZip-compressed TAR; decompress to get the inner TAR stream
+                MemoryStream tar = new MemoryStream();
+                HmodStream.Position = 0;
+                using (var extractorReader = SharpCompress.Readers.ReaderFactory.OpenReader(HmodStream))
+                {
+                    if (!extractorReader.MoveToNextEntry())
+                    {
+                        throw new InvalidOperationException("Archive contains no entries");
+                    }
+                    extractorReader.WriteEntryTo(tar);
+                }
+
+                // Now iterate the inner TAR to find the requested file
+                tar.Position = 0;
+                bool found = false;
+                using (var tarReader = SharpCompress.Readers.ReaderFactory.OpenReader(tar))
+                {
+                    while (tarReader.MoveToNextEntry())
+                    {
+                        if (tarReader.Entry.Key == filename)
+                        {
+                            tarReader.WriteEntryTo(image);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!found)
                 {
                     throw new FileNotFoundException($"File '{filename}' not found in archive");
                 }
-
-                using var stream = entry.OpenEntryStream();
-                stream.CopyTo(image);
 
                 return image;
             }

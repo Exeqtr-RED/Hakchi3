@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using pdj.tiny7z.Archive;
 using SharpCompress.Archives;
+using SharpCompress.Readers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,22 +39,27 @@ namespace com.clusterrr.hakchi_gui
             try
             {
                 string desktopEntriesArchiveFile = Path.Combine(Path.Combine(Program.BaseDirectoryInternal, "data"), "desktop_entries.tar");
-                using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(desktopEntriesArchiveFile))
-                using (var reader = extractor.ExtractAllEntries())
+                using (var stream = File.OpenRead(desktopEntriesArchiveFile))
+                using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(stream))
+                {
                     while (reader.MoveToNextEntry())
                     {
                         if (reader.Entry.IsDirectory)
                             continue;
 
-                        hakchi.ConsoleType c = hakchi.SystemCodeToConsoleType[reader.Entry.Key.Substring(2, reader.Entry.Key.IndexOf('/', 2) - 2)];
-                        DefaultGames[c].Add(Path.GetFileNameWithoutExtension(reader.Entry.Key));
-                        using (var str = reader.OpenEntryStream())
+                        string key = reader.Entry.Key;
+                        hakchi.ConsoleType c = hakchi.SystemCodeToConsoleType[key.Substring(2, key.IndexOf('/', 2) - 2)];
+                        DefaultGames[c].Add(Path.GetFileNameWithoutExtension(key));
+                        using (var ms = new MemoryStream())
                         {
+                            reader.WriteEntryTo(ms);
+                            ms.Position = 0;
                             var desktopFile = new DesktopFile();
-                            desktopFile.Load(str);
+                            desktopFile.Load(ms);
                             AllDefaultGames[desktopFile.Code] = desktopFile;
                         }
                     }
+                }
             }
             catch (Exception ex)
             {
@@ -178,17 +184,15 @@ namespace com.clusterrr.hakchi_gui
                     int extPos = gameFilePath.LastIndexOf('.');
                     if (extPos > -1 && compressedFiles.Contains(gameFilePath.Substring(extPos)))
                     {
-                        using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(gameFilePath))
+                        using (var archiveStream = File.OpenRead(gameFilePath))
+                        using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
                         {
-                            if (extractor.Entries.Count() == 1)
-                            {
-                                MemoryStream stream = new MemoryStream();
-                                using (var srcStream = extractor.Entries.First().OpenEntryStream())
-                                {
-                                    srcStream.CopyTo(stream);
-                                }
-                                return stream;
-                            }
+                            if (!reader.MoveToNextEntry())
+                                return null;
+                            MemoryStream stream = new MemoryStream();
+                            reader.WriteEntryTo(stream);
+                            stream.Position = 0;
+                            return stream;
                         }
                     }
                     else
@@ -298,7 +302,7 @@ namespace com.clusterrr.hakchi_gui
                 }
             }
             if (appInfo == null)
-            { 
+            {
                 appInfo = metadata.AppInfo; // guaranteed to at least return UnknownApp
             }
 
@@ -389,7 +393,7 @@ namespace com.clusterrr.hakchi_gui
             if (appInfo.Unknown)
             {
                 IEnumerable<string> systems = CoreCollection.GetSystemsFromExtension(ext).Except(SystemCollection.RedundancyList);
-                if(systems.Count() == 1)
+                if (systems.Count() == 1)
                 {
                     var system = systems.First();
                     appInfo = AppTypeCollection.GetAppBySystem(system);
@@ -515,7 +519,7 @@ namespace com.clusterrr.hakchi_gui
                 foreach (var file in appFiles.Skip(1))
                 {
                     var info = new FileInfo(file);
-                    
+
                     string dataFile = Path.Combine(file);
 
                     if (!info.Directory.FullName.StartsWith(inputPath.FullName))
@@ -626,7 +630,7 @@ namespace com.clusterrr.hakchi_gui
             IsDeleting = false;
             foreach (var og in CurrentDefaultGames)
             {
-                if( og == desktop.Code )
+                if (og == desktop.Code)
                 {
                     IsOriginalGame = true;
                     break;
@@ -732,17 +736,25 @@ namespace com.clusterrr.hakchi_gui
                 int extPos = file.LastIndexOf('.');
                 if (extPos > -1 && compressedFiles.Contains(file.Substring(extPos)))
                 {
-                    using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(file))
+                    using (var archiveStream = File.OpenRead(file))
+                    using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
                     {
-                        if (extractor.Entries.Count() == 1)
+                        if (reader.MoveToNextEntry())
                         {
-                            var entry = extractor.Entries.First();
-                            var extractedFileName = entry.Key;
-                            if (!File.Exists(Path.Combine(this.basePath, extractedFileName)))
+                            var extractedFileName = reader.Entry.Key;
+                            bool hasMore = reader.MoveToNextEntry();
+                            if (!hasMore && !reader.Entry.IsDirectory)
                             {
-                                entry.WriteToDirectory(this.BasePath);
-                                acceptedFiles.Add(Path.Combine(basePath, extractedFileName));
-                                File.Delete(file);
+                                if (!File.Exists(Path.Combine(this.basePath, extractedFileName)))
+                                {
+                                    reader.WriteAllToDirectory(this.BasePath);
+                                    acceptedFiles.Add(Path.Combine(basePath, extractedFileName));
+                                    File.Delete(file);
+                                }
+                            }
+                            else
+                            {
+                                acceptedFiles.Add(file);
                             }
                         }
                         else
@@ -773,7 +785,7 @@ namespace com.clusterrr.hakchi_gui
             }
             else
             {
-                ParentForm.Invoke(new Action(()=>{
+                ParentForm.Invoke(new Action(() => {
                     var form = new SelectFileForm(
                         acceptedFiles.Select(file => Path.GetFileName(file)).ToArray(),
                         string.Format(Resources.SelectFileFor, Desktop.Name),
@@ -934,14 +946,15 @@ namespace com.clusterrr.hakchi_gui
                 }
 
                 // check for original art in archive
-                using (var extractorTar = SharpCompress.Archives.Tar.TarArchive.OpenArchive(Path.Combine(Program.BaseDirectoryInternal, "data", "original_art.tar")))
+                using (var artStream = File.OpenRead(Path.Combine(Program.BaseDirectoryInternal, "data", "original_art.tar")))
+                using (var artReader = SharpCompress.Readers.ReaderFactory.OpenReader(artStream))
                 {
-                    foreach (var f in extractorTar.Entries)
+                    while (artReader.MoveToNextEntry())
                     {
-                        if (f.Key == $"./{filename}_mdmini.png")
+                        if (artReader.Entry.Key == $"./{filename}_mdmini.png")
                         {
-                            f.WriteToFile(mdMiniIconPath);
-                            CoverArtMatches = new string[] { f.Key };
+                            artReader.WriteEntryToFile(mdMiniIconPath);
+                            CoverArtMatches = new string[] { artReader.Entry.Key };
                             return CoverArtMatchSuccess = true;
                         }
                     }
@@ -1053,7 +1066,7 @@ namespace com.clusterrr.hakchi_gui
             {
                 // build word list, with exceptions
                 List<string[]> words = new List<string[]>();
-                foreach(string word in name.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (string word in name.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     //Trace.WriteLine($"\"{word}\"");
                     if (word == "&" || word == "and") // and, & can be used interchangeably, or omitted
@@ -1108,7 +1121,7 @@ namespace com.clusterrr.hakchi_gui
 
             return new Dictionary<string, bool>();
         }
-        
+
         private static Regex puzzleMatchRegexIteration = new Regex(@"\s[ivx]+\s|[0-9]{1,2}", RegexOptions.Compiled);
         private static void PuzzleMatch(List<string[]> pieces, string puzzle, out bool match, out bool partial)
         {
@@ -1117,7 +1130,7 @@ namespace com.clusterrr.hakchi_gui
 
             if (pieces.Count == 0)
             {
-                if(puzzle.Trim().Length == 0)
+                if (puzzle.Trim().Length == 0)
                 {
                     match = true;
                     partial = false;
@@ -1146,7 +1159,7 @@ namespace com.clusterrr.hakchi_gui
             }
 
             var piece = pieces.First();
-            foreach(var alt in piece)
+            foreach (var alt in piece)
             {
                 if (string.IsNullOrEmpty(alt))
                 {
@@ -1223,7 +1236,7 @@ namespace com.clusterrr.hakchi_gui
             f = Regex.Replace(f, @"[^A-Za-z0-9\.\!\-]+", "_");
             f = Regex.Replace(f, @"_+", "_");
             int maxLength = 64 - ".sfrom.lzma".Length;
-            if(f.Length > maxLength) // 64 characters, leave room for longest extension: '.sfrom.lzma'
+            if (f.Length > maxLength) // 64 characters, leave room for longest extension: '.sfrom.lzma'
             {
                 Trace.WriteLine($"'{f}' l:{f.Length}");
                 f = f.Substring(0, maxLength);
@@ -1486,8 +1499,8 @@ namespace com.clusterrr.hakchi_gui
                     if (Directory.Exists(Path.Combine(originalCacheBasePath, "autoplay")))
                     {
                         gameSet.UnionWith(ApplicationFileInfo.GetApplicationFileInfoForDirectory(
-                            Path.Combine(originalCacheBasePath, "autoplay"), $"{targetDir}/autoplay", skipFiles: new string[] { 
-                                $"{desktop.Code}_original.png", 
+                            Path.Combine(originalCacheBasePath, "autoplay"), $"{targetDir}/autoplay", skipFiles: new string[] {
+                                $"{desktop.Code}_original.png",
                                 $"{desktop.Code}_spine.png",
                                 $"{desktop.Code}_logo.png"
                             }));
@@ -1495,7 +1508,7 @@ namespace com.clusterrr.hakchi_gui
                     if (Directory.Exists(Path.Combine(originalCacheBasePath, "pixelart")))
                     {
                         gameSet.UnionWith(ApplicationFileInfo.GetApplicationFileInfoForDirectory(
-                            Path.Combine(originalCacheBasePath, "pixelart"), $"{targetDir}/pixelart", skipFiles: new string[] { 
+                            Path.Combine(originalCacheBasePath, "pixelart"), $"{targetDir}/pixelart", skipFiles: new string[] {
                                 $"{desktop.Code}_original.png",
                                 $"{desktop.Code}_spine.png",
                                 $"{desktop.Code}_logo.png"
@@ -1514,7 +1527,7 @@ namespace com.clusterrr.hakchi_gui
                 if (Directory.Exists(Path.Combine(basePath, "autoplay")))
                 {
                     gameSet.UnionWith(ApplicationFileInfo.GetApplicationFileInfoForDirectory(
-                        Path.Combine(basePath, "autoplay"), $"{targetDir}/autoplay", skipFiles: new string[] { 
+                        Path.Combine(basePath, "autoplay"), $"{targetDir}/autoplay", skipFiles: new string[] {
                             $"{Code}_original.png",
                             $"{Code}_spine.png",
                             $"{Code}_logo.png"
@@ -1523,7 +1536,7 @@ namespace com.clusterrr.hakchi_gui
                 if (Directory.Exists(Path.Combine(basePath, "pixelart")))
                 {
                     gameSet.UnionWith(ApplicationFileInfo.GetApplicationFileInfoForDirectory(
-                        Path.Combine(basePath, "pixelart"), $"{targetDir}/pixelart", skipFiles: new string[] { 
+                        Path.Combine(basePath, "pixelart"), $"{targetDir}/pixelart", skipFiles: new string[] {
                             $"{Code}_original.png",
                             $"{Code}_spine.png",
                             $"{Code}_logo.png"
@@ -1588,7 +1601,8 @@ namespace com.clusterrr.hakchi_gui
             {
                 if (nonCompressibleExtensions.Contains(Path.GetExtension(file).ToLower()))
                     continue;
-                if (exec.Contains(" " + Path.GetFileName(file) + " ")) { 
+                if (exec.Contains(" " + Path.GetFileName(file) + " "))
+                {
                     if ((new FileInfo(file)).Length <= MaxCompress)
                         result.Add(file);
                 }
@@ -1607,9 +1621,10 @@ namespace com.clusterrr.hakchi_gui
                 foreach (var e in compressedExtensions)
                     if (file.ToLower().EndsWith(e) && exec.Contains(" " + Path.GetFileName(file) + " "))
                     {
-                        using (var archive = SharpCompress.Archives.ArchiveFactory.OpenArchive(file))
+                        using (var archiveStream = File.OpenRead(file))
+                        using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
                         {
-                            if (archive.Entries.Count() == 1)
+                            if (reader.MoveToNextEntry() && !reader.MoveToNextEntry())
                             {
                                 result.Add(file);
                                 break;
@@ -1642,12 +1657,22 @@ namespace com.clusterrr.hakchi_gui
         {
             foreach (var filename in DecompressPossible())
             {
-                using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(filename))
+                using (var archiveStream = File.OpenRead(filename))
+                using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
                 {
                     Trace.WriteLine("Decompressing " + filename);
-                    extractor.Entries.First().WriteToDirectory(basePath);
-                    foreach (var e in extractor.Entries)
-                        desktop.Exec = desktop.Exec.Replace(Path.GetFileName(filename), e.Key);
+                    var entryNames = new List<string>();
+                    while (reader.MoveToNextEntry())
+                    {
+                        entryNames.Add(reader.Entry.Key);
+                    }
+                    if (entryNames.Count > 0)
+                    {
+                        archiveStream.Position = 0;
+                        reader.WriteAllToDirectory(basePath);
+                        foreach (var name in entryNames)
+                            desktop.Exec = desktop.Exec.Replace(Path.GetFileName(filename), name);
+                    }
                 }
                 File.Delete(filename);
             }
