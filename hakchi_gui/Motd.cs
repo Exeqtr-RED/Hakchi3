@@ -22,6 +22,7 @@ namespace com.clusterrr.hakchi_gui
             {
                 webBrowser = new WebBrowser() { Location = position, Size = size, Dock = DockStyle.Fill, Url = new Uri("about:blank") };
                 webBrowser.Navigating += webBrowser_Navigating;
+                webBrowser.DocumentCompleted += WebBrowser_DocumentCompleted;
                 panel1.Controls.Add(webBrowser);
                 Color color = this.BackColor;
                 string text = Markdown.ToHtml(message);
@@ -40,6 +41,20 @@ namespace com.clusterrr.hakchi_gui
                 textBox = new TextBox() { Location = position, Size = size, ReadOnly = true, BackColor = SystemColors.Window, Multiline = true, ScrollBars = ScrollBars.Both, Dock = DockStyle.Fill };
                 panel1.Controls.Add(textBox);
                 textBox.Text = message;
+            }
+        }
+
+        private void WebBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            if (e.Url.ToString() == "about:blank") return;
+            try
+            {
+                dynamic domDoc = webBrowser.Document.DomDocument;
+                Trace.WriteLine($"[MOTD] documentMode={domDoc.documentMode}, compatMode={domDoc.compatMode}");
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"[MOTD] Failed to get documentMode: {ex.Message}");
             }
         }
 

@@ -103,29 +103,15 @@ namespace com.clusterrr.hakchi_gui
             private MemoryStream ArchiveFile(string filename)
             {
                 var image = new MemoryStream();
-
-                // .hmod is a GZip-compressed TAR; decompress to get the inner TAR stream
-                MemoryStream tar = new MemoryStream();
                 HmodStream.Position = 0;
-                using (var extractorReader = SharpCompress.Readers.ReaderFactory.OpenReader(HmodStream))
-                {
-                    if (!extractorReader.MoveToNextEntry())
-                    {
-                        throw new InvalidOperationException("Archive contains no entries");
-                    }
-                    extractorReader.WriteEntryTo(tar);
-                }
-
-                // Now iterate the inner TAR to find the requested file
-                tar.SetLength(tar.Position); tar.Position = 0;
                 bool found = false;
-                using (var tarReader = SharpCompress.Readers.ReaderFactory.OpenReader(tar))
+                using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(HmodStream))
                 {
-                    while (tarReader.MoveToNextEntry())
+                    while (reader.MoveToNextEntry())
                     {
-                        if (tarReader.Entry.Key == filename)
+                        if (reader.Entry.Key == filename)
                         {
-                            tarReader.WriteEntryTo(image);
+                            reader.WriteEntryTo(image);
                             found = true;
                             break;
                         }

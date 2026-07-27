@@ -1,4 +1,4 @@
-﻿using Markdig;
+using Markdig;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -17,8 +17,24 @@ namespace com.clusterrr.hakchi_gui.Hmod.Controls
             wbReadme.Navigate("about:blank");
             HtmlDocument doc = wbReadme.Document;
             doc.Write(String.Empty);
-            
+
+            wbReadme.DocumentCompleted += WbReadme_DocumentCompleted;
+
             clear();
+        }
+
+        private void WbReadme_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            if (e.Url.ToString() == "about:blank") return;
+            try
+            {
+                dynamic domDoc = wbReadme.Document.DomDocument;
+                Trace.WriteLine($"[Readme] documentMode={domDoc.documentMode}, compatMode={domDoc.compatMode}");
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"[Readme] Failed to get documentMode: {ex.Message}");
+            }
         }
 
         private string formatReadme(string name, ref HmodReadme hReadme)
@@ -30,7 +46,10 @@ namespace com.clusterrr.hakchi_gui.Hmod.Controls
         private void setReadmeHTML(string name, ref HmodReadme hReadme)
         {
             Color color = this.BackColor;
-            string html = String.Format(Properties.Resources.readmeTemplateHTML, Properties.Resources.readmeTemplateCSS, formatReadme(name, ref Readme), $"rgb({color.R},{color.G},{color.B})");
+            var css = Properties.Resources.readmeTemplateCSS;
+            var tmpl = Properties.Resources.readmeTemplateHTML;
+            Trace.WriteLine($"[Readme] CSS length={css?.Length ?? -1}, Template length={tmpl?.Length ?? -1}");
+            string html = String.Format(tmpl, css, formatReadme(name, ref Readme), $"rgb({color.R},{color.G},{color.B})");
             wbReadme.DocumentText = html;
         }
 
@@ -48,9 +67,12 @@ namespace com.clusterrr.hakchi_gui.Hmod.Controls
         public void clear()
         {
             Readme = new HmodReadme("");
-            
+
             Color color = this.BackColor;
-            string html = String.Format(Properties.Resources.readmeTemplateHTML, Properties.Resources.readmeTemplateCSS, "", $"rgb({color.R},{color.G},{color.B})");
+            var css = Properties.Resources.readmeTemplateCSS;
+            var tmpl = Properties.Resources.readmeTemplateHTML;
+            Trace.WriteLine($"[Readme:clear] CSS length={css?.Length ?? -1}, Template length={tmpl?.Length ?? -1}");
+            string html = String.Format(tmpl, css, "", $"rgb({color.R},{color.G},{color.B})");
             wbReadme.DocumentText = html;
         }
 

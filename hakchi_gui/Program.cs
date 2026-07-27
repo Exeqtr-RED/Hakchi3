@@ -258,9 +258,17 @@ namespace com.clusterrr.hakchi_gui
                         try
                         {
                             using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"))
-                                key.SetValue("hakchi.exe", 11001, Microsoft.Win32.RegistryValueKind.DWord);
+                            {
+                                var exeName = Path.GetFileName(Application.ExecutablePath);
+                                key.SetValue(exeName, 11001, Microsoft.Win32.RegistryValueKind.DWord);
+                                var readBack = key.GetValue(exeName);
+                                Trace.WriteLine($"[Browser] Set FEATURE_BROWSER_EMULATION for {exeName} = {readBack}");
+                            }
                         }
-                        catch { }
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLine($"[Browser] Failed to set FEATURE_BROWSER_EMULATION: {ex.Message}");
+                        }
 
                         // ИСПРАВЛЕНО: Добавлена поддержка высокого DPI для .NET 8
                         Application.SetHighDpiMode(HighDpiMode.SystemAware);
