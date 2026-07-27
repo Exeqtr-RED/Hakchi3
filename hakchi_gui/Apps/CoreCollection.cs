@@ -112,7 +112,7 @@ namespace com.clusterrr.hakchi_gui
             using (var archiveStream = File.OpenRead(Shared.PathCombine(Program.BaseDirectoryInternal, "data", "libretro_cores.tar")))
             using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
             {
-                while (reader.MoveToNextEntry())
+                foreach (var entry in archive.Entries)
                 {
                     if (reader.Entry.IsDirectory) continue;
                     var file = reader.Entry.Key;

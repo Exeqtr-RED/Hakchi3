@@ -14,7 +14,7 @@ namespace com.clusterrr.hakchi_gui
             using (var licenseMs = new MemoryStream(Properties.Resources.LicensesTar))
             using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(licenseMs))
             {
-                while (reader.MoveToNextEntry())
+                foreach (var entry in archive.Entries)
                 {
                     if (reader.Entry.IsDirectory) continue;
                     using (var ms = new MemoryStream())

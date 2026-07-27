@@ -44,7 +44,7 @@ namespace com.clusterrr.hakchi_gui
                 {
                     while (reader.MoveToNextEntry())
                     {
-                        if (reader.Entry.IsDirectory)
+                        if (entry.IsDirectory)
                             continue;
 
                         string key = reader.Entry.Key;
