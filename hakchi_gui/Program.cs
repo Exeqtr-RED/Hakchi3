@@ -250,6 +250,15 @@ namespace com.clusterrr.hakchi_gui
                         // ИСПРАВЛЕНО: Принудительно указываем .NET 8 использовать TLS 1.2 и 1.3 для совместимости со старыми серверами Hakchi
                         System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls13;
 
+                        // ИСПРАВЛЕНО: WebBrowser control по умолчанию рендерит в IE7.
+                        // Без FEATURE_BROWSER_EMULATION CSS3 (border-radius, flexbox, box-shadow) не работает.
+                        try
+                        {
+                            using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"))
+                                key.SetValue("hakchi.exe", 11001, Microsoft.Win32.RegistryValueKind.DWord);
+                        }
+                        catch { }
+
                         // ИСПРАВЛЕНО: Добавлена поддержка высокого DPI для .NET 8
                         Application.SetHighDpiMode(HighDpiMode.SystemAware);
                         Application.EnableVisualStyles();

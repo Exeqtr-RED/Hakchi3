@@ -328,12 +328,12 @@ namespace com.clusterrr.hakchi_gui.Tasks
                 using (var reader = SharpCompress.Readers.ReaderFactory.OpenReader(archiveStream))
                 {
                     int i = 0;
-                    foreach (var entry in archive.Entries)
+                    while (reader.MoveToNextEntry())
                     {
-                        if (entry.IsDirectory)
+                        if (reader.Entry.IsDirectory)
                             continue;
 
-                        var code = Path.GetFileNameWithoutExtension(entry.Key);
+                        var code = Path.GetFileNameWithoutExtension(reader.Entry.Key);
                         if (!defaultGames.Contains(code))
                             continue;
 
