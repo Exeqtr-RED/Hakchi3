@@ -294,11 +294,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
 
         public void Abort()
         {
-            if (thread != null)
-            {
-                #warning Refactor this to get rid of Thread.Abort!
-                thread.Abort();
-            }
+            _cts?.Cancel();
         }
 
         // Views-related methods
@@ -333,11 +329,11 @@ namespace com.clusterrr.hakchi_gui.Tasks
             this.TaskConclusion = Conclusion.Undefined;
             this.doneTasks = 0;
             this.doneWeight = 0;
+            this._cts = new CancellationTokenSource();
 
             // set up thread
             thread = new Thread(startThread);
             thread.IsBackground = true;
-            thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
 
             Show();
@@ -367,6 +363,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
             this.tasks = new Queue<Task>();
             this.finalTask = null;
             this.thread = null;
+            this._cts = null;
             this.titleSet = false;
             this.doneTasks = 0;
             this.doneWeight = 0;
@@ -379,6 +376,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
         private Queue<Task> tasks;
         private Task finalTask;
         private Thread thread;
+        private CancellationTokenSource _cts;
         private bool titleSet;
         private int doneTasks;
         private int doneWeight;
@@ -386,7 +384,20 @@ namespace com.clusterrr.hakchi_gui.Tasks
         private void startThread()
         {
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(ConfigIni.Instance.Language);
-            while (!Ready) { Thread.Sleep(1); Trace.Write("."); }
+
+            // Wait for Ready signal or cancellation
+            while (!Ready && !_cts.IsCancellationRequested)
+            {
+                Thread.Sleep(10);
+            }
+
+            if (_cts.IsCancellationRequested)
+            {
+                TaskConclusion = Conclusion.Abort;
+                Close();
+                return;
+            }
+
             SetStatus(Resources.Starting);
             TaskState = State.Starting;
             SetProgress(0, 1);
@@ -394,7 +405,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
             {
                 // iterate through tasks queue
                 bool firstTask = true;
-                while (tasks.Any())
+                while (tasks.Any() && !_cts.IsCancellationRequested)
                 {
                     // pop out next task
                     CurrentTask = tasks.Dequeue();
@@ -421,9 +432,9 @@ namespace com.clusterrr.hakchi_gui.Tasks
                     ++doneTasks;
                 }
             }
-            catch (ThreadAbortException)
+            catch (OperationCanceledException)
             {
-                Trace.WriteLine("Thread aborted");
+                Trace.WriteLine("Task cancelled");
                 if (TaskConclusion == Conclusion.Undefined)
                 {
                     TaskConclusion = Conclusion.Abort;
@@ -466,8 +477,10 @@ namespace com.clusterrr.hakchi_gui.Tasks
 
         public void Dispose()
         {
-            this.views.ForEach(view => { if (view is IDisposable) (view as IDisposable).Dispose(); });
-            GC.Collect();
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = null;
+            this.views.ForEach(view => { if (view is IDisposable disposable) disposable.Dispose(); });
         }
 
         // generic tasks
@@ -494,11 +507,12 @@ namespace com.clusterrr.hakchi_gui.Tasks
             };
         }
 
-        public static TaskFunc TaskTitle(string title) => (Tasker tasker, Object syncObject) => 
+        public static TaskFunc TaskTitle(string title) => (Tasker tasker, Object syncObject) =>
         {
             tasker.SetTitle(title);
             return Conclusion.Success;
         };
+
         public static TaskFunc TaskIf(TaskFunc condition, TaskFunc successTask, TaskFunc failureTask = null)
         {
             return (Tasker tasker, Object syncObject) =>
@@ -518,7 +532,6 @@ namespace com.clusterrr.hakchi_gui.Tasks
                 return task(tasker, syncObject);
             };
         }
-
 
         public static TaskFunc ErrorTask(string message, string innerMessage = null)
         {

@@ -58,7 +58,8 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
         // Fallback: raw GitHub URL for pack.tgz mirror
         // Place your pack.tgz at: https://raw.githubusercontent.com/Exeqtr-RED/Hakchi3/master/hmods/pack.tgz
         private const string FALLBACK_GITHUB_PACK_URL = "https://raw.githubusercontent.com/Exeqtr-RED/Hakchi3/master/hmods/pack.tgz";
-        private const int REQUEST_TIMEOUT_MS = 15000;
+        private const int REQUEST_TIMEOUT_MS = 15000;       // connection timeout
+        private const int DOWNLOAD_TIMEOUT_MS = 120000;      // read/write timeout for large files (20MB+)
 
         public static string[] ItemKindFileExtensions = new string[] { null, ".hmod", ".clvg" };
         public enum ItemKind
@@ -207,7 +208,7 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
 
                 var request = (HttpWebRequest)WebRequest.Create(url);
                 request.Timeout = REQUEST_TIMEOUT_MS;
-                request.ReadWriteTimeout = REQUEST_TIMEOUT_MS;
+                request.ReadWriteTimeout = DOWNLOAD_TIMEOUT_MS;
                 request.UserAgent = "hakchi/3.0";
                 request.CachePolicy = new System.Net.Cache.RequestCachePolicy(
                     System.Net.Cache.RequestCacheLevel.BypassCache);

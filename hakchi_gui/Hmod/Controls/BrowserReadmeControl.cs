@@ -18,23 +18,7 @@ namespace com.clusterrr.hakchi_gui.Hmod.Controls
             HtmlDocument doc = wbReadme.Document;
             doc.Write(String.Empty);
 
-            wbReadme.DocumentCompleted += WbReadme_DocumentCompleted;
-
             clear();
-        }
-
-        private void WbReadme_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            if (e.Url.ToString() == "about:blank") return;
-            try
-            {
-                dynamic domDoc = wbReadme.Document.DomDocument;
-                Trace.WriteLine($"[Readme] documentMode={domDoc.documentMode}, compatMode={domDoc.compatMode}");
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine($"[Readme] Failed to get documentMode: {ex.Message}");
-            }
         }
 
         private string formatReadme(string name, ref HmodReadme hReadme)
@@ -43,13 +27,20 @@ namespace com.clusterrr.hakchi_gui.Hmod.Controls
             return Markdown.ToHtml(markdownTitle + String.Join("  \n", hReadme.headingLines) + "\n\n" + (hReadme.isMarkdown || hReadme.readme.Length == 0 ? hReadme.readme : $"```\n{hReadme.readme}\n```"));
         }
 
-        private void setReadmeHTML(string name, ref HmodReadme hReadme)
+        private string buildHTML(string css, string bodyContent)
         {
             Color color = this.BackColor;
-            var css = Properties.Resources.readmeTemplateCSS;
-            var tmpl = Properties.Resources.readmeTemplateHTML;
-            Trace.WriteLine($"[Readme] CSS length={css?.Length ?? -1}, Template length={tmpl?.Length ?? -1}");
-            string html = String.Format(tmpl, css, formatReadme(name, ref Readme), $"rgb({color.R},{color.G},{color.B})");
+            string bgColor = $"rgb({color.R},{color.G},{color.B})";
+            // Using .Replace() instead of String.Format to avoid curly brace conflicts with CSS
+            return Properties.Resources.readmeTemplateHTML
+                .Replace("{0}", css)
+                .Replace("{1}", bodyContent)
+                .Replace("{2}", bgColor);
+        }
+
+        private void setReadmeHTML(string name, ref HmodReadme hReadme)
+        {
+            string html = buildHTML(Properties.Resources.readmeTemplateCSS, formatReadme(name, ref Readme));
             wbReadme.DocumentText = html;
         }
 
@@ -67,12 +58,7 @@ namespace com.clusterrr.hakchi_gui.Hmod.Controls
         public void clear()
         {
             Readme = new HmodReadme("");
-
-            Color color = this.BackColor;
-            var css = Properties.Resources.readmeTemplateCSS;
-            var tmpl = Properties.Resources.readmeTemplateHTML;
-            Trace.WriteLine($"[Readme:clear] CSS length={css?.Length ?? -1}, Template length={tmpl?.Length ?? -1}");
-            string html = String.Format(tmpl, css, "", $"rgb({color.R},{color.G},{color.B})");
+            string html = buildHTML(Properties.Resources.readmeTemplateCSS, "");
             wbReadme.DocumentText = html;
         }
 

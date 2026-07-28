@@ -26,15 +26,13 @@ namespace com.clusterrr.hakchi_gui
                 panel1.Controls.Add(webBrowser);
                 Color color = this.BackColor;
                 string text = Markdown.ToHtml(message);
-                var css = Properties.Resources.motdTemplateCSS;
-                var tmpl = Properties.Resources.motdTemplateHTML;
-                Trace.WriteLine($"[MOTD] CSS length={css?.Length ?? -1}, Template length={tmpl?.Length ?? -1}");
-                this.html = String.Format(
-                    tmpl,
-                    css,
-                    this.Text,
-                    text,
-                    $"rgb({color.R},{color.G},{color.B})");
+                string bgColor = $"rgb({color.R},{color.G},{color.B})";
+                // Using .Replace() instead of String.Format to avoid curly brace conflicts
+                this.html = Properties.Resources.motdTemplateHTML
+                    .Replace("{0}", Properties.Resources.motdTemplateCSS)
+                    .Replace("{1}", this.Text)
+                    .Replace("{2}", text)
+                    .Replace("{3}", bgColor);
             }
             else
             {
