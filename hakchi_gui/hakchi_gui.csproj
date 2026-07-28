@@ -10,45 +10,45 @@
 		<StartupObject>com.clusterrr.hakchi_gui.Program</StartupObject>
 		<ApplicationIcon>icon_app.ico</ApplicationIcon>
 		<Description>
-			Based on hakchi by madmonkey.
+Based on hakchi by madmonkey.
 
-			Coders:
-			Alexey 'Cluster' Avdyukhin
-			princess_daphie
-			DanTheMan827
-			skogaby
-			Exeqtr-RED
+Coders:
+Alexey 'Cluster' Avdyukhin
+princess_daphie
+DanTheMan827
+skogaby
+Exeqtr-RED
 
-			Translators:
-			Arabic: AluCarD
-			French: princess_daphie, JumpmanFR
-			German: Domi78
-			Italian: Leonardo5681
-			Korean: DDinghoya
-			Portuguese: kONNEN
-			Spanish (Latin America): ReyVGM
-			Swedish: yeager
-			Russian: Exeqtr-RED
+Translators:
+Arabic: AluCarD
+French: princess_daphie, JumpmanFR
+German: Domi78
+Italian: Leonardo5681
+Korean: DDinghoya
+Portuguese: kONNEN
+Spanish (Latin America): ReyVGM
+Swedish: yeager
+Russian: Exeqtr-RED
 
-			Sega Boxart and spine templates designed by TheWez1981 with backgrounds designed by HerbFargus and taken from the EmulationStation ""TronkyFran"" Theme
+Sega Boxart and spine templates designed by TheWez1981 with backgrounds designed by HerbFargus and taken from the EmulationStation ""TronkyFran"" Theme
 
-			Inspired by the original USA / EUR Boxarts
-			JP Boxarts are my own design inspired by various real Boxarts, because there is no standard in the JP Boxart theme
+Inspired by the original USA / EUR Boxarts
+JP Boxarts are my own design inspired by various real Boxarts, because there is no standard in the JP Boxart theme
 
-			Go check him out on FB: WH Creative Designs
-			https://www.facebook.com/TheWez81
+Go check him out on FB: WH Creative Designs
+https://www.facebook.com/TheWez81
 
-			Special thanks:
-			madmonkey and pcm720 for great help with everything.
-			Pete Batard/Akeo for libwdi &amp; Zadig.
-			Thomas Bleeker for WinUSBNet lib.
-			bootgod for cartridge database.
-			NeoRame for Graphics.
-			Faustbear (u/faustbear) for additional folder graphics.
-			Nhakin for Game Genie database.
-			Adam Hathcock for SharpCompress.
-			BoneSoft software for ProgressODoom.
-			Gert Driesen for SSH.NET.
+Special thanks:
+madmonkey and pcm720 for great help with everything.
+Pete Batard/Akeo for libwdi &amp; Zadig.
+Thomas Bleeker for WinUSBNet lib.
+bootgod for cartridge database.
+NeoRame for Graphics.
+Faustbear (u/faustbear) for additional folder graphics.
+Nhakin for Game Genie database.
+Adam Hathcock for SharpCompress.
+BoneSoft software for ProgressODoom.
+Gert Driesen for SSH.NET.
 		</Description>
 		<Title>Hakchi3</Title>
 		<Version>0.2.0</Version>
