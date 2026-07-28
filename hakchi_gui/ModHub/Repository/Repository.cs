@@ -4,9 +4,12 @@ using com.clusterrr.util;
 using SharpCompress.Readers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -31,6 +34,8 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
         public event RepositoryLoadedHandler RepositoryLoaded;
 
         public string RepositoryURL { get; private set; }
+        public string FallbackPackURL { get; private set; }
+
         public string RepositoryPackURL
         {
             get
@@ -49,6 +54,11 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
 
         public List<Item> Items = new List<Item>();
         public string Readme { get; private set; } = null;
+
+        // Fallback: raw GitHub URL for pack.tgz mirror
+        // Place your pack.tgz at: https://raw.githubusercontent.com/Exeqtr-RED/Hakchi3/master/hmods/pack.tgz
+        private const string FALLBACK_GITHUB_PACK_URL = "https://raw.githubusercontent.com/Exeqtr-RED/Hakchi3/master/hmods/pack.tgz";
+        private const int REQUEST_TIMEOUT_MS = 15000;
 
         public static string[] ItemKindFileExtensions = new string[] { null, ".hmod", ".clvg" };
         public enum ItemKind
@@ -160,6 +170,15 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
         {
             this.RepositoryURL = repositoryURL + (repositoryURL.EndsWith("/") ? "" : "/");
             this.RepositoryURL = RepositoryURL + (RepositoryURL.EndsWith("/.repo/") ? "" : ".repo/");
+            this.FallbackPackURL = FALLBACK_GITHUB_PACK_URL;
+        }
+
+        // Constructor with explicit fallback URL
+        public Repository(string repositoryURL, string fallbackPackURL)
+        {
+            this.RepositoryURL = repositoryURL + (repositoryURL.EndsWith("/") ? "" : "/");
+            this.RepositoryURL = RepositoryURL + (RepositoryURL.EndsWith("/.repo/") ? "" : ".repo/");
+            this.FallbackPackURL = fallbackPackURL;
         }
 
         private string StreamToString(Stream stream)
@@ -173,21 +192,87 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
             }
         }
 
+        /// <summary>
+        /// Downloads pack.tgz with proper timeout, TLS 1.2, and User-Agent.
+        /// Returns the response stream on success, null on failure.
+        /// </summary>
+        private HTTPHelpers.StatusStream? DownloadPackTgz(string url, string label)
+        {
+            Trace.WriteLine($"[ModHub] Trying {label}: {url}");
+
+            try
+            {
+                // Ensure TLS 1.2 is available (required by many modern servers)
+                ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+
+                var request = (HttpWebRequest)WebRequest.Create(url);
+                request.Timeout = REQUEST_TIMEOUT_MS;
+                request.ReadWriteTimeout = REQUEST_TIMEOUT_MS;
+                request.UserAgent = "hakchi/3.0";
+                request.CachePolicy = new System.Net.Cache.RequestCachePolicy(
+                    System.Net.Cache.RequestCacheLevel.BypassCache);
+                request.AllowAutoRedirect = true;
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    Trace.WriteLine($"[ModHub] Success from {label}, ContentLength={response.ContentLength}");
+                    return new HTTPHelpers.StatusStream(response.StatusCode, response.GetResponseStream(), response.ContentLength);
+                }
+                else
+                {
+                    Trace.WriteLine($"[ModHub] {label} returned status {response.StatusCode}");
+                    response.Dispose();
+                    return new HTTPHelpers.StatusStream(response.StatusCode);
+                }
+            }
+            catch (WebException ex)
+            {
+                Trace.WriteLine($"[ModHub] {label} failed: {ex.Status} - {ex.Message}");
+                if (ex.Response != null)
+                {
+                    try { ex.Response.Close(); } catch { }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"[ModHub] {label} error: {ex.Message}");
+                return null;
+            }
+        }
+
         public void Load()
         {
             string[] list = new string[] { };
+            HTTPHelpers.StatusStream? repoResponse = null;
 
-            var repoResponse = HTTPHelpers.GetHTTPResponseStreamAsync(RepositoryPackURL);
-            repoResponse.Wait();
+            // === Try primary URL first ===
+            repoResponse = DownloadPackTgz(RepositoryPackURL, "Primary");
 
-            if (repoResponse.Result.Status == HttpStatusCode.OK)
+            // === If primary failed, try fallback ===
+            if (repoResponse == null || repoResponse.Value.Status != HttpStatusCode.OK)
             {
-                // Start pack processing
+                Trace.WriteLine("[ModHub] Primary failed, trying fallback...");
+                repoResponse = DownloadPackTgz(FallbackPackURL, "Fallback");
+            }
+
+            // === Both failed ===
+            if (repoResponse == null || repoResponse.Value.Status != HttpStatusCode.OK)
+            {
+                throw new Exception("KMFDs Mod Hub is unavailable. Both primary and fallback servers failed.");
+            }
+
+            // === Process pack.tgz ===
+            try
+            {
+                var response = repoResponse.Value;
                 var tempDict = new Dictionary<string, Item>();
-                var trackableStream = new TrackableStream(repoResponse.Result.Stream);
+                var trackableStream = new TrackableStream(response.Stream);
                 trackableStream.OnProgress += (long current, long total) =>
                 {
-                    RepositoryProgress?.Invoke(current, repoResponse.Result.Length);
+                    RepositoryProgress?.Invoke(current, response.Length);
                 };
 
                 using (var decompressedStream = new System.IO.Compression.GZipStream(trackableStream, System.IO.Compression.CompressionMode.Decompress))
@@ -200,7 +285,7 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
                             list = Regex.Replace(StreamToString(reader.OpenEntryStream()), @"[\r\n]+", "\n").Split("\n"[0]);
                         }
 
-                        if (Regex.Match(reader.Entry.Key, @"^(?:\./)?readme.md$", RegexOptions.IgnoreCase).Success)
+                        if (Regex.Match(reader.Entry.Key, @"^(?:\./)?readme\.md$", RegexOptions.IgnoreCase).Success)
                         {
                             Readme = StreamToString(reader.OpenEntryStream());
                         }
@@ -263,58 +348,12 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
                 tempDict = null;
                 Items.Sort((x, y) => x.Name.CompareTo(y.Name));
                 RepositoryLoaded?.Invoke(Items.ToArray());
-                return;
-                // End pack processing
             }
-            else
+            finally
             {
-                throw new Exception($"HTTP request returned status {repoResponse.Result.Status}");
+                // Make sure the HTTP response stream is disposed
+                try { repoResponse.Value.Stream?.Dispose(); } catch { }
             }
-
-            var taskList = HTTPHelpers.GetHTTPResponseStringAsync(RepositoryListURL);
-
-            taskList.Wait();
-
-            list = (taskList.Result ?? "").Split("\n"[0]);
-
-            for (int i = 0; i < list.Length; i++)
-            {
-                var mod = list[i];
-                Item item = new Item(mod);
-                var taskExtract = HTTPHelpers.GetHTTPStatusCodeAsync($"{RepositoryURL}{mod}/extract");
-                var taskURL = HTTPHelpers.GetHTTPResponseStringAsync($"{RepositoryURL}{mod}/link");
-                var taskMD5 = HTTPHelpers.GetHTTPResponseStringAsync($"{RepositoryURL}{mod}/md5");
-                var taskSHA1 = HTTPHelpers.GetHTTPResponseStringAsync($"{RepositoryURL}{mod}/sha1");
-
-                taskExtract.Wait();
-                taskURL.Wait();
-                taskMD5.Wait();
-                taskSHA1.Wait();
-
-                item.setExtract(taskExtract.Result == HttpStatusCode.OK);
-                item.setURL(taskURL.Result);
-                item.setMD5(taskMD5.Result);
-                item.setSHA1(taskSHA1.Result);
-
-                for (var x = 0; x < HmodReadme.readmeFiles.Length; x++)
-                {
-                    var taskReadme = HTTPHelpers.GetHTTPResponseStringAsync($"{RepositoryURL}{mod}/{HmodReadme.readmeFiles[x]}");
-
-                    taskReadme.Wait();
-
-                    if (taskReadme.Result != null)
-                    {
-                        item.setReadme(taskReadme.Result, HmodReadme.readmeFiles[x].EndsWith(".md"));
-                        break;
-                    }
-                }
-
-                Items.Add(item);
-                RepositoryProgress?.Invoke(i + 1, list.Length);
-            }
-            RepositoryLoaded?.Invoke(Items.ToArray());
-
-            return;
         }
 
         public Item[] LoadTasker(Form hostForm)
