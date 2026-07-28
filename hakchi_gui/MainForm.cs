@@ -347,6 +347,8 @@ namespace com.clusterrr.hakchi_gui
 
             this.KeyDown += menuShiftHandler;
             this.KeyUp += menuShiftHandler;
+            // IKEA / Scandinavian theme
+            //IKEATheme.Apply(this);
         }
 
         private void menuShiftHandler(object sender, EventArgs e) => menuShiftHandler();
@@ -359,6 +361,8 @@ namespace com.clusterrr.hakchi_gui
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+
+            IKEATheme.Apply(this);   // <-- Стиль
             SetWindowTitle();
 
             // centralized upgrade actions system

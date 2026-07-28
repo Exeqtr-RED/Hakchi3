@@ -8,11 +8,14 @@ using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+
+#pragma warning disable SYSLIB0014
 
 namespace com.clusterrr.hakchi_gui.Controls
 {
-    public partial class ImageGoogler : UserControl, IDisposable
+    public partial class ImageGoogler : UserControl
     {
         private const string SearchUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0 Safari/537.36";
 
@@ -27,10 +30,15 @@ namespace com.clusterrr.hakchi_gui.Controls
         public event ImageReceived OnImageSelected;
         public event ImageReceived OnImageDoubleClicked;
         public event ImageDeselected OnImageDeselected;
+
         public List<SearchQuery> Queries { get; } = new List<SearchQuery>();
-        private Thread searchThread;
         private CancellationTokenSource searchCts;
-        private List<string> downloadedUrls = new List<string>();
+        private readonly List<string> downloadedUrls = new List<string>();
+
+        public ImageGoogler()
+        {
+            InitializeComponent();
+        }
 
         public void Deselect()
         {
@@ -48,10 +56,11 @@ namespace com.clusterrr.hakchi_gui.Controls
             downloadedUrls.Clear();
 
             searchCts?.Cancel();
+            searchCts?.Dispose();
             searchCts = new CancellationTokenSource();
             var token = searchCts.Token;
 
-            searchThread = new Thread(() =>
+            Task.Run(() =>
             {
                 foreach (var image in customResults)
                 {
@@ -64,26 +73,26 @@ namespace com.clusterrr.hakchi_gui.Controls
                     if (token.IsCancellationRequested) return;
                     SearchThread(query.Query, query.AdditionalVariables, token);
                 }
-            });
-            searchThread.Start();
+            }, token);
         }
 
         public static string[] GetImageUrls(string query, string additionalVariables = "", int tryCount = 0)
         {
             if (tryCount > 0)
-                Trace.WriteLine($"Retry #{tryCount}");
+                Trace.WriteLine(string.Format("Retry #" + tryCount));
 
             var urls = new List<string>();
 
             try
             {
                 urls.AddRange(GetDuckDuckGoImageUrls(query));
-                Trace.WriteLine($"DuckDuckGo image results: {urls.Count}");
+                Trace.WriteLine(string.Format("DuckDuckGo image results: " + urls.Count));
             }
             catch (Exception ex)
             {
                 Trace.WriteLine("DuckDuckGo image search failed: " + ex.Message);
-                Trace.WriteLine(ex.InnerException?.Message);
+                if (ex.InnerException != null)
+                    Trace.WriteLine(ex.InnerException.Message);
             }
 
             if (urls.Count == 0)
@@ -91,12 +100,13 @@ namespace com.clusterrr.hakchi_gui.Controls
                 try
                 {
                     urls.AddRange(GetBingImageUrls(query, additionalVariables));
-                    Trace.WriteLine($"Bing image results: {urls.Count}");
+                    Trace.WriteLine(string.Format("Bing image results: " + urls.Count));
                 }
                 catch (Exception ex)
                 {
                     Trace.WriteLine("Bing image search failed: " + ex.Message);
-                    Trace.WriteLine(ex.InnerException?.Message);
+                    if (ex.InnerException != null)
+                        Trace.WriteLine(ex.InnerException.Message);
                 }
             }
 
@@ -113,7 +123,7 @@ namespace com.clusterrr.hakchi_gui.Controls
         {
             var cookies = new CookieContainer();
             string encodedQuery = WebUtility.UrlEncode(query);
-            string searchPageUrl = $"https://duckduckgo.com/?q={encodedQuery}";
+            string searchPageUrl = "https://duckduckgo.com/?q=" + encodedQuery;
             Trace.WriteLine("Web request: " + searchPageUrl);
 
             string searchPage = DownloadText(searchPageUrl, cookies);
@@ -125,7 +135,7 @@ namespace com.clusterrr.hakchi_gui.Controls
                 throw new InvalidDataException("DuckDuckGo did not return an image-search token.");
 
             string vqd = vqdMatch.Groups["vqd"].Value;
-            string imageSearchUrl = $"https://duckduckgo.com/i.js?l=us-en&o=json&q={encodedQuery}&vqd={WebUtility.UrlEncode(vqd)}&f=,,,&p=1";
+            string imageSearchUrl = "https://duckduckgo.com/i.js?l=us-en&o=json&q=" + encodedQuery + "&vqd=" + WebUtility.UrlEncode(vqd) + "&f=,,,&p=1";
             Trace.WriteLine("Web request: " + imageSearchUrl);
 
             string json = DownloadText(imageSearchUrl, cookies, searchPageUrl, true);
@@ -162,7 +172,7 @@ namespace com.clusterrr.hakchi_gui.Controls
                 filter = "&qft=+filterui:photo-transparent";
 
             string url = "https://www.bing.com/images/async" +
-                $"?q={encodedQuery}&first=1&count=35&cw=1177&ch=758&relp=35" +
+                "?q=" + encodedQuery + "&first=1&count=35&cw=1177&ch=758&relp=35" +
                 "&tsc=ImageBasicHover&datsrc=I&layout=RowBased_Landscape&mmasync=1&SFX=1" +
                 "&cc=US&setlang=en-US&adlt=off" + filter;
             Trace.WriteLine("Web request: " + url);
@@ -189,7 +199,6 @@ namespace com.clusterrr.hakchi_gui.Controls
                 }
                 catch (JsonException)
                 {
-                    // Ignore malformed metadata records
                 }
             }
 
@@ -267,7 +276,7 @@ namespace com.clusterrr.hakchi_gui.Controls
         {
             try
             {
-                if (this.Disposing)
+                if (this.Disposing || this.IsDisposed)
                     return;
                 if (InvokeRequired)
                 {
@@ -318,11 +327,6 @@ namespace com.clusterrr.hakchi_gui.Controls
             using (Stream dataStream = response.GetResponseStream())
             using (var downloadedImage = Image.FromStream(dataStream))
                 return new Bitmap(downloadedImage);
-        }
-
-        public ImageGoogler()
-        {
-            InitializeComponent();
         }
 
         private Image GetSelectedImage()

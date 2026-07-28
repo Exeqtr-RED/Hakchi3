@@ -13,6 +13,9 @@ namespace com.clusterrr.hakchi_gui.Tasks
 {
     class WebClientTasks
     {
+        private const int CONNECTION_TIMEOUT_MS = 15000;
+        private const int DOWNLOAD_TIMEOUT_MS = 120000;
+
         public static TaskFunc DownloadFile(string url, string fileName, bool successOnError = false, bool onlyLatest = false, DateTime? comparisonDate = null, bool gunzip = false)
         {
             return (Tasker tasker, Object sync) =>
@@ -26,8 +29,13 @@ namespace com.clusterrr.hakchi_gui.Tasks
                     comparisonDate = File.GetLastWriteTime(fileName);
                 }
 
+                // Ensure TLS 1.2 is available
+                ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+
                 var wr = HttpWebRequest.Create(url) as HttpWebRequest;
                 wr.UserAgent = HakchiWebClient.UserAgent;
+                wr.Timeout = CONNECTION_TIMEOUT_MS;
+                wr.ReadWriteTimeout = DOWNLOAD_TIMEOUT_MS;
 
                 try
                 {
@@ -41,9 +49,9 @@ namespace com.clusterrr.hakchi_gui.Tasks
                         if (headers.AllKeys.Contains("Last-Modified"))
                         {
                             date = DateTime.ParseExact(headers["Last-Modified"],
-                            "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
-                            CultureInfo.InvariantCulture.DateTimeFormat,
-                            DateTimeStyles.AssumeUniversal);
+                                "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
+                                CultureInfo.InvariantCulture.DateTimeFormat,
+                                DateTimeStyles.AssumeUniversal);
 
                             if (onlyLatest && comparisonDate != null && comparisonDate >= date)
                             {
@@ -80,7 +88,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                         }
                     }
                 }
-                catch (ThreadAbortException) { }
+                catch (OperationCanceledException) { }
                 catch (Exception e)
                 {
                     if (!successOnError)
