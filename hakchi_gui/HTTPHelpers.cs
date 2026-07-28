@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,65 +21,75 @@ namespace com.clusterrr.hakchi_gui
                 this.Length = length;
             }
         }
-        public async static Task<HttpStatusCode> GetHTTPStatusCodeAsync(string url)
+
+        private static readonly HttpClient httpClient = new HttpClient();
+
+        static HTTPHelpers()
+        {
+            httpClient.DefaultRequestHeaders.CacheControl =
+                new System.Net.Http.Headers.CacheControlHeaderValue { NoCache = true };
+            httpClient.Timeout = TimeSpan.FromSeconds(30);
+        }
+
+        public static async Task<HttpStatusCode> GetHTTPStatusCodeAsync(string url)
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
-
-                request.AllowAutoRedirect = true;
-                HttpWebResponse response = (HttpWebResponse)(request.GetResponse());
-                return response.StatusCode;
-            }
-            catch (WebException e)
-            {
-                if (e.Status == WebExceptionStatus.ProtocolError)
+                using (var response = await httpClient.GetAsync(url,
+                    HttpCompletionOption.ResponseHeadersRead))
                 {
-                    return ((HttpWebResponse)e.Response).StatusCode;
+                    return response.StatusCode;
                 }
-                throw e;
+            }
+            catch (Exception)
+            {
+                return HttpStatusCode.ServiceUnavailable;
             }
         }
 
-        public async static Task<StatusStream> GetHTTPResponseStreamAsync(string url)
+        public static async Task<StatusStream> GetHTTPResponseStreamAsync(string url)
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
-                request.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.BypassCache);
+                var response = await httpClient.GetAsync(url,
+                    HttpCompletionOption.ResponseHeadersRead);
 
-                request.AllowAutoRedirect = true;
-                HttpWebResponse response = (HttpWebResponse)(request.GetResponse());
-                if(response.StatusCode == HttpStatusCode.OK)
+                if (response.IsSuccessStatusCode)
                 {
-                    return new StatusStream(response.StatusCode, response.GetResponseStream(), response.ContentLength);
+                    var stream = await response.Content.ReadAsStreamAsync();
+                    long length = response.Content.Headers.ContentLength ?? -1;
+                    // response не диспоузим — Stream привязан к нему,
+                    // диспоуз Stream вернёт соединение в пул
+                    return new StatusStream(response.StatusCode, stream, length);
                 }
+
+                response.Dispose();
                 return new StatusStream(response.StatusCode);
             }
-            catch (WebException e)
+            catch (Exception)
             {
-                if (e.Status == WebExceptionStatus.ProtocolError)
-                {
-                    return new StatusStream(((HttpWebResponse)e.Response).StatusCode);
-                }
-                throw e;
+                return new StatusStream(HttpStatusCode.ServiceUnavailable);
             }
-
         }
 
-        public async static Task<string> GetHTTPResponseStringAsync(string url, Encoding encoding = null)
+        public static async Task<string> GetHTTPResponseStringAsync(string url, Encoding encoding = null)
         {
-            var response = await GetHTTPResponseStreamAsync(url);
-
-            if (response.Status == HttpStatusCode.OK)
+            try
             {
-                using (var sr = new StreamReader(response.Stream, encoding ?? Encoding.UTF8))
+                using (var response = await httpClient.GetAsync(url))
                 {
-                    return sr.ReadToEnd();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var bytes = await response.Content.ReadAsByteArrayAsync();
+                        return (encoding ?? Encoding.UTF8).GetString(bytes);
+                    }
+                    return null;
                 }
             }
-
-            return null;
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
