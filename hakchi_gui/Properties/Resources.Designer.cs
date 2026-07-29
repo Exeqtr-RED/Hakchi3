@@ -2102,6 +2102,15 @@ namespace com.clusterrr.hakchi_gui.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Oops, {0} contains a trainer (a 512-byte data block before the PRG ROM). The NES Mini emulator does not load trainers, so the game may not work correctly. Do you want to add this game anyway?.
+        /// </summary>
+        internal static string TrainerNotSupported {
+            get {
+                return ResourceManager.GetString("TrainerNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap fr {

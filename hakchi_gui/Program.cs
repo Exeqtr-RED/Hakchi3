@@ -199,14 +199,26 @@ namespace com.clusterrr.hakchi_gui
                                     var destDir = Path.Combine(BaseDirectoryExternal, dir);
                                     if (isFirstRun || !Directory.Exists(destDir))
                                     {
-                                        Shared.DirectoryCopy(sourceDir, destDir, true, false, true, false);
+                                        try
+                                        {
+                                            Shared.DirectoryCopy(sourceDir, destDir, true, false, true, false);
+                                        }
+                                        catch (Exception dirEx)
+                                        {
+                                            // A single broken folder (locked file, permission,
+                                            // AV interference) must not abort the whole setup.
+                                            Trace.WriteLine(string.Format("Failed to copy external directory '{0}': {1}", dir, dirEx.Message));
+                                        }
                                     }
                                 }
                             }
                             catch (Exception ex)
                             {
-                                // TODO: Test it on Windows XP
-                                Trace.WriteLine(ex.Message);
+                                // Failsafe for errors during external-directory setup
+                                // (MyDocuments creation, enumeration, etc.). Logged so a
+                                // half-installed state is diagnosable instead of failing
+                                // silently. Per-directory copy errors are handled below.
+                                Trace.WriteLine("External directory setup failed: " + ex);
                             }
                         }
                         else

@@ -1222,7 +1222,7 @@ namespace com.clusterrr.hakchi_gui
                     }
                     else return false;
                 }
-                IpsPatcher.Patch(patch, ref rawRomData); // TODO
+                IpsPatcher.Patch(patch, ref rawRomData);
                 return true;
             }
             return false;

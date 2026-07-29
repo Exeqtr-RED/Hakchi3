@@ -15,6 +15,7 @@ namespace com.clusterrr.hakchi_gui
     {
         public const char Prefix = 'H';
         public static bool? IgnoreMapper;
+        public static bool? IgnoreTrainer;
         const string DefaultArgs = "--guest-overscan-dimensions 0,0,9,3 --initial-fadein-durations 3,2 --volume 75 --enable-armet";
         private static Dictionary<uint, CachedGameInfo> gameInfoCache = null;
 
@@ -81,7 +82,25 @@ namespace com.clusterrr.hakchi_gui
                     return false;
             }
 
-            // TODO: Make trainer check. I think that the NES Mini doesn't support it.
+            // The NES Mini emulator (clover-kachikachi-wr) does not load the 512-byte
+            // trainer section. ROMs with a trainer will likely misbehave, so warn the
+            // user the same way we do for unsupported mappers / four-screen VRAM.
+            if (nesFile.Trainer != null && (IgnoreTrainer != true))
+            {
+                if (IgnoreTrainer != false)
+                {
+                    var result = Tasks.MessageForm.Show(ParentForm, Resources.AreYouSure,
+                        string.Format(Resources.TrainerNotSupported, Path.GetFileName(inputFileName)),
+                        Resources.sign_warning,
+                        new Tasks.MessageForm.Button[] { Tasks.MessageForm.Button.YesToAll, Tasks.MessageForm.Button.Yes, Tasks.MessageForm.Button.No },
+                        Tasks.MessageForm.DefaultButton.Button2);
+                    if (result == Tasks.MessageForm.Button.YesToAll)
+                        IgnoreTrainer = true;
+                    if (result == Tasks.MessageForm.Button.No)
+                        return false;
+                }
+                else return false;
+            }
             rawRomData = nesFile.GetRaw();
             if (inputFileName.Contains("(J)")) cover = Resources.blank_jp;
 

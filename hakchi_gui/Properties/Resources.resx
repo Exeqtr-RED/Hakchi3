@@ -257,6 +257,9 @@ It's very simple to use. Just click "Add more games", select some ROMs, press "S
   <data name="FourScreenNotSupported" xml:space="preserve">
     <value>Oops, {0} uses four-screen mode (i.e. the game has additional VRAM memory in the cartridge), and this feature is not supported by the NES Mini. The game will probably not start. But it should work if other emulator's module installed. Do you want to add this game anyway?</value>
   </data>
+  <data name="TrainerNotSupported" xml:space="preserve">
+    <value>Oops, {0} contains a trainer (a 512-byte data block before the PRG ROM). The NES Mini emulator does not load trainers, so the game may not work correctly. Do you want to add this game anyway?</value>
+  </data>
   <data name="InputPreset" xml:space="preserve">
     <value>Please input a preset name for the current games selection.</value>
   </data>
