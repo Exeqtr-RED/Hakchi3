@@ -47,12 +47,13 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
             Game
         }
 
+        // Строгие regex — после нормализации имён (strip ./)
         private static readonly Regex RegexList =
-            new Regex(@"^(?:\./)?list$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            new Regex(@"^list$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex RegexReadme =
-            new Regex(@"^(?:\./)?readme\.md$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            new Regex(@"^readme\.md$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex RegexModMeta =
-            new Regex(@"^(?:\./)?([^/]+)/(extract|link|md5|sha1|readme(?:\.(?:md|txt)?)?)$",
+            new Regex(@"^([^/]+)/(extract|link|md5|sha1|readme(?:\.(?:md|txt)?)?)$",
                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static ItemKind ItemKindFromFilename(string filename)
@@ -119,27 +120,54 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
         public Repository(string repositoryURL)
         {
             RepositoryURL = repositoryURL;
+
+            // Автоконвертация GitHub web URL → raw content URL
+            // https://github.com/User/Repo/tree/branch/path  →  https://raw.githubusercontent.com/User/Repo/branch/path
+            if (RepositoryURL.Contains("github.com/") && !RepositoryURL.Contains("raw.githubusercontent.com"))
+            {
+                RepositoryURL = RepositoryURL.Replace("https://github.com/", "https://raw.githubusercontent.com/");
+                RepositoryURL = RepositoryURL.Replace("/tree/", "/");
+                System.Diagnostics.Trace.WriteLine($"[Repo] GitHub URL converted to: {RepositoryURL}");
+            }
+
             if (!RepositoryURL.EndsWith("/"))
                 RepositoryURL += "/";
             if (!RepositoryURL.EndsWith("/.repo/"))
                 RepositoryURL += ".repo/";
         }
 
+        /// <summary>
+        /// Читает поток в строку. leaveOpen:true чтобы не диспоузить
+        /// TarEntry.DataStream — иначе TarReader теряет возможность
+        /// читать следующие записи.
+        /// </summary>
         private static string StreamToString(Stream stream)
         {
+            if (stream == null)
+                return null;
             if (stream.CanSeek)
                 stream.Position = 0;
-            using (var sr = new StreamReader(stream, Encoding.UTF8))
+            using (var sr = new StreamReader(stream, Encoding.UTF8,
+                detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true))
                 return sr.ReadToEnd();
+        }
+
+        /// <summary>
+        /// Нормализует путь из tar-архива:
+        /// убирает ведущие "./" и detects/убирает общий префикс директории.
+        /// </summary>
+        private static string NormalizeEntryName(string name)
+        {
+            // Убираем ведущие ./
+            while (name.StartsWith("./"))
+                name = name.Substring(2);
+            return name;
         }
 
         public void Load()
         {
-            // Пытаемся загрузить pack.tgz (быстрый путь)
             if (TryLoadPack())
                 return;
-
-            // Фоллбэк: пофайловая загрузка
             LoadIndividual();
         }
 
@@ -147,8 +175,10 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
         {
             try
             {
+                System.Diagnostics.Trace.WriteLine($"[Repo] Pack URL: {RepositoryPackURL}");
                 var repoResponse = HTTPHelpers.GetHTTPResponseStreamAsync(RepositoryPackURL).GetAwaiter().GetResult();
 
+                System.Diagnostics.Trace.WriteLine($"[Repo] Pack response: {repoResponse.Status}");
                 if (repoResponse.Status != HttpStatusCode.OK)
                     return false;
 
@@ -165,24 +195,51 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
                     trackableStream, System.IO.Compression.CompressionMode.Decompress))
                 using (var tarReader = new TarReader(decompressedStream))
                 {
+                    // Собираем все имена файлов для диагностики
+                    var allFileEntries = new List<string>();
+
                     TarEntry entry;
                     while ((entry = tarReader.GetNextEntry()) != null)
                     {
-                        if (entry.EntryType == TarEntryType.Directory)
+                        // Пропускаем всё кроме обычных файлов
+                        if (entry.EntryType != TarEntryType.RegularFile
+                            && entry.EntryType != TarEntryType.V7RegularFile)
                             continue;
 
-                        string entryName = entry.Name;
+                        if (entry.DataStream == null)
+                            continue;
+
+                        string rawName = entry.Name;
+                        string entryName = NormalizeEntryName(rawName);
+
+                        if (allFileEntries.Count < 30)
+                            allFileEntries.Add($"{rawName}  →  {entryName}");
+
+                        System.Diagnostics.Trace.WriteLine($"[Repo] {rawName} → {entryName}");
 
                         if (RegexList.IsMatch(entryName))
                         {
                             list = Regex.Replace(
                                 StreamToString(entry.DataStream),
-                                @"[\r\n]+", "\n").Split('\n');
+                                @"[\r\n]+", "\n").Split('\n')
+                                .Select(s =>
+                                {
+                                    s = s.Trim();
+                                    while (s.StartsWith("./"))
+                                        s = s.Substring(2);
+                                    return s;
+                                })
+                                .Where(s => !string.IsNullOrWhiteSpace(s))
+                                .ToArray();
+                            System.Diagnostics.Trace.WriteLine($"[Repo] Found list: {list.Length} items");
+                            if (list.Length > 0)
+                                System.Diagnostics.Trace.WriteLine($"[Repo]   first: {list[0]}, last: {list[list.Length - 1]}");
                         }
 
                         if (RegexReadme.IsMatch(entryName))
                         {
                             Readme = StreamToString(entry.DataStream);
+                            System.Diagnostics.Trace.WriteLine($"[Repo] Found readme: {Readme?.Length ?? 0} chars");
                         }
 
                         var match = RegexModMeta.Match(entryName);
@@ -203,34 +260,57 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
                                     item.setExtract(true);
                                     break;
                                 case "link":
-                                    item.setURL(StreamToString(entry.DataStream).Trim());
+                                    item.setURL(StreamToString(entry.DataStream)?.Trim());
                                     break;
                                 case "md5":
-                                    item.setMD5(StreamToString(entry.DataStream).Trim());
+                                    item.setMD5(StreamToString(entry.DataStream)?.Trim());
                                     break;
                                 case "sha1":
-                                    item.setSHA1(StreamToString(entry.DataStream).Trim());
+                                    item.setSHA1(StreamToString(entry.DataStream)?.Trim());
                                     break;
                                 case "readme":
                                 case "readme.txt":
                                 case "readme.md":
                                     item.setReadme(
-                                        StreamToString(entry.DataStream).Trim(),
+                                        StreamToString(entry.DataStream)?.Trim(),
                                         fileName.EndsWith(".md"));
                                     break;
                             }
                         }
+                    }
+
+                    // === ДИАГНОСТИКА ===
+                    if (tempDict.Count == 0)
+                    {
+                        string msg = $"Pack загружен, но 0 модов распознано.\n\n"
+                            + $"Файлов в архиве: {allFileEntries.Count}\n\n"
+                            + $"Первые записи:\n{string.Join("\n", allFileEntries)}";
+                        System.Diagnostics.Trace.WriteLine($"[Repo] {msg}");
+                        MessageBox.Show(msg, "Repository Debug",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
 
                 if (list.Length == 0)
                     list = tempDict.Keys.ToArray();
 
-                foreach (var key in tempDict.Keys.ToArray())
+                // Фильтрация: только моды из list
+                var matchedKeys = tempDict.Keys.Where(k => list.Contains(k)).ToArray();
+
+                // Фоллбэк: если list нашёлся, но ни один ключ не совпал
+                // (например list содержит имена без расширения, а ключи с расширением)
+                if (matchedKeys.Length == 0 && tempDict.Count > 0)
                 {
-                    if (list.Contains(key))
-                        Items.Add(tempDict[key]);
+                    System.Diagnostics.Trace.WriteLine(
+                        $"[Repo] List had {list.Length} entries but 0 matched tempDict keys. Using all {tempDict.Count} items from archive.");
+                    matchedKeys = tempDict.Keys.ToArray();
                 }
+
+                System.Diagnostics.Trace.WriteLine(
+                    $"[Repo] Parsed {tempDict.Count} mods, list has {list.Length} entries, matched: {matchedKeys.Length}");
+
+                foreach (var key in matchedKeys)
+                    Items.Add(tempDict[key]);
 
                 tempDict.Clear();
                 Items.Sort((x, y) => string.Compare(x.Name, y.Name, StringComparison.Ordinal));
@@ -239,7 +319,10 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Trace.WriteLine("Pack loading failed, falling back to individual: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Pack loading failed: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                MessageBox.Show($"Ошибка загрузки pack.tgz:\n\n{ex.GetType().Name}: {ex.Message}\n\n{ex.StackTrace}",
+                    "Repository Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Items.Clear();
                 return false;
             }
@@ -247,7 +330,9 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
 
         private void LoadIndividual()
         {
+            System.Diagnostics.Trace.WriteLine($"[Repo] Fallback to individual, list URL: {RepositoryListURL}");
             var taskList = HTTPHelpers.GetHTTPResponseStringAsync(RepositoryListURL).GetAwaiter().GetResult();
+            System.Diagnostics.Trace.WriteLine($"[Repo] List response: {(taskList == null ? "null" : taskList.Length + " chars")}");
             string[] list = (taskList ?? "").Split('\n');
 
             for (int i = 0; i < list.Length; i++)

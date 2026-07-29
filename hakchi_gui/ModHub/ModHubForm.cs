@@ -81,7 +81,10 @@ namespace com.clusterrr.hakchi_gui.ModHub
                 page.Controls.Add(tabControl);
                 tabControl1.TabPages.Add(page);
             }
-            
+
+            //IKEATheme.Apply(this);
+            //tabControl1.ResumeLayout();
+
             tabControl1.ResumeLayout();
         }
 
