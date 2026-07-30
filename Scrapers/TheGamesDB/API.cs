@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TeamShinkansen.Scrapers.TheGamesDB.ApiModels;
@@ -22,46 +23,53 @@ namespace TeamShinkansen.Scrapers.TheGamesDB
         /// </summary>
         public static bool TraceURLs { get; set; } = false;
 
+        /// <summary>
+        /// Shared HttpClient for all API requests. Configured with the hakchi User-Agent.
+        /// Self-contained - Scrapers (netstandard2.0) cannot reference hakchi_gui.
+        /// </summary>
+        private static readonly HttpClient httpClient = new HttpClient();
+
+        static API()
+        {
+            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"Hakchi3/{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version} (https://github.com/Exeqtr-RED/Hakchi3)");
+            httpClient.Timeout = TimeSpan.FromSeconds(30);
+        }
+
         internal async Task<responseType> ApiRequest<responseType>(string route, Dictionary<string, string> parameters = null)
         {
-            using (var wc = new WebClient())
+            var escapedParameters = new List<string>();
+
+            escapedParameters.Add($"apikey={WebUtility.UrlEncode(Key)}");
+
+            foreach (var item in parameters ?? new Dictionary<string, string>())
             {
-                var escapedParameters = new List<string>();
-
-                escapedParameters.Add($"apikey={WebUtility.UrlEncode(Key)}");
-
-                foreach (var item in parameters ?? new Dictionary<string, string>())
-                {
-                    escapedParameters.Add($"{WebUtility.UrlEncode(item.Key)}={WebUtility.UrlEncode(item.Value)}");
-                }
-
-                return await ApiRequest<responseType>(string.Format("https://api.thegamesdb.net/v1{0}?{1}", route, string.Join("&", escapedParameters.ToArray())));
+                escapedParameters.Add($"{WebUtility.UrlEncode(item.Key)}={WebUtility.UrlEncode(item.Value)}");
             }
+
+            return await ApiRequest<responseType>($"https://api.thegamesdb.net/v1{route}?{string.Join("&", escapedParameters.ToArray())}");
         }
 
         public static async Task<responseType> ApiRequest<responseType>(string url)
         {
-            using (var wc = new WebClient())
+            if (TraceURLs)
+                Trace.WriteLine($"Fetching: {Regex.Replace(url, "apikey=[^&]+", "")}");
+
+            var json = await httpClient.GetStringAsync(url);
+
+            if (typeof(responseType) == typeof(string))
             {
-                if (TraceURLs)
-                    Trace.WriteLine($"Fetching: {Regex.Replace(url, "apikey=[^&]+", "")}");
+                return (responseType)(object)json;
+            }
 
-                var json = await wc.DownloadStringTaskAsync(url);
-
-                if (typeof(responseType) == typeof(string))
-                {
-                    return (responseType)(object)json;
-                }
-
-                try
-                {
-                    var deserialized = JsonConvert.DeserializeObject<responseType>(json);
-                    return deserialized;
-                }
-                catch (Exception ex)
-                {
-                    return default(responseType);
-                }
+            try
+            {
+                var deserialized = JsonConvert.DeserializeObject<responseType>(json);
+                return deserialized;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"TGDB deserialize failed for {typeof(responseType)}: {ex.Message}");
+                return default(responseType);
             }
         }
 

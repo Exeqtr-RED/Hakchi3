@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace com.clusterrr.hakchi_gui
 {
-    class HakchiWebClient : WebClient
+    /// <summary>
+    /// Provides a shared <see cref="HttpClient"/> pre-configured with the
+    /// hakchi User-Agent. Replaces the legacy <c>HakchiWebClient : WebClient</c>
+    /// subclass which was deprecated in .NET 6+.
+    /// </summary>
+    internal static class HakchiWebClient
     {
         public static readonly string UserAgent = $"Hakchi3/{Shared.AppVersion.ToString()} (https://github.com/Exeqtr-RED/Hakchi3)";
-        public string Method
+
+        /// <summary>
+        /// Shared HttpClient instance. Reuse across the app — do not wrap in 'using'.
+        /// </summary>
+        public static readonly HttpClient HttpClient = new HttpClient();
+
+        static HakchiWebClient()
         {
-            get;
-            set;
-        }
-
-        public HakchiWebClient() {
-            this.Headers.Add(HttpRequestHeader.UserAgent, HakchiWebClient.UserAgent);
-        }
-
-        protected override WebRequest GetWebRequest(Uri address)
-        {
-            var webRequest = base.GetWebRequest(address);
-
-            if (!string.IsNullOrEmpty(Method))
-                webRequest.Method = Method;
-
-            return webRequest;
+            HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(UserAgent);
+            HttpClient.Timeout = TimeSpan.FromSeconds(30);
         }
     }
 }

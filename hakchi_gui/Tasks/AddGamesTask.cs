@@ -12,6 +12,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Windows.Forms;
 using TeamShinkansen.Scrapers.Interfaces;
@@ -483,7 +484,6 @@ namespace com.clusterrr.hakchi_gui.Tasks
                                 }
                             }
 
-                            using (var wc = new HakchiWebClient())
                             {
 
                                 try
@@ -493,7 +493,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                                     if (front.Length > 0 && !app.CoverArtMatchSuccess)
                                     {
                                         tasker.SetStatus(string.Format(Resources.DownloadingFrontArtFor0, apiResult.Name));
-                                        var data = wc.DownloadData(front[0].Url);
+                                        var data = HakchiWebClient.HttpClient.GetByteArrayAsync(front[0].Url).GetAwaiter().GetResult();
                                         using (var ms = new MemoryStream(data))
                                         using (var bm = new Bitmap(ms))
                                         {
@@ -501,12 +501,12 @@ namespace com.clusterrr.hakchi_gui.Tasks
                                         }
                                     }
                                 }
-                                catch (WebException ex) { }
+                                catch (HttpRequestException ex) { Trace.WriteLine($"Art download failed: {ex.Message}"); }
 
                                 try
                                 {
                                     tasker.SetStatus(string.Format(Resources.DownloadingClearLogoFor0, apiResult.Name));
-                                    var imageData = wc.DownloadData($"https://cdn.thegamesdb.net/images/original/clearlogo/{apiResult.ID}.png");
+                                    var imageData = HakchiWebClient.HttpClient.GetByteArrayAsync($"https://cdn.thegamesdb.net/images/original/clearlogo/{apiResult.ID}.png").GetAwaiter().GetResult();
 
                                     using (var ms = new MemoryStream(imageData))
                                     using (var clearLogo = File.OpenWrite(Path.Combine(app.BasePath, $"{app.Code}_logo.png")))
@@ -524,7 +524,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                                         }
                                     }
                                 }
-                                catch (WebException ex) { }
+                                catch (HttpRequestException ex) { Trace.WriteLine($"Art download failed: {ex.Message}"); }
                             }
                         }
                         catch (Exception innerEx) { }

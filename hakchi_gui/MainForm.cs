@@ -17,6 +17,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Resources;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -291,10 +292,8 @@ namespace com.clusterrr.hakchi_gui
                     }
                 }
 
-                var client = new HakchiWebClient();
-
                 Trace.WriteLine("Downloading motd file, URL: " + MOTD_URL);
-                string motd = client.DownloadString(MOTD_URL);
+                string motd = HakchiWebClient.HttpClient.GetStringAsync(MOTD_URL).GetAwaiter().GetResult();
                 if (!string.IsNullOrEmpty(motd))
                 {
                     if (!Directory.Exists(Path.GetDirectoryName(MotdFilename)))

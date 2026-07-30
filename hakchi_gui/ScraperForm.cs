@@ -9,6 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -600,9 +601,8 @@ namespace com.clusterrr.hakchi_gui
                                     pictureBoxM2Front.Image = new Bitmap(Resources.LoadingFront);
                                 }));
 
-                                using (var wc = new HakchiWebClient())
                                 {
-                                    var imageData = wc.DownloadData(frontUrl);
+                                    var imageData = HakchiWebClient.HttpClient.GetByteArrayAsync(frontUrl).GetAwaiter().GetResult();
                                     using (var ms = new MemoryStream(imageData)) 
                                     {
                                         ms.Seek(0, SeekOrigin.Begin);
@@ -625,7 +625,7 @@ namespace com.clusterrr.hakchi_gui
 
                         }
                         catch (ThreadAbortException ex) { }
-                        catch (WebException ex) { }
+                        catch (HttpRequestException ex) { Trace.WriteLine($"Art download failed: {ex.Message}"); }
                         finally
                         {
                             item.ScraperImageFetchThread = null;
@@ -646,11 +646,10 @@ namespace com.clusterrr.hakchi_gui
                             if (innerResult is TeamShinkansen.Scrapers.TheGamesDB.ScraperData)
                             {
                                 var tgdbResult = innerResult as TeamShinkansen.Scrapers.TheGamesDB.ScraperData;
-                                using (var wc = new HakchiWebClient())
                                 {
                                     try
                                     {
-                                        var imageData = wc.DownloadData($"https://cdn.thegamesdb.net/images/original/clearlogo/{tgdbResult.ID}.png");
+                                        var imageData = HakchiWebClient.HttpClient.GetByteArrayAsync($"https://cdn.thegamesdb.net/images/original/clearlogo/{tgdbResult.ID}.png").GetAwaiter().GetResult();
 
                                         using (var ms = new MemoryStream(imageData))
                                         {
@@ -670,7 +669,7 @@ namespace com.clusterrr.hakchi_gui
                                             }
                                         }
                                     }
-                                    catch (WebException ex) { }
+                                    catch (HttpRequestException ex) { Trace.WriteLine($"Art download failed: {ex.Message}"); }
                                 }
                             }
                         }
