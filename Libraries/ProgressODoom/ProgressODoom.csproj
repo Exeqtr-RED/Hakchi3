@@ -9,6 +9,8 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<!-- Обязательно включаем поддержку WinForms для дизайнера компонентов -->
 		<UseWindowsForms>true</UseWindowsForms>
+		<!-- Suppress CA1416 (Windows-only API warnings) - this is a WinForms library -->
+		<NoWarn>CA1416</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -81,7 +81,7 @@ namespace com.clusterrr.hakchi_gui.Wireless.Bluetooth
                 )
                     this.ParentControl?.Invoke(new Action(PopulateMenu));
             }
-            catch (Exception) { }
+            catch (Exception ex) { System.Diagnostics.Trace.WriteLine("Bluetooth menu update failed: " + ex.Message); }
         }
 
         private void PopulateMenu()

@@ -49,7 +49,7 @@ namespace com.clusterrr.hakchi_gui
                 {
                     Directory.Delete(tempFolder, true);
                 }
-                catch (Exception) { }
+                catch (Exception ex) { System.Diagnostics.Trace.WriteLine("Temp cleanup failed: " + ex.Message); }
             }
 
             if (funcError != null) throw funcError;
