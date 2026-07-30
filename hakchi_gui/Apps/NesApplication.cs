@@ -1163,7 +1163,7 @@ namespace com.clusterrr.hakchi_gui
             {
                 if (string.IsNullOrEmpty(alt))
                 {
-                    PuzzleMatch(pieces.Skip(1).ToList(), string.Copy(puzzle), out match, out partial);
+                    PuzzleMatch(pieces.Skip(1).ToList(), puzzle, out match, out partial);
                 }
                 else
                 {

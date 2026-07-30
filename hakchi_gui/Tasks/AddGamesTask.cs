@@ -527,11 +527,11 @@ namespace com.clusterrr.hakchi_gui.Tasks
                                 catch (HttpRequestException ex) { Trace.WriteLine($"Art download failed: {ex.Message}"); }
                             }
                         }
-                        catch (Exception innerEx) { }
+                        catch (Exception innerEx) { Trace.WriteLine($"Scraper error: {innerEx.Message}"); }
                     }
                 }
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { Trace.WriteLine($"Add games task error: {ex.Message}"); }
 
             return Tasker.Conclusion.Success;
         }

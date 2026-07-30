@@ -40,7 +40,7 @@ namespace com.clusterrr.hakchi_gui
                     bin = string.Empty;
                     if (!string.IsNullOrEmpty(exec))
                     {
-                        string tmp_exec = string.Copy(exec);
+                        string tmp_exec = exec;
                         Match m = Regex.Match(tmp_exec, @"^[^\s]+(?:\s+-rom)*");
                         if (m.Success)
                         {
@@ -459,28 +459,28 @@ namespace com.clusterrr.hakchi_gui
         {
             var newObject = new DesktopFile
             {
-                Exec = string.Copy(exec),
-                profilePath = string.Copy(profilePath),
-                name = string.Copy(name),
-                cePrefix = string.Copy(cePrefix),
-                iconPath = string.Copy(iconPath),
-                iconFilename = string.Copy(iconFilename),
-                code = string.Copy(code),
+                Exec = exec,
+                profilePath = profilePath,
+                name = name,
+                cePrefix = cePrefix,
+                iconPath = iconPath,
+                iconFilename = iconFilename,
+                code = code,
                 testId = testId,
-                status = string.Copy(status),
+                status = status,
                 players = players,
                 simultaneous = simultaneous,
-                releaseDate = string.Copy(releaseDate),
+                releaseDate = releaseDate,
                 saveCount = saveCount,
-                sortRawTitle = string.Copy(sortRawTitle),
-                sortRawPublisher = string.Copy(sortRawPublisher),
-                copyright = string.Copy(copyright),
-                description = string.Copy(description),
-                genre = string.Copy(genre),
-                index = string.Copy(index),
-                demoTime = string.Copy(demoTime),
-                country = string.Copy(country),
-                regionTag = string.Copy(regionTag)
+                sortRawTitle = sortRawTitle,
+                sortRawPublisher = sortRawPublisher,
+                copyright = copyright,
+                description = description,
+                genre = genre,
+                index = index,
+                demoTime = demoTime,
+                country = country,
+                regionTag = regionTag
 
             };
             return newObject;

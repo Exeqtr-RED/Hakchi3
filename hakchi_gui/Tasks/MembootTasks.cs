@@ -695,7 +695,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
 
                 var version = hakchi.Shell.ExecuteSimple($"cat {Shared.EscapeShellArgument($"{squashfs}/version")}", 0, true).Trim();
                 using (var versionMemoryStream = new MemoryStream())
-                using (var hasher = new MD5CryptoServiceProvider())
+                using (var hasher = System.Security.Cryptography.MD5.Create())
                 {
                     hakchi.Shell.Execute($"cd \"{squashfs}\" && (echo \"$(cat {Shared.EscapeShellArgument($"{squashfs}/version")})\"; find -type d | sort; find -type l | sort | while read link; do echo \"$link -> $(readlink \"$link\")\"; done; find -type f | sort | while read file; do md5sum \"$file\"; done)", null, versionMemoryStream, versionMemoryStream, 0, true);
                     versionMemoryStream.Seek(0, SeekOrigin.Begin);

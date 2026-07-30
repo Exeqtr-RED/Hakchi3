@@ -1,0 +1,185 @@
+diff --git a/hakchi_gui/AboutBox.cs b/hakchi_gui/AboutBox.cs
+index 98a782f..479c7cb 100644
+--- a/hakchi_gui/AboutBox.cs
++++ b/hakchi_gui/AboutBox.cs
+@@ -41,7 +41,7 @@ namespace com.clusterrr.hakchi_gui
+                         return titleAttribute.Title;
+                     }
+                 }
+-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
++                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
+             }
+         }
+ 
+diff --git a/hakchi_gui/Apps/AppTypeCollection.cs b/hakchi_gui/Apps/AppTypeCollection.cs
+index ff235ae..6bb3350 100644
+--- a/hakchi_gui/Apps/AppTypeCollection.cs
++++ b/hakchi_gui/Apps/AppTypeCollection.cs
+@@ -25,14 +25,14 @@ namespace com.clusterrr.hakchi_gui
+             {
+                 var newAppInfo = new AppInfo()
+                 {
+-                    Name = string.Copy(Name),
++                    Name = Name,
+                     Class = Class,
+-                    DefaultCore = string.Copy(DefaultCore),
++                    DefaultCore = DefaultCore,
+                     LegacyApps = new string[LegacyApps.Length],
+                     Extensions = new string[Extensions.Length],
+                     Prefix = Prefix,
+                     DefaultCover = DefaultCover,
+-                    GoogleSuffix = string.Copy(GoogleSuffix),
++                    GoogleSuffix = GoogleSuffix,
+                     Unknown = Unknown
+                 };
+                 LegacyApps.CopyTo(newAppInfo.LegacyApps, 0);
+diff --git a/hakchi_gui/Apps/DesktopFile.cs b/hakchi_gui/Apps/DesktopFile.cs
+index e0b3d97..8e4a8bf 100644
+--- a/hakchi_gui/Apps/DesktopFile.cs
++++ b/hakchi_gui/Apps/DesktopFile.cs
+@@ -40,7 +40,7 @@ namespace com.clusterrr.hakchi_gui
+                     bin = string.Empty;
+                     if (!string.IsNullOrEmpty(exec))
+                     {
+-                        string tmp_exec = string.Copy(exec);
++                        string tmp_exec = exec;
+                         Match m = Regex.Match(tmp_exec, @"^[^\s]+(?:\s+-rom)*");
+                         if (m.Success)
+                         {
+@@ -459,28 +459,28 @@ namespace com.clusterrr.hakchi_gui
+         {
+             var newObject = new DesktopFile
+             {
+-                Exec = string.Copy(exec),
+-                profilePath = string.Copy(profilePath),
+-                name = string.Copy(name),
+-                cePrefix = string.Copy(cePrefix),
+-                iconPath = string.Copy(iconPath),
+-                iconFilename = string.Copy(iconFilename),
+-                code = string.Copy(code),
++                Exec = exec,
++                profilePath = profilePath,
++                name = name,
++                cePrefix = cePrefix,
++                iconPath = iconPath,
++                iconFilename = iconFilename,
++                code = code,
+                 testId = testId,
+-                status = string.Copy(status),
++                status = status,
+                 players = players,
+                 simultaneous = simultaneous,
+-                releaseDate = string.Copy(releaseDate),
++                releaseDate = releaseDate,
+                 saveCount = saveCount,
+-                sortRawTitle = string.Copy(sortRawTitle),
+-                sortRawPublisher = string.Copy(sortRawPublisher),
+-                copyright = string.Copy(copyright),
+-                description = string.Copy(description),
+-                genre = string.Copy(genre),
+-                index = string.Copy(index),
+-                demoTime = string.Copy(demoTime),
+-                country = string.Copy(country),
+-                regionTag = string.Copy(regionTag)
++                sortRawTitle = sortRawTitle,
++                sortRawPublisher = sortRawPublisher,
++                copyright = copyright,
++                description = description,
++                genre = genre,
++                index = index,
++                demoTime = demoTime,
++                country = country,
++                regionTag = regionTag
+ 
+             };
+             return newObject;
+diff --git a/hakchi_gui/Apps/NesApplication.cs b/hakchi_gui/Apps/NesApplication.cs
+index 474cfde..41bd443 100644
+--- a/hakchi_gui/Apps/NesApplication.cs
++++ b/hakchi_gui/Apps/NesApplication.cs
+@@ -1163,7 +1163,7 @@ namespace com.clusterrr.hakchi_gui
+             {
+                 if (string.IsNullOrEmpty(alt))
+                 {
+-                    PuzzleMatch(pieces.Skip(1).ToList(), string.Copy(puzzle), out match, out partial);
++                    PuzzleMatch(pieces.Skip(1).ToList(), puzzle, out match, out partial);
+                 }
+                 else
+                 {
+diff --git a/hakchi_gui/Tasks/AddGamesTask.cs b/hakchi_gui/Tasks/AddGamesTask.cs
+index 8570cc0..20b724b 100644
+--- a/hakchi_gui/Tasks/AddGamesTask.cs
++++ b/hakchi_gui/Tasks/AddGamesTask.cs
+@@ -527,11 +527,11 @@ namespace com.clusterrr.hakchi_gui.Tasks
+                                 catch (HttpRequestException ex) { Trace.WriteLine($"Art download failed: {ex.Message}"); }
+                             }
+                         }
+-                        catch (Exception innerEx) { }
++                        catch (Exception innerEx) { Trace.WriteLine($"Scraper error: {innerEx.Message}"); }
+                     }
+                 }
+             }
+-            catch (Exception ex) { }
++            catch (Exception ex) { Trace.WriteLine($"Add games task error: {ex.Message}"); }
+ 
+             return Tasker.Conclusion.Success;
+         }
+diff --git a/hakchi_gui/Tasks/MembootTasks.cs b/hakchi_gui/Tasks/MembootTasks.cs
+index 1e3ea63..00ade16 100644
+--- a/hakchi_gui/Tasks/MembootTasks.cs
++++ b/hakchi_gui/Tasks/MembootTasks.cs
+@@ -695,7 +695,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
+ 
+                 var version = hakchi.Shell.ExecuteSimple($"cat {Shared.EscapeShellArgument($"{squashfs}/version")}", 0, true).Trim();
+                 using (var versionMemoryStream = new MemoryStream())
+-                using (var hasher = new MD5CryptoServiceProvider())
++                using (var hasher = System.Security.Cryptography.MD5.Create())
+                 {
+                     hakchi.Shell.Execute($"cd \"{squashfs}\" && (echo \"$(cat {Shared.EscapeShellArgument($"{squashfs}/version")})\"; find -type d | sort; find -type l | sort | while read link; do echo \"$link -> $(readlink \"$link\")\"; done; find -type f | sort | while read file; do md5sum \"$file\"; done)", null, versionMemoryStream, versionMemoryStream, 0, true);
+                     versionMemoryStream.Seek(0, SeekOrigin.Begin);
+diff --git a/hakchi_gui/Tasks/WebClientTasks.cs b/hakchi_gui/Tasks/WebClientTasks.cs
+index c130853..76673aa 100644
+--- a/hakchi_gui/Tasks/WebClientTasks.cs
++++ b/hakchi_gui/Tasks/WebClientTasks.cs
+@@ -92,7 +92,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
+                 catch (Exception e)
+                 {
+                     if (!successOnError)
+-                        throw e;
++                        throw;
+                 }
+ 
+                 return result;
+diff --git a/hakchi_gui/Wireless/Bluetooth/BluetoothControl.cs b/hakchi_gui/Wireless/Bluetooth/BluetoothControl.cs
+index de6e3f9..4f86f25 100644
+--- a/hakchi_gui/Wireless/Bluetooth/BluetoothControl.cs
++++ b/hakchi_gui/Wireless/Bluetooth/BluetoothControl.cs
+@@ -401,7 +401,7 @@ namespace com.clusterrr.hakchi_gui.Wireless.Bluetooth
+                 cmdWriter = null;
+                 cmdStream = null;
+             }
+-            catch (Exception ex) { }
++            catch (Exception ex) { Trace.WriteLine("Bluetooth listener error: " + ex.Message); }
+         }
+ 
+         public void SetPower(bool state) => RunCommand($"power {(state ? "on" : "off")}");
+diff --git a/hakchi_gui/hakchi_gui.csproj b/hakchi_gui/hakchi_gui.csproj
+index 3dbf7f0..3678507 100644
+--- a/hakchi_gui/hakchi_gui.csproj
++++ b/hakchi_gui/hakchi_gui.csproj
+@@ -244,11 +244,11 @@ Gert Driesen for SSH.NET.
+ 	</Target>
+ 
+ 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+-		<Exec Condition="'$(Configuration)|$(Platform)'!='Dumper|AnyCPU'" Command="cd /D &quot;$(SolutionDir)tools/&quot; || cd &quot;$(SolutionDir)tools/&quot;&#xD;&#xA;&quot;./busybox&quot; tar -cf - -C ../GeneratedData . | &quot;busybox&quot; tar -xvf - -C &quot;../hakchi_gui/bin/$(Configuration)/$(TargetFramework)&quot;" />
+-		<Exec Condition="'$(Configuration)|$(Platform)'=='Dumper|AnyCPU'" Command="cd /D &quot;$(SolutionDir)tools/&quot; || cd &quot;$(SolutionDir)tools/&quot;&#xD;&#xA;&quot;./busybox&quot; tar -cf - -C ../GeneratedData basehmods.tar driver tools/arm/detached-fallback | &quot;busybox&quot; tar -xvf - -C &quot;../hakchi_gui/bin/$(Configuration)/$(TargetFramework)&quot;" />
++		<Exec Condition="'$(Configuration)|$(Platform)'!='Dumper|AnyCPU' And (Exists('$(SolutionDir)tools/busybox') Or Exists('$(SolutionDir)tools/busybox.exe'))" Command="cd /D &quot;$(SolutionDir)tools/&quot; || cd &quot;$(SolutionDir)tools/&quot;&#xD;&#xA;&quot;./busybox&quot; tar -cf - -C ../GeneratedData . | &quot;busybox&quot; tar -xvf - -C &quot;../hakchi_gui/bin/$(Configuration)/$(TargetFramework)&quot;" />
++		<Exec Condition="'$(Configuration)|$(Platform)'=='Dumper|AnyCPU' And (Exists('$(SolutionDir)tools/busybox') Or Exists('$(SolutionDir)tools/busybox.exe'))" Command="cd /D &quot;$(SolutionDir)tools/&quot; || cd &quot;$(SolutionDir)tools/&quot;&#xD;&#xA;&quot;./busybox&quot; tar -cf - -C ../GeneratedData basehmods.tar driver tools/arm/detached-fallback | &quot;busybox&quot; tar -xvf - -C &quot;../hakchi_gui/bin/$(Configuration)/$(TargetFramework)&quot;" />
+ 	</Target>
+ 
+ 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+-		<Exec Command="cd /D &quot;$(SolutionDir)tools/&quot; || cd &quot;$(SolutionDir)tools/&quot;&#xD;&#xA;&quot;./busybox&quot; mkdir -p &quot;../hakchi_gui/ApiKeys&quot;&#xD;&#xA;&quot;./busybox&quot; touch &quot;../hakchi_gui/ApiKeys/TheGamesDB.txt&quot;&#xD;&#xA;&quot;./busybox&quot; sh -e &quot;./gitcommit&quot; &gt; &quot;../hakchi_gui/commit.txt&quot;&#xD;&#xA;&quot;./busybox&quot; sh -e &quot;./git-commits-since-last-tag&quot; &gt; &quot;../hakchi_gui/git-commits-since-last-tag.txt&quot;&#xD;&#xA;&quot;./busybox&quot; sh -e &quot;./gittag&quot; &gt; &quot;../hakchi_gui/tag.txt&quot;&#xD;&#xA;" />
++		<Exec Condition="(Exists('$(SolutionDir)tools/busybox') Or Exists('$(SolutionDir)tools/busybox.exe'))" Command="cd /D &quot;$(SolutionDir)tools/&quot; || cd &quot;$(SolutionDir)tools/&quot;&#xD;&#xA;&quot;./busybox&quot; mkdir -p &quot;../hakchi_gui/ApiKeys&quot;&#xD;&#xA;&quot;./busybox&quot; touch &quot;../hakchi_gui/ApiKeys/TheGamesDB.txt&quot;&#xD;&#xA;&quot;./busybox&quot; sh -e &quot;./gitcommit&quot; &gt; &quot;../hakchi_gui/commit.txt&quot;&#xD;&#xA;&quot;./busybox&quot; sh -e &quot;./git-commits-since-last-tag&quot; &gt; &quot;../hakchi_gui/git-commits-since-last-tag.txt&quot;&#xD;&#xA;&quot;./busybox&quot; sh -e &quot;./gittag&quot; &gt; &quot;../hakchi_gui/tag.txt&quot;&#xD;&#xA;" />
+ 	</Target>
+ </Project>
+\ No newline at end of file

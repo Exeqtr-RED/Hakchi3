@@ -25,14 +25,14 @@ namespace com.clusterrr.hakchi_gui
             {
                 var newAppInfo = new AppInfo()
                 {
-                    Name = string.Copy(Name),
+                    Name = Name,
                     Class = Class,
-                    DefaultCore = string.Copy(DefaultCore),
+                    DefaultCore = DefaultCore,
                     LegacyApps = new string[LegacyApps.Length],
                     Extensions = new string[Extensions.Length],
                     Prefix = Prefix,
                     DefaultCover = DefaultCover,
-                    GoogleSuffix = string.Copy(GoogleSuffix),
+                    GoogleSuffix = GoogleSuffix,
                     Unknown = Unknown
                 };
                 LegacyApps.CopyTo(newAppInfo.LegacyApps, 0);

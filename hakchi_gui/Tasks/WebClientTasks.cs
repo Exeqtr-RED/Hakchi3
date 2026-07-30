@@ -92,7 +92,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                 catch (Exception e)
                 {
                     if (!successOnError)
-                        throw e;
+                        throw;
                 }
 
                 return result;

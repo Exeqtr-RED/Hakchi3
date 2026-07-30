@@ -401,7 +401,7 @@ namespace com.clusterrr.hakchi_gui.Wireless.Bluetooth
                 cmdWriter = null;
                 cmdStream = null;
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { Trace.WriteLine("Bluetooth listener error: " + ex.Message); }
         }
 
         public void SetPower(bool state) => RunCommand($"power {(state ? "on" : "off")}");
