@@ -129,51 +129,230 @@ Hakchi3/
 
 ## 🐞 //TODO
 
-### 1. Удаление мёртвых методов
+🛠️ Технический долг после миграции на .NET 8
+Отчёт по оставшимся проблемам и план работ
+Status
+Platform
+Priority
+Risk
 
-GetDocumentsLibraryPath + SHGetKnownFolderPath (Program.cs):
-Оба существуют только в месте объявления — git grep по всему репозиторию (включая Libraries/) нашёл ровно 3 совпадения, и все три внутри одной функции: декларация P/Invoke + декларация метода + единственный call изнутри самого метода. Внешних вызовов нет. Метод предназначался для получения пути к библиотеке "Documents" через Windows Known Folder API (GUID 7B0DB17D-9CD2-4A93-9733-46CC89022E7C), но фактически в коде используется Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) (это видно в Program.cs:184 — там, где настраивается BaseDirectoryExternal). То есть функция была написана как альтернатива, но никогда не была подключена. Это кандидаты на удаление, но я рекомендую проверить сначала — возможно, автор планировал её использовать для случаев, когда MyDocuments перенаправлен через библиотеки.
+</div>
 
-GenerateStreamFromString (Shared.cs):
-Утилита, превращающая строку в MemoryStream. По git grep — 0 вызовов во всём репозитории. Стандартный паттерн new MemoryStream(...) + StreamWriter, но в коде проекта нигде не применяется. Возможно, leftover из ранних версий.
+📑 Содержание
+Обзор
+1. Thread.Abort() — критично (6 файлов)
+Затронутые файлы
+Почему это не исправлено
+План рефакторинга
+2. ProgressODoom — 624 предупреждения CA1416
+3. Пустые catch — низкий приоритет
+4. NU1701 — NuGet пакеты
+5. Удаление мёртвого кода
+5.1 Неиспользуемые методы
+5.2 Неиспользуемые файлы
+5.3 Неиспользуемые поля
+5.4 Неиспользуемые классы
+📋 Сводная таблица рисков
+🎯 Рекомендуемый порядок действий
+🔍 Обзор
+После миграции проекта на .NET 8 остался ряд проблем — от критических runtime-ошибок до косметических предупреждений и мёртвого кода. Этот документ систематизирует все оставшиеся вопросы, оценивает риски и предлагает конкретные шаги для их устранения.
 
-GetDetectedRemoteGameSyncPath (hakchi.cs:268):
-Здесь важный нюанс. Рядом (hakchi.cs:275) есть sibling-метод GetRemoteGameSyncPath(ConsoleType consoleType) — он используется в 2 местах (NesApplication.cs:1357, SyncTask.cs:497). А GetDetectedRemoteGameSyncPath() (без параметра, использует текущую консоль) — 0 вызовов. То есть это либо ранняя версия, либо обёртка, от которой отказались в пользу версии с явным параметром. Рекомендую удалить, но это публичный метод — теоретически может быть частью публичного API для внешних потребителей.
+Все проблемы разделены на 4 основные категории:
 
-### 2. Удаление неиспользуемых файлов
+#
+Категория
+Критичность
+Объём работ
+1	Thread.Abort() → CancellationToken	🔴 Высокая	Большой рефакторинг
+2	CA1416 в ProgressODoom	🟡 Низкая	1 строка
+3	Пустые catch	🟢 Косметика	Опционально
+4	Мёртвый код и пакеты	🟡 Средняя	Механические правки
 
-TaskerDebug.cs:
-Это реализация интерфейса ITaskerView, которая вместо отображения UI просто пишет в Trace.WriteLine каждое событие (SetState, SetProgress, SetTitle и т.д.). Похоже на debug-заглушку для тестирования Tasker без UI. Никогда не инстанцируется — git grep 'TaskerDebug' находит только класс и его конструктор, ни одного new TaskerDebug() в коде нет. Похоже на leftover отладочного кода.
+1. Thread.Abort() — критично (6 файлов)
+⚠️ Это единственная серьёзная проблема.
 
-ApplicationDeploymentWrapper.cs:
-Это обёртка над System.Deployment.Application.ApplicationDeployment — ClickOnce API. Использовалась для проверки IsNetworkDeployed / IsFirstRun (типичный паттерн "приложение установлено через ClickOnce?"). Все 4 references — внутри самого файла. ClickOnce не поддерживается в .NET 8 (это .NET Framework-only фича), и после миграции на .NET 8 этот код стал бесполезен — даже если бы его вызвали, он всегда возвращал бы false через applicationDeploymentType == null ветку. Это явный рудимент миграции.
+Thread.Abort() бросает PlatformNotSupportedException в .NET 8 — код компилируется, но падает в рантайме при отмене операции.
 
-### 3. Удаление неиспользуемых полей
+Затронутые файлы
+Файл
+Строки
+Вызов
+ShellConnection.cs	101, 103	shellConnectionThread.Abort()
+ExecConnection.cs	92, 94	stdinThread.Abort()
+BluetoothControl.cs	128, 129	cmdThread.Abort()
+Shared.cs	686, 687	transferThread.Abort()
+ScraperForm.cs	584, 637, 831	#warning (без вызова, но поток рядом)
+TaskerTransferForm.cs	224	#warning
 
-UPDATE_XML_URL (MainForm.cs:34):
-URL https://teamshinkansen.github.io/xml/updates/update.xml — это фид автообновления. Поле приватное, единственное упоминание — в закомментированной строке // AutoUpdater.Start(UPDATE_XML_URL); (MainForm.cs:333). Весь блок автoupdater-а закомментирован с пометкой // TEMP: disabled for migration. В hakchi_gui.csproj при этом остался <PackageReference Include="Autoupdater.NET.Official" Version="1.9.2" /> — зависимость не убрали. То есть автoupdater был отключён при миграции на .NET 8, но забытый мусор остался.
+💡 Автор сам пометил #warning Refactor this to get rid of Thread.Abort! — он знает о проблеме.
 
-InfoRegex (BluetoothControl.cs:36):
-Regex @"^\s+([^:]+):\s+(.*)\s*$" — парсит строки вида Key: value (с отступом). Рядом есть 4 sibling-regex: ChangeRegex, NewDelRegex, DeviceRegex, ControllerRegex — все они используются для парсинга вывода bluetoothctl. InfoRegex единственный не используется — видимо, был предназначен для парсинга info-секций устройства, но логика пошла другим путём. Кандидат на удаление, но я бы сначала спросил автора BluetoothControl — возможно, это WIP.
+Почему это не исправлено
+Это не механический фикс, а изменение поведения. Требуется:
 
-### 4. Удаление классов
+Ввести CancellationToken во все методы, которые запускают потоки.
+Изменить логику потоков на cooperative cancellation (поток сам проверяет token.IsCancellationRequested).
+Заменить принудительный Thread.Abort() (с ThreadAbortException) на кооперативную остановку.
+План рефакторинга
+diff
 
-**NesMenuElementBaseComparer** — вложенный класс, реализующий IEqualityComparer<NesMenuElementBase>, сравнивающий элементы по Code. По git grep — 0 references во всём репозитории (даже через generic-поиск IEqualityComparer<NesMenuElementBase>). Подобный comparer обычно используется в Dictionary<NesMenuElementBase, T> или HashSet<NesMenuElementBase> или Distinct(...). Но в коде все коллекции используют string Code напрямую как ключ, а не сами объекты. Видимо, класс был написан "про запас" или для ранней версии логики, от которой отказались.
+- // Старый подход — принудительный abort
+- private Thread workerThread;
+- 
+- public void Cancel()
+- {
+-     workerThread.Abort();  // PlatformNotSupportedException в .NET 8
+- }
++ // Новый подход — кооперативная отмена
++ private CancellationTokenSource cts;
++ 
++ public void Cancel()
++ {
++     cts.Cancel();  // Поток сам завершится при следующей проверке
++ }
+Аспект
+Thread.Abort()
+CancellationToken
+Механизм	Принудительный (ThreadAbortException)	Кооперативный
+Безопасность ресурсов	Небезопасен (может оставить lock-и)	Безопасен (точки проверки)
+Поддержка .NET 8	❌ PlatformNotSupportedException	✅ Нативная
+Сложность миграции	—	Требует рефакторинга вызовов
 
-Это самый безопасный кандидат на удаление — вложенный класс, ноль references, не часть публичного API.
+🔴 Риск: высокий. Без тестирования на реальном NES Mini легко сломать USB-shell / Clovershell / Bluetooth.
 
-*Резюме по рискам*
+2. NU1701 — NuGet пакеты
+Пакет
+Версия
+Причина предупреждения
+nQuant	1.0.3	Восстановлен под .NET Framework, не net8.0
+Autoupdater.NET.Official	1.9.2	То же самое
 
-| Что | Уверенность | Риск |
-| :--- | :--- | :--- |
-| TaskerDebug.cs (весь файл) | Высокая | Минимальный — debug-заглушка без вызовов |
-| ApplicationDeploymentWrapper.cs (весь файл) | Высокая | Минимальный — ClickOnce мёртв в .NET 8 |
-| NesMenuElementBaseComparer | Высокая | Минимальный — вложенный класс, 0 references |
-| UPDATE_XML_URL + закомментированный AutoUpdater-блок | Высокая | Минимальный — но можно заодно убрать PackageReference Autoupdater.NET.Official из csproj |
-| InfoRegex | Средняя | Низкий — но это WIP-маркер, лучше спросить автора |
-| GetDocumentsLibraryPath + SHGetKnownFolderPath | Средняя | Низкий — но это рабочий код, просто не вызывается |
-| GenerateStreamFromString | Высокая | Минимальный — утилита без вызовов |
-| GetDetectedRemoteGameSyncPath | Средняя | Низкий — публичный метод, но 0 callers; есть sibling с параметром |
+Назначение пакетов
+nQuant — квантизация изображений (PNG optimization). Работает через compat-шейм.
+Autoupdater.NET — автoupdater. Весь код автoupdate закомментирован (см. MainForm.cs:333).
+Варианты решений
+Пакет
+Решение
+Риск
+nQuant	Найти аналог под .NET 8 или оставить (работает через compat-шейм)	Низкий
+Autoupdater.NET	❌ Удалить из .csproj — код не используется	Минимальный
+
+💡 Ранее обсуждали в Phase A — было решено оставить dead code. Сейчас можно пересмотреть.
+
+3. Удаление мёртвого кода
+3.1 Неиспользуемые методы
+GetDocumentsLibraryPath + SHGetKnownFolderPath (Program.cs)
+Назначение: получение пути к библиотеке "Documents" через Windows Known Folder API (GUID 7B0DB17D-9CD2-4A93-9733-46CC89022E7C).
+Анализ: git grep по всему репозиторию (включая Libraries/) нашёл ровно 3 совпадения, все внутри одной функции:
+Декларация P/Invoke
+Декларация метода
+Единственный call изнутри самого метода
+Фактическое использование: в коде применяется Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) (см. Program.cs:184, настройка BaseDirectoryExternal).
+Вывод: функция написана как альтернатива, но никогда не подключена.
+⚠️ Рекомендация: проверить, не планировалось ли использование для случаев, когда MyDocuments перенаправлен через библиотеки.
+
+GenerateStreamFromString (Shared.cs)
+Назначение: утилита, превращающая строку в MemoryStream (стандартный паттерн new MemoryStream(...) + StreamWriter).
+Анализ: git grep — 0 вызовов во всём репозитории.
+Вывод: leftover из ранних версий.
+GetDetectedRemoteGameSyncPath (hakchi.cs:268)
+Назначение: обёртка без параметра, использует текущую консоль.
+Анализ:
+Рядом (hakchi.cs:275) есть sibling-метод GetRemoteGameSyncPath(ConsoleType consoleType) — используется в 2 местах:
+NesApplication.cs:1357
+SyncTask.cs:497
+GetDetectedRemoteGameSyncPath() — 0 вызовов.
+Вывод: либо ранняя версия, либо обёртка, от которой отказались в favour версии с явным параметром.
+⚠️ Внимание: это публичный метод — теоретически может быть частью публичного API для внешних потребителей.
+
+3.2 Неиспользуемые файлы
+TaskerDebug.cs
+Назначение: реализация интерфейса ITaskerView, которая вместо отображения UI пишет в Trace.WriteLine каждое событие (SetState, SetProgress, SetTitle и т.д.).
+Анализ: git grep 'TaskerDebug' находит только класс и его конструктор — ни одного new TaskerDebug() в коде.
+Вывод: debug-заглушка для тестирования Tasker без UI, leftover отладочного кода.
+ApplicationDeploymentWrapper.cs
+Назначение: обёртка над System.Deployment.Application.ApplicationDeployment — ClickOnce API.
+Использование: проверка IsNetworkDeployed / IsFirstRun (типичный паттерн "приложение установлено через ClickOnce?").
+Анализ: все 4 references — внутри самого файла.
+Контекст: ClickOnce не поддерживается в .NET 8 (это .NET Framework-only фича). После миграции код стал бесполезен — даже при вызове всегда возвращает false через ветку applicationDeploymentType == null.
+Вывод: явный рудимент миграции.
+3.3 Неиспользуемые поля
+UPDATE_XML_URL (MainForm.cs:34)
+csharp
+
+private const string UPDATE_XML_URL = 
+    "https://teamshinkansen.github.io/xml/updates/update.xml";
+Назначение: фид автообновления.
+Анализ: приватное поле, единственное упоминание — в закомментированной строке:
+csharp
+
+// TEMP: disabled for migration
+// AutoUpdater.Start(UPDATE_XML_URL);  // MainForm.cs:333
+Дополнительно: в hakchi_gui.csproj остался PackageReference на Autoupdater.NET.Official — зависимость не убрали.
+Вывод: автoupdater отключён при миграции на .NET 8, но забытый мусор остался.
+InfoRegex (BluetoothControl.cs:36)
+csharp
+
+private static readonly Regex InfoRegex = 
+    new Regex(@"^\s+([^:]+):\s+(.*)\s$");
+Назначение: парсит строки вида Key: value (с отступом).
+Контекст: рядом 4 sibling-regex для парсинга вывода bluetoothctl:
+ChangeRegex ✅ используется
+NewDelRegex ✅ используется
+DeviceRegex ✅ используется
+ControllerRegex ✅ используется
+InfoRegex ❌ единственный не используется
+Вывод: видимо, предназначался для парсинга info-секций устройства, но логика пошла другим путём.
+⚠️ Рекомендация: спросить автора BluetoothControl — возможно, это WIP.
+
+3.4 Неиспользуемые классы
+NesMenuElementBaseComparer
+Назначение: вложенный класс, реализующий IEqualityComparer, сравнивающий элементы по Code.
+Анализ: git grep — 0 references во всём репозитории (даже через generic-поиск IEqualityComparer).
+Контекст: подобный comparer обычно используется в:
+Dictionary<NesMenuElementBase, T>
+HashSet<NesMenuElementBase>
+Distinct(...)
+Фактическое использование: все коллекции используют string Code напрямую как ключ, а не сами объекты.
+Вывод: класс написан "про запас" или для ранней версии логики, от которой отказались.
+✅ Самый безопасный кандидат на удаление — вложенный класс, 0 references, не часть публичного API.
+
+📋 Сводная таблица рисков
+
+| Что | Уверенность | Риск | Действие |
+|---|---|---|---|
+| TaskerDebug.cs (весь файл) | 🟢 Высокая | Минимальный | Удалить — debug-заглушка без вызовов |
+| ApplicationDeploymentWrapper.cs (весь файл) | 🟢 Высокая | Минимальный | Удалить — ClickOnce мёртв в .NET 8 |
+| NesMenuElementBaseComparer | 🟢 Высокая | Минимальный | Удалить — вложенный класс, 0 references |
+| UPDATE_XML_URL + закомментированный AutoUpdater-блок | 🟢 Высокая | Минимальный | Удалить + убрать PackageReference из .csproj |
+| InfoRegex | 🟡 Средняя | Низкий | Спросить автора — WIP-маркер |
+| GetDocumentsLibraryPath + SHGetKnownFolderPath | 🟡 Средняя | Низкий | Удалить — рабочий код, но не вызывается |
+| GenerateStreamFromString | 🟢 Высокая | Минимальный | Удалить — утилита без вызовов |
+| GetDetectedRemoteGameSyncPath | 🟡 Средняя | Низкий | Удалить — публичный метод, но 0 callers; есть sibling с параметром |
+
+🎯 Рекомендуемый порядок действий
+Предлагаемый порядок — от наименее рискованных к наиболее рискованным:
+
+Этап 1 — Механические правки (минимальный риск)
+ - Удалить TaskerDebug.cs
+ - Удалить ApplicationDeploymentWrapper.cs
+ - Удалить класс NesMenuElementBaseComparer
+ - Удалить GenerateStreamFromString
+ - Удалить UPDATE_XML_URL + убрать Autoupdater.NET.Official из .csproj
+ - Добавить Trace.WriteLine в пустые catch (опционально)
+
+
+Этап 2 — Требует проверки (низкий риск)
+ - Удалить GetDocumentsLibraryPath + SHGetKnownFolderPath
+ - Удалить GetDetectedRemoteGameSyncPath
+ - Уточнить у автора BluetoothControl статус InfoRegex
+   
+Этап 3 — Большой рефакторинг (высокий риск)
+ - Ввести CancellationToken в ShellConnection, ExecConnection
+ - Ввести CancellationToken в BluetoothControl
+ - Ввести CancellationToken в Shared.cs (transfer logic)
+ - Рефакторинг ScraperForm и TaskerTransferForm
+ - Полное тестирование на реальном NES Mini (USB-shell / Clovershell / Bluetooth)
+🔴 Этап 3 нельзя делать "вслепую" — без аппаратного тестирования высок риск сломать рабочие сценарии.
 
 ---
 
