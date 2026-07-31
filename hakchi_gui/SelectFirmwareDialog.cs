@@ -101,7 +101,6 @@ namespace com.clusterrr.hakchi_gui
                 }));
 
             }
-            catch (ThreadAbortException) { }
             catch (ObjectDisposedException) { }
             catch (Exception ex)
             {

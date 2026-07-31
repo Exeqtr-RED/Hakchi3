@@ -690,9 +690,9 @@ namespace com.clusterrr.hakchi_gui
                 catch (OperationCanceledException) { }
                 catch (ObjectDisposedException) { }
                 catch (IOException) { }
-                // Note: ThreadAbortException is no longer reachable on .NET 8
-                // (Thread.Abort throws PlatformNotSupportedException). The three
-                // catches above cover the cooperative-cancellation path.
+                // Cooperative cancellation path: CancellationTokenSource.Cancel()
+                // surfaces as OperationCanceledException, ObjectDisposedException,
+                // or IOException depending on where the blocking call is.
             });
             transferThread.Start();
 
