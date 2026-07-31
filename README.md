@@ -212,7 +212,6 @@ git checkout -- hakchi_gui/<path>/<file>.cs
 | Этап | Patch-файл | Описание |
 | :--- | :--- | :--- |
 | 1 | `hakchi3-stage1-mechanical-fixes.patch` | Удаление мёртвого кода (6 файлов, −202 строки) |
-| 2 | `hakchi3-stage2-all.patch` | Рефакторинг Thread.Abort() (6 файлов, сводный) |
 | 2.1 | `hakchi3-stage2-1-shared.patch` | Только `Shared.cs` |
 | 2.2 | `hakchi3-stage2-2-shellconnection.patch` | Только `ShellConnection.cs` |
 | 2.3 | `hakchi3-stage2-3-execconnection.patch` | Только `ExecConnection.cs` |
