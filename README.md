@@ -129,228 +129,96 @@ Hakchi3/
 
 ## 🐞 //TODO
 
-🛠️ Технический долг после миграции на .NET 8
-Отчёт по оставшимся проблемам и план работ
-Status
-Platform
-Priority
-Risk
+> 📌 **Статус после Этапов 1 и 2.** Большая часть технического долга после
+> миграции на .NET 8 закрыта. Ниже — итоговая сводка.
 
-</div>
+### ✅ Выполнено
 
-📑 Содержание
-Обзор
-1. Thread.Abort() — критично (6 файлов)
-Затронутые файлы
-Почему это не исправлено
-План рефакторинга
-2. NU1701 — NuGet пакеты
-3. Удаление мёртвого кода
-3.1 Неиспользуемые методы
-3.2 Неиспользуемые файлы
-3.3 Неиспользуемые поля
-3.4 Неиспользуемые классы
-📋 Сводная таблица рисков
-🎯 Рекомендуемый порядок действий
-🔍 Обзор
-После миграции проекта на .NET 8 остался ряд проблем — от критических runtime-ошибок до косметических предупреждений и мёртвого кода. Этот документ систематизирует все оставшиеся вопросы, оценивает риски и предлагает конкретные шаги для их устранения.
+#### Этап 1 — Механические правки (мёртвый код)
 
-Все проблемы разделены на 4 основные категории:
+| Что | Файл | Статус |
+| :--- | :--- | :--- |
+| `TaskerDebug.cs` (весь файл) | `hakchi_gui/Tasks/` | ✅ Удалён |
+| `ApplicationDeploymentWrapper.cs` (весь файл) | `hakchi_gui/` | ✅ Удалён (ClickOnce мёртв в .NET 8) |
+| Класс `NesMenuElementBaseComparer` | `Apps/NesMenuElementBase.cs` | ✅ Удалён (0 references) |
+| Метод `GenerateStreamFromString` | `Shared.cs` | ✅ Удалён |
+| Метод `GetDocumentsLibraryPath` + P/Invoke `SHGetKnownFolderPath` | `Program.cs` | ✅ Удалён + осиротевшие `using` убраны |
+| Метод `GetDetectedRemoteGameSyncPath()` (безаргументный) | `hakchi.cs` | ✅ Удалён (sibling с параметром оставлен) |
 
-#
-Категория
-Критичность
-Объём работ
-1	Thread.Abort() → CancellationToken	🔴 Высокая	Большой рефакторинг
-2	CA1416 в ProgressODoom	🟡 Низкая	1 строка
-3	Пустые catch	🟢 Косметика	Опционально
-4	Мёртвый код и пакеты	🟡 Средняя	Механические правки
+#### Этап 2 — Рефакторинг Thread.Abort() (6 файлов)
 
-1. Thread.Abort() — критично (6 файлов)
-⚠️ Это единственная серьёзная проблема.
+`Thread.Abort()` бросает `PlatformNotSupportedException` в .NET 8. Все 6
+call-site'ов заменены на кооперативную отмену:
 
-Thread.Abort() бросает PlatformNotSupportedException в .NET 8 — код компилируется, но падает в рантайме при отмене операции.
+| Файл | Стратегия | Статус |
+| :--- | :--- | :--- |
+| `Shared.cs` (`ShellPipe`) | `CancellationTokenSource` + `stdErr.Close()` | ✅ Готово |
+| `Clovershell/ShellConnection.cs` | `socket.Close()` + `Join(2s)` | ✅ Готово |
+| `Clovershell/ExecConnection.cs` | `stdin.Close()` + `Join(2s)` | ✅ Готово |
+| `Wireless/Bluetooth/BluetoothControl.cs` | `cmdConnection.Close()` + `Join(2s)` | ✅ Готово |
+| `Tasks/TaskerTransferForm.cs` | Удалён ложный `#warning` (`Tasker.Abort()` уже кооперативный) | ✅ Готово |
+| `ScraperForm.cs` | `CancellationTokenSource` для HTTP-вызовов | ✅ Готово |
 
-Затронутые файлы
-Файл
-Строки
-Вызов
-ShellConnection.cs	101, 103	shellConnectionThread.Abort()
-ExecConnection.cs	92, 94	stdinThread.Abort()
-BluetoothControl.cs	128, 129	cmdThread.Abort()
-Shared.cs	686, 687	transferThread.Abort()
-ScraperForm.cs	584, 637, 831	#warning (без вызова, но поток рядом)
-TaskerTransferForm.cs	224	#warning
+Все `catch (ThreadAbortException)` заменены на соответствующие типы:
+`SocketException`, `ObjectDisposedException`, `IOException`,
+`OperationCanceledException`.
 
-💡 Автор сам пометил #warning Refactor this to get rid of Thread.Abort! — он знает о проблеме.
+### ⏸️ Осознанно оставлено
 
-Почему это не исправлено
-Это не механический фикс, а изменение поведения. Требуется:
+| Что | Причина |
+| :--- | :--- |
+| `nQuant` 1.0.3 (NU1701) | Работает через compat-shim. Квантизация PNG критична для отображения иконок на консоли (8-bit palletized). Замена требует визуального тестирования на реальном устройстве. |
+| `Autoupdater.NET.Official` 1.9.2 (NU1701) | Код автообновления закомментирован, но пакет оставлен для возможной повторной активации. |
+| `Libraries/LibUsbDotNet/` (vendored) | Не используется основным решением, но нужна для справки/экспериментов с USB API. |
+| `Libraries/FelLib/FelHelpers/` | Аналогично — vendored-проект, не referenced, но оставлен. |
+| Константа `UPDATE_XML_URL` + закомментированный `AutoUpdater.Start` | Привязано к `Autoupdater.NET.Official`, который оставлён. |
 
-Ввести CancellationToken во все методы, которые запускают потоки.
-Изменить логику потоков на cooperative cancellation (поток сам проверяет token.IsCancellationRequested).
-Заменить принудительный Thread.Abort() (с ThreadAbortException) на кооперативную остановку.
-План рефакторинга
-diff
+### 🟡 Опционально (косметика)
 
-- // Старый подход — принудительный abort
-- private Thread workerThread;
-- 
-- public void Cancel()
-- {
--     workerThread.Abort();  // PlatformNotSupportedException в .NET 8
-- }
-+ // Новый подход — кооперативная отмена
-+ private CancellationTokenSource cts;
-+ 
-+ public void Cancel()
-+ {
-+     cts.Cancel();  // Поток сам завершится при следующей проверке
-+ }
-Аспект
-Thread.Abort()
-CancellationToken
-Механизм	Принудительный (ThreadAbortException)	Кооперативный
-Безопасность ресурсов	Небезопасен (может оставить lock-и)	Безопасен (точки проверки)
-Поддержка .NET 8	❌ PlatformNotSupportedException	✅ Нативная
-Сложность миграции	—	Требует рефакторинга вызовов
+| Что | Файл | Заметка |
+| :--- | :--- | :--- |
+| Поле `InfoRegex` | `BluetoothControl.cs:36` | WIP-маркер — уточнить у автора, планируется ли использование. |
+| Пустые `catch` блоки | несколько файлов | Добавить `Trace.WriteLine` для диагностики. Не критично. |
+| `catch (ThreadAbortException ex)` без вызова `Abort` | `ScraperForm.cs` (3 места) | В .NET 8 `ThreadAbortException` никогда не бросается — catch мёртвый, можно убрать. Безопасно. |
+| Кодировка `IKEATheme.cs` и `NSI/Installer.nsi` | CP1251 вместо UTF-8 | (Если ещё не исправлено в Этапе 0.) Конвертация через `iconv -f CP1251 -t UTF-8`. |
+| `app.config` `<startup>` блок | `hakchi_gui/app.config` | Декларирует .NET Framework 4.6.1 — рудимент, .NET 8 его игнорирует. Можно удалить. |
+| Сироты `tiny7zTool`, `SpineGen.Test`, `TestCueSharp` | `Libraries/` | На .NET Framework 4.6.1, не входят в `hakchi_gui.sln`. Можно мигрировать или удалить. |
 
-🔴 Риск: высокий. Без тестирования на реальном NES Mini легко сломать USB-shell / Clovershell / Bluetooth.
+### 🔬 Рекомендуемое тестирование на устройстве
 
-2. NU1701 — NuGet пакеты
-Пакет
-Версия
-Причина предупреждения
-nQuant	1.0.3	Восстановлен под .NET Framework, не net8.0
-Autoupdater.NET.Official	1.9.2	То же самое
+После применения Этапов 1 и 2 прогнать следующие сценарии на реальной
+консоли (NES/SNES Mini):
 
-Назначение пакетов
-nQuant — квантизация изображений (PNG optimization). Работает через compat-шейм.
-Autoupdater.NET — автoupdater. Весь код автoupdate закомментирован (см. MainForm.cs:333).
-Варианты решений
-Пакет
-Решение
-Риск
-nQuant	Найти аналог под .NET 8 или оставить (работает через compat-шейм)	Низкий
-Autoupdater.NET	❌ Удалить из .csproj — код не используется	Минимальный
+1. **`Shared.cs`** — передача ROM на консоль через `nc`. Нажать «Отмена»
+   во время передачи — должно отмениться без падения.
+2. **`ShellConnection.cs`** — `Tools → Shell` → подключиться `puttytel.exe`
+   к localhost. Ввести команду. Закрыть puttytel — Hakchi не должен зависнуть.
+3. **`ExecConnection.cs`** — любая команда с stdin (например, смена boot
+   logo). Отмена во время загрузки — должна пройти чисто.
+4. **`BluetoothControl.cs`** — при установленном `bluetooth.hmod`:
+   `Tools → Bluetooth` → сканировать → закрыть форму.
+5. **`TaskerTransferForm.cs`** — длительная операция (синхронизация игр)
+   → «Отмена» в окне прогресса.
+6. **`ScraperForm.cs`** — `Game → Edit cover art → Search` → переключаться
+   между результатами. Закрыть форму во время загрузки обложки.
 
-💡 Ранее обсуждали в Phase A — было решено оставить dead code. Сейчас можно пересмотреть.
+Если что-то сломалось — откат отдельного файла:
+```bash
+git checkout -- hakchi_gui/<path>/<file>.cs
+```
 
-3. Удаление мёртвого кода
-3.1 Неиспользуемые методы
-GetDocumentsLibraryPath + SHGetKnownFolderPath (Program.cs)
-Назначение: получение пути к библиотеке "Documents" через Windows Known Folder API (GUID 7B0DB17D-9CD2-4A93-9733-46CC89022E7C).
-Анализ: git grep по всему репозиторию (включая Libraries/) нашёл ровно 3 совпадения, все внутри одной функции:
-Декларация P/Invoke
-Декларация метода
-Единственный call изнутри самого метода
-Фактическое использование: в коде применяется Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) (см. Program.cs:184, настройка BaseDirectoryExternal).
-Вывод: функция написана как альтернатива, но никогда не подключена.
-⚠️ Рекомендация: проверить, не планировалось ли использование для случаев, когда MyDocuments перенаправлен через библиотеки.
+### 📦 История патчей
 
-GenerateStreamFromString (Shared.cs)
-Назначение: утилита, превращающая строку в MemoryStream (стандартный паттерн new MemoryStream(...) + StreamWriter).
-Анализ: git grep — 0 вызовов во всём репозитории.
-Вывод: leftover из ранних версий.
-GetDetectedRemoteGameSyncPath (hakchi.cs:268)
-Назначение: обёртка без параметра, использует текущую консоль.
-Анализ:
-Рядом (hakchi.cs:275) есть sibling-метод GetRemoteGameSyncPath(ConsoleType consoleType) — используется в 2 местах:
-NesApplication.cs:1357
-SyncTask.cs:497
-GetDetectedRemoteGameSyncPath() — 0 вызовов.
-Вывод: либо ранняя версия, либо обёртка, от которой отказались в favour версии с явным параметром.
-⚠️ Внимание: это публичный метод — теоретически может быть частью публичного API для внешних потребителей.
-
-3.2 Неиспользуемые файлы
-TaskerDebug.cs
-Назначение: реализация интерфейса ITaskerView, которая вместо отображения UI пишет в Trace.WriteLine каждое событие (SetState, SetProgress, SetTitle и т.д.).
-Анализ: git grep 'TaskerDebug' находит только класс и его конструктор — ни одного new TaskerDebug() в коде.
-Вывод: debug-заглушка для тестирования Tasker без UI, leftover отладочного кода.
-ApplicationDeploymentWrapper.cs
-Назначение: обёртка над System.Deployment.Application.ApplicationDeployment — ClickOnce API.
-Использование: проверка IsNetworkDeployed / IsFirstRun (типичный паттерн "приложение установлено через ClickOnce?").
-Анализ: все 4 references — внутри самого файла.
-Контекст: ClickOnce не поддерживается в .NET 8 (это .NET Framework-only фича). После миграции код стал бесполезен — даже при вызове всегда возвращает false через ветку applicationDeploymentType == null.
-Вывод: явный рудимент миграции.
-3.3 Неиспользуемые поля
-UPDATE_XML_URL (MainForm.cs:34)
-csharp
-
-private const string UPDATE_XML_URL = 
-    "https://teamshinkansen.github.io/xml/updates/update.xml";
-Назначение: фид автообновления.
-Анализ: приватное поле, единственное упоминание — в закомментированной строке:
-csharp
-
-// TEMP: disabled for migration
-// AutoUpdater.Start(UPDATE_XML_URL);  // MainForm.cs:333
-Дополнительно: в hakchi_gui.csproj остался PackageReference на Autoupdater.NET.Official — зависимость не убрали.
-Вывод: автoupdater отключён при миграции на .NET 8, но забытый мусор остался.
-InfoRegex (BluetoothControl.cs:36)
-csharp
-
-private static readonly Regex InfoRegex = 
-    new Regex(@"^\s+([^:]+):\s+(.*)\s$");
-Назначение: парсит строки вида Key: value (с отступом).
-Контекст: рядом 4 sibling-regex для парсинга вывода bluetoothctl:
-ChangeRegex ✅ используется
-NewDelRegex ✅ используется
-DeviceRegex ✅ используется
-ControllerRegex ✅ используется
-InfoRegex ❌ единственный не используется
-Вывод: видимо, предназначался для парсинга info-секций устройства, но логика пошла другим путём.
-⚠️ Рекомендация: спросить автора BluetoothControl — возможно, это WIP.
-
-3.4 Неиспользуемые классы
-NesMenuElementBaseComparer
-Назначение: вложенный класс, реализующий IEqualityComparer, сравнивающий элементы по Code.
-Анализ: git grep — 0 references во всём репозитории (даже через generic-поиск IEqualityComparer).
-Контекст: подобный comparer обычно используется в:
-Dictionary<NesMenuElementBase, T>
-HashSet<NesMenuElementBase>
-Distinct(...)
-Фактическое использование: все коллекции используют string Code напрямую как ключ, а не сами объекты.
-Вывод: класс написан "про запас" или для ранней версии логики, от которой отказались.
-✅ Самый безопасный кандидат на удаление — вложенный класс, 0 references, не часть публичного API.
-
-📋 Сводная таблица рисков
-
-| Что | Уверенность | Риск | Действие |
-|---|---|---|---|
-| TaskerDebug.cs (весь файл) | 🟢 Высокая | Минимальный | Удалить — debug-заглушка без вызовов |
-| ApplicationDeploymentWrapper.cs (весь файл) | 🟢 Высокая | Минимальный | Удалить — ClickOnce мёртв в .NET 8 |
-| NesMenuElementBaseComparer | 🟢 Высокая | Минимальный | Удалить — вложенный класс, 0 references |
-| UPDATE_XML_URL + закомментированный AutoUpdater-блок | 🟢 Высокая | Минимальный | Удалить + убрать PackageReference из .csproj |
-| InfoRegex | 🟡 Средняя | Низкий | Спросить автора — WIP-маркер |
-| GetDocumentsLibraryPath + SHGetKnownFolderPath | 🟡 Средняя | Низкий | Удалить — рабочий код, но не вызывается |
-| GenerateStreamFromString | 🟢 Высокая | Минимальный | Удалить — утилита без вызовов |
-| GetDetectedRemoteGameSyncPath | 🟡 Средняя | Низкий | Удалить — публичный метод, но 0 callers; есть sibling с параметром |
-
-🎯 Рекомендуемый порядок действий
-Предлагаемый порядок — от наименее рискованных к наиболее рискованным:
-
-Этап 1 — Механические правки (минимальный риск)
- - Удалить TaskerDebug.cs
- - Удалить ApplicationDeploymentWrapper.cs
- - Удалить класс NesMenuElementBaseComparer
- - Удалить GenerateStreamFromString
- - Удалить UPDATE_XML_URL + убрать Autoupdater.NET.Official из .csproj
- - Добавить Trace.WriteLine в пустые catch (опционально)
-
-
-Этап 2 — Требует проверки (низкий риск)
- - Удалить GetDocumentsLibraryPath + SHGetKnownFolderPath
- - Удалить GetDetectedRemoteGameSyncPath
- - Уточнить у автора BluetoothControl статус InfoRegex
-   
-Этап 3 — Большой рефакторинг (высокий риск)
- - Ввести CancellationToken в ShellConnection, ExecConnection
- - Ввести CancellationToken в BluetoothControl
- - Ввести CancellationToken в Shared.cs (transfer logic)
- - Рефакторинг ScraperForm и TaskerTransferForm
- - Полное тестирование на реальном NES Mini (USB-shell / Clovershell / Bluetooth)
-🔴 Этап 3 нельзя делать "вслепую" — без аппаратного тестирования высок риск сломать рабочие сценарии.
+| Этап | Patch-файл | Описание |
+| :--- | :--- | :--- |
+| 1 | `hakchi3-stage1-mechanical-fixes.patch` | Удаление мёртвого кода (6 файлов, −202 строки) |
+| 2 | `hakchi3-stage2-all.patch` | Рефакторинг Thread.Abort() (6 файлов, сводный) |
+| 2.1 | `hakchi3-stage2-1-shared.patch` | Только `Shared.cs` |
+| 2.2 | `hakchi3-stage2-2-shellconnection.patch` | Только `ShellConnection.cs` |
+| 2.3 | `hakchi3-stage2-3-execconnection.patch` | Только `ExecConnection.cs` |
+| 2.4 | `hakchi3-stage2-4-bluetooth.patch` | Только `BluetoothControl.cs` |
+| 2.5 | `hakchi3-stage2-5-tasker.patch` | Только `TaskerTransferForm.cs` |
+| 2.6 | `hakchi3-stage2-6-scraper.patch` | Только `ScraperForm.cs` |
 
 ---
 

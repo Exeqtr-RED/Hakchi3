@@ -123,14 +123,18 @@ namespace com.clusterrr.hakchi_gui.Wireless.Bluetooth
 
         public void StopListener()
         {
-            if (cmdThread?.IsAlive ?? false)
-            {
-                #warning Refactor this to get rid of Thread.Abort!
-                cmdThread.Abort();
-            }
+            // Cooperative shutdown: close the TCP connection to unblock
+            // cmdReader.ReadLine() in the worker thread, then Join with a
+            // short timeout so we don't return while the worker is still
+            // in its cleanup block (which nulls cmdConnection/Reader/Writer).
+            var thread = cmdThread;
+            try { if (cmdConnection?.Connected ?? false) cmdConnection?.Close(); }
+            catch { /* already closed */ }
             cmdThread = null;
             _cmdQueue.Clear();
             _Devices.Clear();
+            if (thread != null && thread != Thread.CurrentThread)
+                thread.Join(TimeSpan.FromSeconds(2));
         }
 
         private BluetoothDeviceData GetDeviceData(string deviceAddress, bool add = true)
@@ -390,12 +394,23 @@ namespace com.clusterrr.hakchi_gui.Wireless.Bluetooth
                 cmdWriter = null;
                 cmdStream = null;
             }
-            catch (ThreadAbortException)
+            // cmdConnection.Close() from StopListener() unblocks
+            // cmdReader.ReadLine() — throws IOException (network reset) or
+            // ObjectDisposedException (stream already closed). Both are
+            // expected during shutdown and don't need logging.
+            catch (IOException)
             {
                 if (cmdConnection?.Connected ?? false)
                 {
                     cmdConnection?.Close();
                 }
+                cmdConnection = null;
+                cmdReader = null;
+                cmdWriter = null;
+                cmdStream = null;
+            }
+            catch (ObjectDisposedException)
+            {
                 cmdConnection = null;
                 cmdReader = null;
                 cmdWriter = null;

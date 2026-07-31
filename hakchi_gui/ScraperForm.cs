@@ -34,6 +34,11 @@ namespace com.clusterrr.hakchi_gui
             public Thread ScraperFetchThread { get; set; } = null;
             public Thread ScraperImageFetchThread { get; set; } = null;
             public Thread ScraperSpineFetchThread { get; set; } = null;
+            // Cancellation tokens for the fetch threads. Created on demand
+            // when a thread is started, cancelled + disposed when the thread
+            // is replaced or the item is deselected.
+            public CancellationTokenSource ScraperImageFetchCts { get; set; } = null;
+            public CancellationTokenSource ScraperSpineFetchCts { get; set; } = null;
             public override string ToString() => Result.Game.Name;
         }
         public class Result
@@ -581,8 +586,11 @@ namespace com.clusterrr.hakchi_gui
                         textBoxDescription.Text = result.Description;
                     }
 
-                    #warning Refactor this to get rid of Thread.Abort!
-                    SelectedItem.ScraperImageFetchThread?.Abort();
+                    // Cancel any in-flight image fetch for this item, then start a new one.
+                    SelectedItem.ScraperImageFetchCts?.Cancel();
+                    SelectedItem.ScraperImageFetchCts?.Dispose();
+                    SelectedItem.ScraperImageFetchCts = new CancellationTokenSource();
+                    var imageCts = SelectedItem.ScraperImageFetchCts;
                     SelectedItem.ScraperImageFetchThread = new Thread(() =>
                     {
                         Threads.Add(Thread.CurrentThread);
@@ -602,8 +610,8 @@ namespace com.clusterrr.hakchi_gui
                                 }));
 
                                 {
-                                    var imageData = HakchiWebClient.HttpClient.GetByteArrayAsync(frontUrl).GetAwaiter().GetResult();
-                                    using (var ms = new MemoryStream(imageData)) 
+                                    var imageData = HakchiWebClient.HttpClient.GetByteArrayAsync(frontUrl, imageCts.Token).GetAwaiter().GetResult();
+                                    using (var ms = new MemoryStream(imageData))
                                     {
                                         ms.Seek(0, SeekOrigin.Begin);
                                         var bitmap = new Bitmap(ms);
@@ -624,7 +632,7 @@ namespace com.clusterrr.hakchi_gui
                             }
 
                         }
-                        catch (ThreadAbortException ex) { }
+                        catch (OperationCanceledException) { /* user switched item or form closed */ }
                         catch (HttpRequestException ex) { Trace.WriteLine($"Art download failed: {ex.Message}"); }
                         finally
                         {
@@ -634,8 +642,11 @@ namespace com.clusterrr.hakchi_gui
                     });
                     SelectedItem.ScraperImageFetchThread.Start();
 
-                    #warning Refactor this to get rid of Thread.Abort!
-                    SelectedItem.ScraperSpineFetchThread?.Abort();
+                    // Cancel any in-flight spine fetch for this item, then start a new one.
+                    SelectedItem.ScraperSpineFetchCts?.Cancel();
+                    SelectedItem.ScraperSpineFetchCts?.Dispose();
+                    SelectedItem.ScraperSpineFetchCts = new CancellationTokenSource();
+                    var spineCts = SelectedItem.ScraperSpineFetchCts;
                     SelectedItem.ScraperSpineFetchThread = new Thread(() =>
                     {
                         Threads.Add(Thread.CurrentThread);
@@ -649,7 +660,7 @@ namespace com.clusterrr.hakchi_gui
                                 {
                                     try
                                     {
-                                        var imageData = HakchiWebClient.HttpClient.GetByteArrayAsync($"https://cdn.thegamesdb.net/images/original/clearlogo/{tgdbResult.ID}.png").GetAwaiter().GetResult();
+                                        var imageData = HakchiWebClient.HttpClient.GetByteArrayAsync($"https://cdn.thegamesdb.net/images/original/clearlogo/{tgdbResult.ID}.png", spineCts.Token).GetAwaiter().GetResult();
 
                                         using (var ms = new MemoryStream(imageData))
                                         {
@@ -669,11 +680,12 @@ namespace com.clusterrr.hakchi_gui
                                             }
                                         }
                                     }
+                                    catch (OperationCanceledException) { /* user switched item or form closed */ }
                                     catch (HttpRequestException ex) { Trace.WriteLine($"Art download failed: {ex.Message}"); }
                                 }
                             }
                         }
-                        catch (ThreadAbortException ex) { }
+                        catch (OperationCanceledException) { /* user switched item or form closed */ }
                         finally
                         {
                             item.ScraperSpineFetchThread = null;
@@ -826,11 +838,27 @@ namespace com.clusterrr.hakchi_gui
 
         private void ScraperForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            foreach (var thread in Threads.ToArray())
-            {             
-                #warning Refactor this to get rid of Thread.Abort!
-                if (thread != null && thread.IsAlive)
-                    thread.Abort();
+            // Cooperative shutdown: rather than Thread.Abort() (which throws
+            // PlatformNotSupportedException on .NET 8), we cancel any active
+            // fetch CTSes and let the worker threads self-terminate.
+            //
+            // The HTTP calls in image/spine fetch threads will throw
+            // OperationCanceledException via the per-item CTS, which they
+            // already catch. Search/page-switch threads do resultsTask.Wait()
+            // without a cancellation token — they will finish naturally on
+            // their next iteration, and their Invoke() calls will throw
+            // InvalidOperationException (disposed handle), caught by the
+            // existing catch (Exception) blocks.
+            //
+            // We do NOT Join the threads: the form is closing and the
+            // application may be exiting. Threads are background=false by
+            // default, so they would keep the process alive — but since
+            // they handle exceptions gracefully and exit on their own,
+            // this is acceptable.
+            if (SelectedItem != null)
+            {
+                SelectedItem.ScraperImageFetchCts?.Cancel();
+                SelectedItem.ScraperSpineFetchCts?.Cancel();
             }
         }
 

@@ -77,14 +77,24 @@ namespace com.clusterrr.clovershell
                         break;
                 }
             }
-            catch (ThreadAbortException)
+            // socket.Close() from Dispose() unblocks socket.Receive() with a
+            // SocketException — caught here. ObjectDisposedException covers the
+            // race where socket is closed between the Connected check and Send.
+            catch (SocketException)
+            {
+            }
+            catch (ObjectDisposedException)
             {
             }
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.Message + ex.StackTrace);
-                if (socket.Connected)
-                    socket.Send(Encoding.ASCII.GetBytes("Error: " + ex.Message));
+                try
+                {
+                    if (socket.Connected)
+                        socket.Send(Encoding.ASCII.GetBytes("Error: " + ex.Message));
+                }
+                catch { /* socket already closed by Dispose() */ }
             }
             finally
             {
@@ -98,14 +108,20 @@ namespace com.clusterrr.clovershell
 
         public void Dispose()
         {
-            #warning Refactor this to get rid of Thread.Abort!
-            if (shellConnectionThread != null)
-                shellConnectionThread.Abort();
-            if (socket != null)
-                socket.Close();
+            // Cooperative shutdown: close the socket first to unblock
+            // socket.Receive() in the worker thread, then Join with a short
+            // timeout so we don't return while the worker is still in its
+            // finally block (which clears shellConnections[id]).
+            var thread = shellConnectionThread;
+            try { if (socket != null) socket.Close(); }
+            catch { /* already closed */ }
             socket = null;
             if (id > 0)
                 connection.shellConnections[id] = null;
+            // Join only if we're being called from a different thread —
+            // otherwise we'd deadlock (worker thread calling Dispose on itself).
+            if (thread != null && thread != Thread.CurrentThread)
+                thread.Join(TimeSpan.FromSeconds(2));
         }
 
         internal void Send(byte[] data, int pos, int len)
