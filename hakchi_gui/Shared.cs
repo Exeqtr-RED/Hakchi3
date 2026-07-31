@@ -651,15 +651,33 @@ namespace com.clusterrr.hakchi_gui
 
             var stdErr = new MemoryStream();
             SplitterStream splitStream = new SplitterStream(stdErr).AddStreams(Program.debugStreams);
+
+            // Cooperative cancellation: the worker thread checks the token at
+            // every await/blocking point. When the main shell command finishes,
+            // we cancel the token AND close stdErr — that unblocks ReadLine()
+            // and any in-flight SocketTransfer stream copy.
+            var cts = new CancellationTokenSource();
+            var token = cts.Token;
+
             var transferThread = new Thread(() =>
             {
                 try
                 {
-                    Thread.Sleep(1000);
+                    // Replaced Thread.Sleep(1000) with cancellable delay.
+                    // If the token is cancelled while we wait, this throws
+                    // TaskCanceledException and we exit cleanly.
+                    Task.Delay(1000, token).Wait(token);
+
                     stdErr.Seek(0, SeekOrigin.Begin);
                     using (var sr = new StreamReader(stdErr))
                     {
                         var line = sr.ReadLine();
+                        // stdErr may have been closed externally by cancel —
+                        // ReadLine returns null or throws ObjectDisposedException,
+                        // both handled by the catch below.
+                        if (line == null)
+                            return;
+
                         var match = Regex.Match(line, "^listening on (\\d+\\.\\d+\\.\\d+\\.\\d+):(\\d+)");
                         stdErr.Close();
                         splitStream.RemoveStream(stdErr).AddStreams(stderr);
@@ -669,12 +687,24 @@ namespace com.clusterrr.hakchi_gui
                         }
                     }
                 }
-                catch (ThreadAbortException) { }
+                catch (OperationCanceledException) { }
+                catch (ObjectDisposedException) { }
+                catch (IOException) { }
+                // Note: ThreadAbortException is no longer reachable on .NET 8
+                // (Thread.Abort throws PlatformNotSupportedException). The three
+                // catches above cover the cooperative-cancellation path.
             });
             transferThread.Start();
+
             int returnValue = hakchi.Shell.Execute($"nc -lv -w 60 -i 60 -s 0.0.0.0 -e {command}", null, null, splitStream, timeout, throwOnNonZero);
-            #warning Refactor this to get rid of Thread.Abort!
-            transferThread.Abort();
+
+            // Cancel + close stdErr to unblock the worker thread's blocking
+            // calls. Join with a short timeout so we never hang the UI thread
+            // if the worker is stuck in a long socket read.
+            cts.Cancel();
+            try { stdErr.Close(); } catch { }
+            transferThread.Join(TimeSpan.FromSeconds(2));
+
             return returnValue;
         }
 
