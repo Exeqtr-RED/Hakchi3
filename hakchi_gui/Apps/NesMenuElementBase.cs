@@ -496,19 +496,6 @@ namespace com.clusterrr.hakchi_gui
             img = bmp;
         }
 
-        public class NesMenuElementBaseComparer : IEqualityComparer<NesMenuElementBase>
-        {
-            public bool Equals(NesMenuElementBase x, NesMenuElementBase y)
-            {
-                return x.Code == y.Code;
-            }
-
-            public int GetHashCode(NesMenuElementBase obj)
-            {
-                return obj.Code.GetHashCode();
-            }
-        }
-
     }
 }
 

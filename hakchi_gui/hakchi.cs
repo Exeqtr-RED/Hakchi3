@@ -265,13 +265,6 @@ namespace com.clusterrr.hakchi_gui
 
         public static bool HasPixelArt(ConsoleType consoleType) => consoleType == ConsoleType.NES || consoleType == ConsoleType.Famicom;
 
-        public static string GetDetectedRemoteGameSyncPath()
-        {
-            if (RemoteGameSyncPath == null) throw new NullReferenceException("No valid sync path is available");
-            if (ConfigIni.Instance.SeparateGameStorage && SystemCode != null) return $"{RemoteGameSyncPath}/{SystemCode}";
-            return RemoteGameSyncPath;
-        }
-
         public static string GetRemoteGameSyncPath(ConsoleType consoleType)
         {
             if (RemoteGameSyncPath == null) throw new NullReferenceException("No valid sync path is available");

@@ -11,11 +11,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using System.Xml;
 using TeamShinkansen.Scrapers.Interfaces;
 
 namespace com.clusterrr.hakchi_gui
@@ -327,34 +325,6 @@ namespace com.clusterrr.hakchi_gui
                 return Encoding.GetEncoding(MY_CODE_PAGE).GetString(stream.GetBuffer(), 0, (int)stream.Length);
             }
             return "";
-        }
-
-        [DllImport("Shell32.dll")]
-        private static extern int SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)] Guid rfid, uint dwFlags,
-            IntPtr hToken, out IntPtr ppszPath);
-        private static string GetDocumentsLibraryPath()
-        {
-            IntPtr outPath;
-            var documentsLibraryGuid = new Guid("7B0DB17D-9CD2-4A93-9733-46CC89022E7C");
-            int result = SHGetKnownFolderPath(documentsLibraryGuid, 0, WindowsIdentity.GetCurrent().Token, out outPath);
-            if (result >= 0)
-            {
-                var libConfigPath = Marshal.PtrToStringUni(outPath);
-                var libConfig = new XmlDocument();
-                libConfig.LoadXml(File.ReadAllText(libConfigPath));
-                var nsmgr = new XmlNamespaceManager(libConfig.NameTable);
-                nsmgr.AddNamespace("ns", libConfig.LastChild.NamespaceURI);
-                var docs = libConfig.SelectSingleNode("//ns:searchConnectorDescription[ns:isDefaultSaveLocation='true']/ns:simpleLocation/ns:url/text()", nsmgr);
-                if (Directory.Exists(docs.Value))
-                    return docs.Value;
-                else
-                    throw new Exception("Invalid Documents directory: " + docs.Value);
-            }
-            else
-            {
-                throw new ExternalException("Cannot get the known folder path. It may not be available on this system.",
-                    result);
-            }
         }
 
     }
