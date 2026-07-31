@@ -1,15 +1,15 @@
-using System;
+п»їusing System;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
     /// <summary>
-    /// Светлая современная тема "Акварель" с пастельными тонами и эргономичным дизайном.
+    /// вЂ”РІРµС‚Р»Р°В¤ СЃРѕРІСЂРµРјРµРЅРЅР°В¤ С‚РµРјР° "СРєРІР°СЂРµР»СЊ" СЃ РїР°СЃС‚РµР»СЊРЅС‹РјРё С‚РѕРЅР°РјРё Рё СЌСЂРіРѕРЅРѕРјРёС‡РЅС‹Рј РґРёР·Р°Р№РЅРѕРј.
     /// </summary>
     public static class IKEATheme
     {
-        #region Цветовая палитра
+        #region Г·РІРµС‚РѕРІР°В¤ РїР°Р»РёС‚СЂР°
         public static class Colors
         {
             public static readonly Color FormBg = Color.FromArgb(245, 246, 248);
@@ -37,7 +37,7 @@ namespace com.clusterrr.hakchi_gui
         }
         #endregion
 
-        #region Шрифты
+        #region РЋСЂРёС„С‚С‹
         public static class Fonts
         {
             public static readonly Font UI = new Font("Segoe UI", 9f);
@@ -330,7 +330,7 @@ namespace com.clusterrr.hakchi_gui
             c.ForeColor = Colors.TextPrimary;
         }
 
-        #region Отрисовка ListView
+        #region СњС‚СЂРёСЃРѕРІРєР° ListView
         private static void LvDrawHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             using (var brush = new SolidBrush(Colors.MenuBarBg))
@@ -373,7 +373,7 @@ namespace com.clusterrr.hakchi_gui
         }
         #endregion
 
-        #region Отрисовка ListBox
+        #region СњС‚СЂРёСЃРѕРІРєР° ListBox
         private static void DrawListBoxItem(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0) return;
@@ -397,7 +397,7 @@ namespace com.clusterrr.hakchi_gui
         #endregion
     }
 
-    #region Рендерер для меню и тулбаров
+    #region вЂ“РµРЅРґРµСЂРµСЂ РґР»В¤ РјРµРЅСЋ Рё С‚СѓР»Р±Р°СЂРѕРІ
     public class AquaColorTable : ProfessionalColorTable
     {
         public override Color ToolStripGradientBegin => IKEATheme.Colors.MenuBarBg;

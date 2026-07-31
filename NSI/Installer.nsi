@@ -1,23 +1,23 @@
-!include "LogicLib.nsh"
+п»ї!include "LogicLib.nsh"
 !include "Sections.nsh"
 !include "FileFunc.nsh"
 
 ; Display Version
-; ИСПРАВЛЕНИЕ 1: Изменен путь с Debug\net48 на Release\net8.0-windows
+; В»вЂ”С•вЂ“СВ¬Р‹в‰€РЊВ»в‰€ 1: В»Р·РјРµРЅРµРЅ РїСѓС‚СЊ СЃ Debug\net48 РЅР° Release\net8.0-windows
 !system '..\hakchi_gui\bin\Release\net8.0-windows\hakchi.exe --versionFormat "!define DisplayVersion {0}" --versionFile version.nsh'
 !include ".\version.nsh"
 !system 'del version.nsh'
 
 ; Create zip files
-; ИСПРАВЛЕНИЕ 2: Изменен путь исходников. ИСПРАВЛЕНИЕ 3: Название архива hakchi3
+; В»вЂ”С•вЂ“СВ¬Р‹в‰€РЊВ»в‰€ 2: В»Р·РјРµРЅРµРЅ РїСѓС‚СЊ РёСЃС…РѕРґРЅРёРєРѕРІ. В»вЂ”С•вЂ“СВ¬Р‹в‰€РЊВ»в‰€ 3: РЊР°Р·РІР°РЅРёРµ Р°СЂС…РёРІР° hakchi3
 !system '..\Zipper\bin\Release\net8.0-windows\Zipper.exe ..\hakchi_gui\bin\Release\net8.0-windows ..\hakchi_gui\bin\hakchi3-${DisplayVersion}-portable.zip'
-; ВНИМАНИЕ: Если ты мигрировал утилиту Zipper на .NET 8, поменяй в строке выше net48 на net8.0-windows
+; В¬РЊВ»С›СРЊВ»в‰€: в‰€СЃР»Рё С‚С‹ РјРёРіСЂРёСЂРѕРІР°Р» СѓС‚РёР»РёС‚Сѓ Zipper РЅР° .NET 8, РїРѕРјРµРЅВ¤Р№ РІ СЃС‚СЂРѕРєРµ РІС‹С€Рµ net48 РЅР° net8.0-windows
 
 ; The icon of the installer
 Icon "..\hakchi_gui\icon_app.ico"
 
 ; The file to write
-; ИСПРАВЛЕНИЕ 4: Переименовано в hakchi3
+; В»вЂ”С•вЂ“СВ¬Р‹в‰€РЊВ»в‰€ 4: С•РµСЂРµРёРјРµРЅРѕРІР°РЅРѕ РІ hakchi3
 OutFile "..\hakchi_gui\bin\hakchi3-${DisplayVersion}-installer.exe"
 
 ; The default installation directory
@@ -28,11 +28,11 @@ Var launchExe
 var launchArgs
 
 ; The name of the installer
-; ИСПРАВЛЕНИЕ 5: Имя инсталлятора
+; В»вЂ”С•вЂ“СВ¬Р‹в‰€РЊВ»в‰€ 5: В»РјВ¤ РёРЅСЃС‚Р°Р»Р»В¤С‚РѕСЂР°
 Name "Hakchi3 ${DisplayVersion}"
 
 ; Registry key to check for directory
-; ИСПРАВЛЕНИЕ 6: Сменил ветку реестра, чтобы Hakchi3 не конфликтовал с Hakchi2 CE на ПК пользователя
+; В»вЂ”С•вЂ“СВ¬Р‹в‰€РЊВ»в‰€ 6: вЂ”РјРµРЅРёР» РІРµС‚РєСѓ СЂРµРµСЃС‚СЂР°, С‡С‚РѕР±С‹ Hakchi3 РЅРµ РєРѕРЅС„Р»РёРєС‚РѕРІР°Р» СЃ Hakchi2 CE РЅР° С•В  РїРѕР»СЊР·РѕРІР°С‚РµР»В¤
 InstallDirRegKey HKLM "Software\Hakchi3" "Install_Dir"
 
 ; Request application privileges for Windows Vista
@@ -78,7 +78,7 @@ SectionEnd
 Section "Hakchi3 ${DisplayVersion} (required)" section_main
   SectionIn RO
   SetOutPath $INSTDIR
-  ; ИСПРАВЛЕНИЕ 7: Берем файлы для инсталлятора из новой папки .NET 8
+  ; В»вЂ”С•вЂ“СВ¬Р‹в‰€РЊВ»в‰€ 7: Р…РµСЂРµРј С„Р°Р№Р»С‹ РґР»В¤ РёРЅСЃС‚Р°Р»Р»В¤С‚РѕСЂР° РёР· РЅРѕРІРѕР№ РїР°РїРєРё .NET 8
   File /r "..\hakchi_gui\bin\Release\net8.0-windows\*"
   AccessControl::GrantOnFile "$INSTDIR\" "(BU)" "GenericRead + GenericWrite"
 SectionEnd
@@ -145,7 +145,7 @@ Section "Uninstall"
   RMDir /r "$SMPROGRAMS\Hakchi3"
   RMDir "$SMPROGRAMS\Hakchi3"
 
-  ; ИСПРАВЛЕНИЕ 8: Подключаем файл, который реально генерирует vcxproj в релизе
+  ; В»вЂ”С•вЂ“СВ¬Р‹в‰€РЊВ»в‰€ 8: С•РѕРґРєР»СЋС‡Р°РµРј С„Р°Р№Р», РєРѕС‚РѕСЂС‹Р№ СЂРµР°Р»СЊРЅРѕ РіРµРЅРµСЂРёСЂСѓРµС‚ vcxproj РІ СЂРµР»РёР·Рµ
   !include "release-uninstall.nsh"
 
   Delete "$INSTDIR\nonportable.flag"
@@ -163,7 +163,7 @@ FunctionEnd
 
 Function .onSelChange
   ${If} ${SectionIsSelected} ${section_portable}
-    ; ИСПРАВЛЕНИЕ 9: Обновлено название папки портативной версии
+    ; В»вЂ”С•вЂ“СВ¬Р‹в‰€РЊВ»в‰€ 9: СњР±РЅРѕРІР»РµРЅРѕ РЅР°Р·РІР°РЅРёРµ РїР°РїРєРё РїРѕСЂС‚Р°С‚РёРІРЅРѕР№ РІРµСЂСЃРёРё
     StrCpy $InstDir "$EXEDIR\hakchi3-${DisplayVersion}"
 
     !insertmacro UnselectSection ${section_install}
