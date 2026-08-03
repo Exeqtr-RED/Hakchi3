@@ -191,12 +191,13 @@ namespace com.clusterrr.hakchi_gui
                     {
                         if (!WaitingShellForm.WaitForDevice(this))
                             return;
-                        using (var save = new MemoryStream())
-                        {
+                        using var save = new MemoryStream();
+
                             hakchi.Shell.Execute("cd /var/lib/clover/profiles/0 && tar -cz " + game.SubItems["colCode"].Text, null, save, null, 10000, true);
                             var buffer = save.ToArray();
                             File.WriteAllBytes(saveFileDialog.FileName, buffer);
-                        }
+
+                        
                     }
                     else break;
                 }
@@ -237,10 +238,11 @@ namespace com.clusterrr.hakchi_gui
                 }))) return;
                 foreach (var file in files)
                 {
-                    using (var f = new FileStream(file, FileMode.Open, FileAccess.Read))
-                    {
+                    using var f = new FileStream(file, FileMode.Open, FileAccess.Read);
+
                         hakchi.Shell.Execute("cd /var/lib/clover/profiles/0 && tar -xvz", f, null, null, 10000, true);
-                    }
+
+                    
                 }
             }
             catch (ObjectDisposedException) { }
@@ -278,29 +280,32 @@ namespace com.clusterrr.hakchi_gui
                 {
                     hakchi.Shell.Execute("cd /var/lib/clover/profiles/0 && tar -cz " + code, null, save, null, 10000, true);
                     save.Seek(0, SeekOrigin.Begin);
-                    using (var extractor = SharpCompress.Readers.ReaderFactory.OpenReader(save))
-                    {
+                    using var extractor = SharpCompress.Readers.ReaderFactory.OpenReader(save);
+
                         if (!extractor.MoveToNextEntry())
-                            throw new InvalidOperationException("Archive contains no entries");
-                        using (var tar = new MemoryStream())
-                        {
+                        throw new InvalidOperationException("Archive contains no entries");
+                        using var tar = new MemoryStream();
+
                             extractor.WriteEntryTo(tar);
                             tar.Position = 0;
-                            using (var tarReader = SharpCompress.Readers.ReaderFactory.OpenReader(tar))
-                            {
+                            using var tarReader = SharpCompress.Readers.ReaderFactory.OpenReader(tar);
+
                                 while (tarReader.MoveToNextEntry())
                                 {
-                                    if (Path.GetExtension(tarReader.Entry.Key).ToLower() == ".png")
-                                    {
-                                        var o = new MemoryStream();
-                                        tarReader.WriteEntryTo(o);
-                                        o.Seek(0, SeekOrigin.Begin);
-                                        images.Add(Image.FromStream(o));
-                                    }
+                                if (Path.GetExtension(tarReader.Entry.Key).ToLower() == ".png")
+                                {
+                                var o = new MemoryStream();
+                                tarReader.WriteEntryTo(o);
+                                o.Seek(0, SeekOrigin.Begin);
+                                images.Add(Image.FromStream(o));
                                 }
-                            }
-                        }
-                    }
+                                }
+
+                            
+
+                        
+
+                    
 
                 }
                 Trace.WriteLine("Loaded " + images.Count + " imags");

@@ -183,26 +183,27 @@ namespace pdj.tiny7z.Compression
             }
             else
             {
-                using (var sha = System.Security.Cryptography.SHA256.Create())
-                {
+                using var sha = System.Security.Cryptography.SHA256.Create();
+
                     byte[] counter = new byte[8];
                     long numRounds = 1L << mNumCyclesPower;
                     for (long round = 0; round < numRounds; round++)
                     {
-                        sha.TransformBlock(salt, 0, salt.Length, null, 0);
-                        sha.TransformBlock(pass, 0, pass.Length, null, 0);
-                        sha.TransformBlock(counter, 0, 8, null, 0);
+                    sha.TransformBlock(salt, 0, salt.Length, null, 0);
+                    sha.TransformBlock(pass, 0, pass.Length, null, 0);
+                    sha.TransformBlock(counter, 0, 8, null, 0);
 
-                        // This mirrors the counter so we don't have to convert long to byte[] each round.
-                        // (It also ensures the counter is little endian, which BitConverter does not.)
-                        for (int i = 0; i < 8; i++)
-                            if (++counter[i] != 0)
-                                break;
+                    // This mirrors the counter so we don't have to convert long to byte[] each round.
+                    // (It also ensures the counter is little endian, which BitConverter does not.)
+                    for (int i = 0; i < 8; i++)
+                    if (++counter[i] != 0)
+                    break;
                     }
 
                     sha.TransformFinalBlock(counter, 0, 0);
                     return sha.Hash;
-                }
+
+                
             }
         }
 

@@ -355,11 +355,12 @@ namespace ManagedLzma.LZMA
                     lock (mSync)
                         mRunningThreads.Add(thread);
 
-                    using (mContext = new Context(this, GetThreadId(thread), false))
-                    {
+                    using mContext = new Context(this, GetThreadId(thread), false);
+
                         ((Action)fun)();
                         mContext.EnsureEnd();
-                    }
+
+                    
                 }
                 catch (Exception ex)
                 {
@@ -382,25 +383,26 @@ namespace ManagedLzma.LZMA
             {
                 try
                 {
-                    using (var pipe = new NamedPipeClientStream(".", (string)id + "\\root", PipeDirection.In))
-                    {
+                    using var pipe = new NamedPipeClientStream(".", (string)id + "\\root", PipeDirection.In);
+
                         pipe.Connect();
 
                         BinaryReader rd = new BinaryReader(pipe);
 
                         for (;;)
                         {
-                            lock (mSync)
-                                if (mShutdown)
-                                    return;
+                        lock (mSync)
+                        if (mShutdown)
+                        return;
 
-                            int op = pipe.ReadByte();
-                            if (op < 0)
-                                return;
+                        int op = pipe.ReadByte();
+                        if (op < 0)
+                        return;
 
-                            ProcessPipeThreadEvent(rd, op);
+                        ProcessPipeThreadEvent(rd, op);
                         }
-                    }
+
+                    
                 }
                 catch (Exception ex)
                 {

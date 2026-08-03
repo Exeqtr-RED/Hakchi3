@@ -108,20 +108,22 @@ namespace com.clusterrr.hakchi_gui
 
         private void licenseInfo_Click(object sender, EventArgs e)
         {
-            using (var info = new LicenseInfo())
-            {
+            using var info = new LicenseInfo();
+
                 info.ShowDialog();
-            }
+
+            
         }
 
         private void buttonCommitsSinceTag_Click(object sender, EventArgs e)
         {
-            using (var info = new TextInfo())
-            {
+            using var info = new TextInfo();
+
                 info.Text = "Commits Since Last Tag";
                 info.textBoxInfo.Text = commitsSinceTag.Replace("\r", "").Replace("\n", "\r\n");
                 info.ShowDialog();
-            }
+
+            
         }
     }
 }

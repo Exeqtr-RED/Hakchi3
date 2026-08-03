@@ -560,19 +560,20 @@ namespace com.clusterrr.hakchi_gui.Tasks
         {
             return (Tasker tasker, Object syncObject) =>
             {
-                using (var stockKernelFile = File.Open(dumpPath, FileMode.Create))
-                {
+                using var stockKernelFile = File.Open(dumpPath, FileMode.Create);
+
                     if (hakchi.Shell.Execute("hakchi getBackup2", null, stockKernelFile) == 0)
                     {
-                        return Conclusion.Success;
+                    return Conclusion.Success;
                     }
                     else
                     {
-                        stockKernelFile.Close();
-                        File.Delete(dumpPath);
-                        throw new Exception("Stock kernel not found on system.");
+                    stockKernelFile.Close();
+                    File.Delete(dumpPath);
+                    throw new Exception("Stock kernel not found on system.");
                     }
-                }
+
+                
             };
         }
 
@@ -600,32 +601,33 @@ namespace com.clusterrr.hakchi_gui.Tasks
             }
             else
             {
-                using (OpenFileDialog ofd = new OpenFileDialog())
-                {
+                using OpenFileDialog ofd = new OpenFileDialog();
+
                     ofd.Filter = $"{Resources.KernelDump}|*.img";
                     ofd.InitialDirectory = Shared.PathCombine(Program.BaseDirectoryExternal, "dump");
                     if (ofd.ShowDialog(hostForm) == DialogResult.OK)
                     {
-                        if (File.OpenRead(ofd.FileName).Length <= Fel.kernel_max_size)
-                        {
-                            byte[] kernelBytes = File.ReadAllBytes(ofd.FileName);
+                    if (File.OpenRead(ofd.FileName).Length <= Fel.kernel_max_size)
+                    {
+                    byte[] kernelBytes = File.ReadAllBytes(ofd.FileName);
 
-                            var md5 = System.Security.Cryptography.MD5.Create();
-                            var hash = BitConverter.ToString(md5.ComputeHash(kernelBytes)).Replace("-", "").ToLower();
-                            var matchedKernels = from k in correctKernels where k.Value.Contains(hash) select k.Key;
-                            if (matchedKernels.Count() > 0)
-                            {
-                                stockKernel = new MemoryStream(kernelBytes);
-                                return Conclusion.Success;
-                            }
-                        }
-                        MessageForm.Show(hostForm, Resources.Error, Resources.DumpOriginalKernelInvalid, Resources.sign_error);
+                    var md5 = System.Security.Cryptography.MD5.Create();
+                    var hash = BitConverter.ToString(md5.ComputeHash(kernelBytes)).Replace("-", "").ToLower();
+                    var matchedKernels = from k in correctKernels where k.Value.Contains(hash) select k.Key;
+                    if (matchedKernels.Count() > 0)
+                    {
+                    stockKernel = new MemoryStream(kernelBytes);
+                    return Conclusion.Success;
+                    }
+                    }
+                    MessageForm.Show(hostForm, Resources.Error, Resources.DumpOriginalKernelInvalid, Resources.sign_error);
                     }
                     else
                     {
-                        return Conclusion.Abort;
+                    return Conclusion.Abort;
                     }
-                }
+
+                
             }
             return Conclusion.Error;
         }
@@ -999,20 +1001,20 @@ namespace com.clusterrr.hakchi_gui.Tasks
                             case NandTasks.FlashSystemPartition:
                                 if (isTar || (hakchi.IsMdPartitioning && !isExtFs))
                                 {
-                                    using (var eventStream = new EventStream())
-                                    {
+                                    using var eventStream = new EventStream();
+
                                         eventStream.OnData += (byte[] data) =>
                                         {
-                                            var dataString = Encoding.UTF8.GetString(data).Trim();
-                                            tasker.SetStatus(dataString);
-                                            Trace.WriteLine(dataString);
+                                        var dataString = Encoding.UTF8.GetString(data).Trim();
+                                        tasker.SetStatus(dataString);
+                                        Trace.WriteLine(dataString);
                                         };
 
                                         hakchi.Shell.Execute("mkdir -p /tmp/rootfs /tmp/squashfs", throwOnNonZero: true);
 
                                         if (isHsqs)
                                         {
-                                            Shared.ShellPipe($"dd of=/tmp/squashfs/squash.hsqs bs=128K", file, throwOnNonZero: true);
+                                        Shared.ShellPipe($"dd of=/tmp/squashfs/squash.hsqs bs=128K", file, throwOnNonZero: true);
                                         }
 
                                         ShellTasks.FormatDevice(osDecryptedDevice)(tasker);
@@ -1020,20 +1022,21 @@ namespace com.clusterrr.hakchi_gui.Tasks
 
                                         if (isTar)
                                         {
-                                            hakchi.Shell.Execute($"tar -xvf - -C /tmp/rootfs", file, eventStream, null, throwOnNonZero: true);
+                                        hakchi.Shell.Execute($"tar -xvf - -C /tmp/rootfs", file, eventStream, null, throwOnNonZero: true);
                                         }
                                         else if (isHsqs)
                                         {
-                                            tasker.SetStatus(Resources.FlashingNand);
-                                            hakchi.Shell.Execute($"mount /tmp/squashfs/squash.hsqs /tmp/squashfs/", throwOnNonZero: true);
-                                            hakchi.Shell.Execute("cd /tmp/squashfs; rsync -av ./ ../rootfs", null, eventStream, eventStream, throwOnNonZero: true);
-                                            hakchi.Shell.Execute("umount /tmp/squashfs", throwOnNonZero: true);
-                                            hakchi.Shell.Execute("rm -rf /tmp/squashfs", throwOnNonZero: true);
+                                        tasker.SetStatus(Resources.FlashingNand);
+                                        hakchi.Shell.Execute($"mount /tmp/squashfs/squash.hsqs /tmp/squashfs/", throwOnNonZero: true);
+                                        hakchi.Shell.Execute("cd /tmp/squashfs; rsync -av ./ ../rootfs", null, eventStream, eventStream, throwOnNonZero: true);
+                                        hakchi.Shell.Execute("umount /tmp/squashfs", throwOnNonZero: true);
+                                        hakchi.Shell.Execute("rm -rf /tmp/squashfs", throwOnNonZero: true);
                                         }
 
                                         hakchi.Shell.Execute("umount /tmp/rootfs", throwOnNonZero: true);
                                         hakchi.Shell.Execute("rmdir /tmp/rootfs", throwOnNonZero: true);
-                                    }
+
+                                    
                                 }
                                 else
                                 {
@@ -1095,10 +1098,11 @@ namespace com.clusterrr.hakchi_gui.Tasks
                 if (hakchi.Shell.Execute($"sntool sd {(type == UbootType.SD ? "enable" : "disable")}", null, splitStream, splitStream) != 0)
                 {
                     flashLog.Seek(0, SeekOrigin.Begin);
-                    using (var sr = new StreamReader(flashLog))
-                    {
+                    using var sr = new StreamReader(flashLog);
+
                         throw new Exception(sr.ReadToEnd());
-                    }
+
+                    
                 }
                 return Conclusion.Success;
             };

@@ -98,8 +98,8 @@ namespace pdj.tiny7z.Archive
         #region Private Methods
         private void extractMultipleFromFolder(ulong outputStreamIndexOffset, bool[] matches, ulong folderIndex, ulong packIndex, Func<ulong, Stream> onStreamRequest, Action<ulong, Stream> onStreamClose, SevenZipProgressProvider progressProvider)
         {
-            using (var decoder = createDecoderStream(folderIndex, packIndex))
-            {
+            using var decoder = createDecoderStream(folderIndex, packIndex);
+
                 ulong unPackSize = streamsInfo.UnPackInfo.Folders[folderIndex].GetUnPackSize();
                 ulong neededUnPackSize = 0;
 
@@ -107,64 +107,65 @@ namespace pdj.tiny7z.Archive
                 Stream outStream = null;
                 if (matches == null)
                 {
-                    // single stream
-                    outStream = onStreamRequest(outputStreamIndexOffset);
-                    neededUnPackSize = unPackSize;
+                // single stream
+                outStream = onStreamRequest(outputStreamIndexOffset);
+                neededUnPackSize = unPackSize;
                 }
                 else
                 {
-                    // find actual number of needed streams
-                    ulong numStreams = streamsInfo.SubStreamsInfo.NumUnPackStreamsInFolders[folderIndex];
-                    ulong lastStream = checked((ulong)Array.LastIndexOf(matches, true));
-                    numStreams = lastStream + 1;
+                // find actual number of needed streams
+                ulong numStreams = streamsInfo.SubStreamsInfo.NumUnPackStreamsInFolders[folderIndex];
+                ulong lastStream = checked((ulong)Array.LastIndexOf(matches, true));
+                numStreams = lastStream + 1;
 
-                    // create complex multistream
-                    MultiStream multi = new MultiStream(numStreams,
-                        (ulong innerIndex) =>
-                        {
-                            Stream innerStream = null;
-                            if (matches[innerIndex])
-                            {
-                                innerStream = onStreamRequest(outputStreamIndexOffset + innerIndex);
-                                if (innerStream == null)
-                                    matches[innerIndex] = false;
-                            }
+                // create complex multistream
+                MultiStream multi = new MultiStream(numStreams,
+                (ulong innerIndex) =>
+                {
+                Stream innerStream = null;
+                if (matches[innerIndex])
+                {
+                innerStream = onStreamRequest(outputStreamIndexOffset + innerIndex);
+                if (innerStream == null)
+                matches[innerIndex] = false;
+                }
 
-                            return innerStream ??
-                                new NullStream((long)streamsInfo.SubStreamsInfo.UnPackSizes[(int)(outputStreamIndexOffset + innerIndex)]);
-                        },
-                        (ulong innerIndex, Stream stream) =>
-                        {
-                            if (onStreamClose != null && matches[innerIndex])
-                                onStreamClose(outputStreamIndexOffset + innerIndex, stream);
-                        });
+                return innerStream ??
+                new NullStream((long)streamsInfo.SubStreamsInfo.UnPackSizes[(int)(outputStreamIndexOffset + innerIndex)]);
+                },
+                (ulong innerIndex, Stream stream) =>
+                {
+                if (onStreamClose != null && matches[innerIndex])
+                onStreamClose(outputStreamIndexOffset + innerIndex, stream);
+                });
 
-                    // set sizes in multistream and define needed data size
-                    for (ulong i = 0; i < numStreams; i++)
-                    {
-                        ulong ss = streamsInfo.SubStreamsInfo.UnPackSizes[(int)(outputStreamIndexOffset + i)];
-                        multi.Sizes[i] = (long)ss;
-                        neededUnPackSize += ss;
-                    }
+                // set sizes in multistream and define needed data size
+                for (ulong i = 0; i < numStreams; i++)
+                {
+                ulong ss = streamsInfo.SubStreamsInfo.UnPackSizes[(int)(outputStreamIndexOffset + i)];
+                multi.Sizes[i] = (long)ss;
+                neededUnPackSize += ss;
+                }
 
-                    // set new stream as output stream
-                    outStream = multi;
+                // set new stream as output stream
+                outStream = multi;
                 }
 
                 // actual extraction is done here (some decoder streams require knowing output size in advance, like PPMd)
                 Util.TransferTo(decoder, outStream, (long)neededUnPackSize, progressProvider);
                 if (progressProvider != null)
                 {
-                    progressProvider.IncreaseOffsetBy((long)unPackSize, 0);
-                    progressProvider.SetProgress(0, 0);
+                progressProvider.IncreaseOffsetBy((long)unPackSize, 0);
+                progressProvider.SetProgress(0, 0);
                 }
 
                 // call stream close delegate if only one stream and delegate present
                 if (matches == null)
                 {
-                    onStreamClose?.Invoke(outputStreamIndexOffset, outStream);
+                onStreamClose?.Invoke(outputStreamIndexOffset, outStream);
                 }
-            }
+
+            
         }
 
         private Stream createDecoderStreamForCoder(Stream[] packedStreams, UInt64[] packedSizes, Stream[] outputStreams, SevenZipHeader.Folder folder, UInt64 coderIndex)

@@ -43,7 +43,7 @@ namespace com.clusterrr.hakchi_gui
 
             try
             {
-                using (var proc = new Process
+                using var proc = new Process
                 {
                     StartInfo = new ProcessStartInfo
                     {
@@ -54,18 +54,19 @@ namespace com.clusterrr.hakchi_gui
                         RedirectStandardError = true,
                         CreateNoWindow = true
                     }
-                })
-                {
+                };
+
                     proc.Start();
                     string output = proc.StandardOutput.ReadToEnd();
                     string error = proc.StandardError.ReadToEnd();
                     proc.WaitForExit();
 
                     if (!string.IsNullOrWhiteSpace(error))
-                        Trace.WriteLine("pnputil: " + error.Trim());
+                    Trace.WriteLine("pnputil: " + error.Trim());
 
                     return output.IndexOf("USB\\VID_1F3A&PID_EFE8", StringComparison.OrdinalIgnoreCase) >= 0;
-                }
+
+                
             }
             catch (Exception ex)
             {

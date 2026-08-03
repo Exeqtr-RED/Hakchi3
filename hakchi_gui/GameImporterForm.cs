@@ -92,8 +92,8 @@ namespace com.clusterrr.hakchi_gui
                                 {
                                     if (reader.Entry.IsDirectory) continue;
                                     Trace.WriteLine(reader.Entry.Key);
-                                    using (var entryStream = new MemoryStream())
-                                    {
+                                    using var entryStream = new MemoryStream();
+
                                         reader.WriteEntryTo(entryStream);
                                         entryStream.Position = 0;
                                         var key = Path.GetDirectoryName($"/{reader.Entry.Key}").Replace('\\', '/');
@@ -101,7 +101,7 @@ namespace com.clusterrr.hakchi_gui
 
                                         if (desktop.IconPath.EndsWith("/.storage"))
                                         {
-                                            key = $"{mountpoint}{desktop.IconPath}/{desktop.Code}";
+                                        key = $"{mountpoint}{desktop.IconPath}/{desktop.Code}";
                                         }
 
                                         desktop.Exec = desktop.Exec.Replace(desktop.IconPath, "/var/games");
@@ -110,30 +110,32 @@ namespace com.clusterrr.hakchi_gui
 
                                         if (!NesApplication.AllDefaultGames.ContainsKey(desktop.Code) && desktop.Bin != "/bin/chmenu")
                                         {
-                                            foundGames.Add(key, new FoundGame()
-                                            {
-                                                RemotePath = key,
-                                                Desktop = desktop,
-                                                Size = 0
-                                            });
+                                        foundGames.Add(key, new FoundGame()
+                                        {
+                                        RemotePath = key,
+                                        Desktop = desktop,
+                                        Size = 0
+                                        });
                                         }
-                                    }
+
+                                    
                                 }
                             }
 
-                            using (var sr = new StreamReader(sizeStream))
-                            {
+                            using var sr = new StreamReader(sizeStream);
+
                                 var matches = sizeRegex.Matches(sr.ReadToEnd());
                                 foreach (Match match in matches)
                                 {
-                                    var size = long.Parse(match.Groups[1].Value) * 1024;
-                                    var path = match.Groups[2].Value;
-                                    if (foundGames.ContainsKey(path))
-                                    {
-                                        foundGames[path].Size = size;
-                                    }
+                                var size = long.Parse(match.Groups[1].Value) * 1024;
+                                var path = match.Groups[2].Value;
+                                if (foundGames.ContainsKey(path))
+                                {
+                                foundGames[path].Size = size;
                                 }
-                            }
+                                }
+
+                            
                         }
                     }
                     return Conclusion.Success;
@@ -212,10 +214,11 @@ namespace com.clusterrr.hakchi_gui
 
                             if (hakchi.Shell is INetworkShell)
                             {
-                                using (var ftpStream = ftp.Retr($"{game.RemotePath}/{filename}"))
-                                {
+                                using var ftpStream = ftp.Retr($"{game.RemotePath}/{filename}");
+
                                     ftpStream.CopyTo(tracker);
-                                }
+
+                                
                             }
                             else
                             {
@@ -248,21 +251,22 @@ namespace com.clusterrr.hakchi_gui
             if (listViewGames.SelectedItems.Count > 0)
             {
                 gameCopied = true;
-                using (var tasker = new Tasks.Tasker(this))
-                {
+                using var tasker = new Tasks.Tasker(this);
+
                     tasker.AttachView(new TaskerTaskbar());
                     tasker.AttachView(new TaskerForm());
                     tasker.SetTitle(Resources.CopyingGames);
                     if (hakchi.Shell.IsOnline)
                     {
-                        foreach (var game in SelectedGames)
-                        {
-                            tasker.AddTask(GameCopyTask(game));
-                        }
+                    foreach (var game in SelectedGames)
+                    {
+                    tasker.AddTask(GameCopyTask(game));
+                    }
                     }
 
                     tasker.Start();
-                }
+
+                
             }
         }
     }

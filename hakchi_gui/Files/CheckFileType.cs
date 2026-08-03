@@ -7,10 +7,11 @@ namespace com.clusterrr.hakchi_gui.Files
     {
         public static bool IsTar(string filename)
         {
-            using (var dataStream = File.OpenRead(filename))
-            {
+            using var dataStream = File.OpenRead(filename);
+
                 return IsTar(dataStream);
-            }
+
+            
         }
         public static bool IsTar(Stream dataStream)
         {
@@ -23,10 +24,11 @@ namespace com.clusterrr.hakchi_gui.Files
 
         public static bool IsSquashFs(string filename)
         {
-            using (var dataStream = File.OpenRead(filename))
-            {
+            using var dataStream = File.OpenRead(filename);
+
                 return IsSquashFs(dataStream);
-            }
+
+            
         }
         public static bool IsSquashFs(Stream dataStream)
         {
@@ -37,10 +39,11 @@ namespace com.clusterrr.hakchi_gui.Files
 
         public static bool IsExtFs(string filename)
         {
-            using (var dataStream = File.OpenRead(filename))
-            {
+            using var dataStream = File.OpenRead(filename);
+
                 return IsExtFs(dataStream);
-            }
+
+            
         }
         public static bool IsExtFs(Stream dataStream)
         {

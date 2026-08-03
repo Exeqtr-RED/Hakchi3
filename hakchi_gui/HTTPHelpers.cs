@@ -35,11 +35,12 @@ namespace com.clusterrr.hakchi_gui
         {
             try
             {
-                using (var response = await httpClient.GetAsync(url,
-                    HttpCompletionOption.ResponseHeadersRead))
-                {
+                using var response = await httpClient.GetAsync(url,
+                    HttpCompletionOption.ResponseHeadersRead);
+
                     return response.StatusCode;
-                }
+
+                
             }
             catch (Exception)
             {
@@ -76,15 +77,16 @@ namespace com.clusterrr.hakchi_gui
         {
             try
             {
-                using (var response = await httpClient.GetAsync(url))
-                {
+                using var response = await httpClient.GetAsync(url);
+
                     if (response.IsSuccessStatusCode)
                     {
-                        var bytes = await response.Content.ReadAsByteArrayAsync();
-                        return (encoding ?? Encoding.UTF8).GetString(bytes);
+                    var bytes = await response.Content.ReadAsByteArrayAsync();
+                    return (encoding ?? Encoding.UTF8).GetString(bytes);
                     }
                     return null;
-                }
+
+                
             }
             catch (Exception)
             {

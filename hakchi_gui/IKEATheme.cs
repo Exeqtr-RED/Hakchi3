@@ -388,11 +388,12 @@ namespace com.clusterrr.hakchi_gui
                 e.Graphics.FillRectangle(brush, e.Bounds);
 
             Color fore = selected ? Colors.ListViewSelectText : Colors.TextPrimary;
-            using (var textBrush = new SolidBrush(fore))
-            {
+            using var textBrush = new SolidBrush(fore);
+
                 string text = lb.Items[e.Index]?.ToString() ?? "";
                 e.Graphics.DrawString(text, Fonts.UI, textBrush, e.Bounds);
-            }
+
+            
         }
         #endregion
     }

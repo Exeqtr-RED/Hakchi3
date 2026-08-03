@@ -1,4 +1,4 @@
-using com.clusterrr.util;
+﻿using com.clusterrr.util;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -43,75 +43,78 @@ namespace com.clusterrr.hakchi_gui.Tasks
                 // Ensure TLS 1.2 is available
                 ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
-                using (var request = new HttpRequestMessage(HttpMethod.Get, url))
-                {
+                using var request = new HttpRequestMessage(HttpMethod.Get, url);
+
                     request.Headers.UserAgent.ParseAdd(HakchiWebClient.UserAgent);
 
                     try
                     {
-                        using (var response = HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).Result)
+                    using var response = HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).Result;
+
+                        response.EnsureSuccessStatusCode();
+
+                        var headers = response.Headers;
+                        var contentLength = response.Content.Headers.ContentLength ?? 0;
+
+                        var date = DateTime.Now;
+
+                        if (headers.TryGetValues("Last-Modified", out var lastModifiedValues))
                         {
-                            response.EnsureSuccessStatusCode();
+                        var lastModified = lastModifiedValues.FirstOrDefault();
+                        if (!string.IsNullOrEmpty(lastModified))
+                        {
+                        date = DateTime.ParseExact(lastModified,
+                        "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
+                        CultureInfo.InvariantCulture.DateTimeFormat,
+                        DateTimeStyles.AssumeUniversal);
 
-                            var headers = response.Headers;
-                            var contentLength = response.Content.Headers.ContentLength ?? 0;
-
-                            var date = DateTime.Now;
-
-                            if (headers.TryGetValues("Last-Modified", out var lastModifiedValues))
-                            {
-                                var lastModified = lastModifiedValues.FirstOrDefault();
-                                if (!string.IsNullOrEmpty(lastModified))
-                                {
-                                    date = DateTime.ParseExact(lastModified,
-                                        "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
-                                        CultureInfo.InvariantCulture.DateTimeFormat,
-                                        DateTimeStyles.AssumeUniversal);
-
-                                    if (onlyLatest && comparisonDate != null && comparisonDate >= date)
-                                    {
-                                        return Conclusion.Success;
-                                    }
-                                }
-                            }
-
-                            using (var webStream = response.Content.ReadAsStreamAsync().Result)
-                            using (var trackableStream = new TrackableStream(webStream))
-                            {
-                                trackableStream.OnProgress += (progress, max) =>
-                                {
-                                    tasker.SetStatus($"{Shared.SizeSuffix(progress)}{(contentLength > 0 ? $" / {Shared.SizeSuffix(contentLength)}" : "")}");
-                                    tasker.SetProgress(progress, contentLength);
-                                };
-
-                                using (var outputFile = File.Create(fileName))
-                                {
-
-                                    if (gunzip)
-                                    {
-                                        using (var gzipStream = new GZipStream(trackableStream, CompressionMode.Decompress))
-                                        {
-                                            gzipStream.CopyTo(outputFile);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        trackableStream.CopyTo(outputFile);
-                                    }
-                                }
-                                File.SetLastWriteTime(fileName, date);
-                            }
+                        if (onlyLatest && comparisonDate != null && comparisonDate >= date)
+                        {
+                        return Conclusion.Success;
                         }
+                        }
+                        }
+
+                        using (var webStream = response.Content.ReadAsStreamAsync().Result)
+                        using (var trackableStream = new TrackableStream(webStream))
+                        {
+                        trackableStream.OnProgress += (progress, max) =>
+                        {
+                        tasker.SetStatus($"{Shared.SizeSuffix(progress)}{(contentLength > 0 ? $" / {Shared.SizeSuffix(contentLength)}" : "")}");
+                        tasker.SetProgress(progress, contentLength);
+                        };
+
+                        using (var outputFile = File.Create(fileName))
+                        {
+
+                        if (gunzip)
+                        {
+                        using var gzipStream = new GZipStream(trackableStream, CompressionMode.Decompress);
+
+                            gzipStream.CopyTo(outputFile);
+
+                        
+                        }
+                        else
+                        {
+                        trackableStream.CopyTo(outputFile);
+                        }
+                        }
+                        File.SetLastWriteTime(fileName, date);
+                        }
+
+                    
                     }
                     catch (OperationCanceledException) { }
                     catch (Exception)
                     {
-                        if (!successOnError)
-                            throw;
+                    if (!successOnError)
+                    throw;
                     }
 
                     return result;
-                }
+
+                
             };
         }
     }

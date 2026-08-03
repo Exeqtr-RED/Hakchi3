@@ -91,16 +91,17 @@ namespace com.clusterrr.hakchi_gui.Tasks
                     string gameFile = game.GameFilePath;
                     if (crc32 == 0 && !game.IsOriginalGame && gameFile != null && File.Exists(gameFile))
                     {
-                        using (var stream = game.GameFileStream)
-                        {
+                        using var stream = game.GameFileStream;
+
                             if (stream != null)
                             {
-                                stream.Position = 0;
-                                crc32 = Shared.CRC32(stream);
-                                game.Metadata.OriginalCrc32 = crc32;
-                                game.SaveMetadata();
+                            stream.Position = 0;
+                            crc32 = Shared.CRC32(stream);
+                            game.Metadata.OriginalCrc32 = crc32;
+                            game.SaveMetadata();
                             }
-                        }
+
+                        
                     }
                     else
                     {
@@ -123,11 +124,12 @@ namespace com.clusterrr.hakchi_gui.Tasks
             if (unknownApps.Count > 0)
             {
                 tasker.HostForm.Invoke(new Action(() => {
-                    using (SelectCoverDialog selectCoverDialog = new SelectCoverDialog())
-                    {
+                    using SelectCoverDialog selectCoverDialog = new SelectCoverDialog();
+
                         selectCoverDialog.Games.AddRange(unknownApps);
                         selectCoverDialog.ShowDialog(tasker.HostForm);
-                    }
+
+                    
                 }));
             }
 
@@ -399,17 +401,18 @@ namespace com.clusterrr.hakchi_gui.Tasks
 
             if (gameCount > 1)
             {
-                using (var fbd = new FolderBrowserDialog() { SelectedPath = Program.BaseDirectoryExternal })
-                {
+                using var fbd = new FolderBrowserDialog() { SelectedPath = Program.BaseDirectoryExternal };
+
                     if (fbd.ShowDialog() == DialogResult.OK)
                     {
-                        directory = fbd.SelectedPath;
+                    directory = fbd.SelectedPath;
                     }
                     else
                     {
-                        return Tasker.Conclusion.Abort;
+                    return Tasker.Conclusion.Abort;
                     }
-                }
+
+                
             }
 
             foreach (var game in Games)
@@ -419,13 +422,14 @@ namespace com.clusterrr.hakchi_gui.Tasks
 
                 if (directory == null)
                 {
-                    using (var sfd = new SaveFileDialog() { Filter = Resources.GameArchive + "(*.clvg)|*.clvg", FileName = fileName })
-                    {
+                    using var sfd = new SaveFileDialog() { Filter = Resources.GameArchive + "(*.clvg)|*.clvg", FileName = fileName };
+
                         if (sfd.ShowDialog() == DialogResult.OK)
                         {
-                            game.Archive(sfd.FileName);
+                        game.Archive(sfd.FileName);
                         }
-                    }
+
+                    
                 }
                 else
                 {

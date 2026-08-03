@@ -201,10 +201,11 @@ namespace com.clusterrr.hakchi_gui.Hmod
                     {
                         if (ext == ".7z")
                         {
-                            using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(file))
-                            {
+                            using var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(file);
+
                                 extractor.WriteToDirectory(temp, new ExtractionOptions() { ExtractFullPath = true });
-                            }
+
+                            
                         }
                         else
                         {

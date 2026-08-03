@@ -761,8 +761,8 @@ namespace pdj.tiny7z.Archive
 
             public virtual void Write(Stream headerStream)
             {
-                using (var dataStream = new MemoryStream())
-                {
+                using var dataStream = new MemoryStream();
+
                     WriteProperty(dataStream);
                     Size = (UInt64)dataStream.Length;
 
@@ -770,7 +770,8 @@ namespace pdj.tiny7z.Archive
                     headerStream.WriteEncodedUInt64(Size);
                     dataStream.Position = 0;
                     dataStream.CopyTo(headerStream);
-                }
+
+                
             }
             public abstract void WriteProperty(Stream hs);
         }
@@ -909,39 +910,41 @@ namespace pdj.tiny7z.Archive
                 else
                 {
                     Names = new string[NumFiles];
-                    using (BinaryReader reader = new BinaryReader(hs, Encoding.Default, true))
-                    {
+                    using BinaryReader reader = new BinaryReader(hs, Encoding.Default, true);
+
                         List<Byte> nameData = new List<byte>(1024);
                         for (ulong i = 0; i < NumFiles; ++i)
                         {
-                            nameData.Clear();
-                            UInt16 ch;
-                            while (true)
-                            {
-                                ch = reader.ReadUInt16();
-                                if (ch == 0x0000)
-                                    break;
-                                nameData.Add((Byte)(ch >> 8));
-                                nameData.Add((Byte)(ch & 0xFF));
-                            }
-                            Names[i] = Encoding.BigEndianUnicode.GetString(nameData.ToArray());
+                        nameData.Clear();
+                        UInt16 ch;
+                        while (true)
+                        {
+                        ch = reader.ReadUInt16();
+                        if (ch == 0x0000)
+                        break;
+                        nameData.Add((Byte)(ch >> 8));
+                        nameData.Add((Byte)(ch & 0xFF));
                         }
-                    }
+                        Names[i] = Encoding.BigEndianUnicode.GetString(nameData.ToArray());
+                        }
+
+                    
                 }
             }
 
             public override void WriteProperty(Stream hs)
             {
                 hs.WriteByte(0);
-                using (BinaryWriter writer = new BinaryWriter(hs, Encoding.Default, true))
-                {
+                using BinaryWriter writer = new BinaryWriter(hs, Encoding.Default, true);
+
                     for (ulong i = 0; i < NumFiles; ++i)
                     {
-                        Byte[] nameData = Encoding.Unicode.GetBytes(Names[i]);
-                        writer.Write(nameData);
-                        writer.Write((UInt16)0x0000);
+                    Byte[] nameData = Encoding.Unicode.GetBytes(Names[i]);
+                    writer.Write(nameData);
+                    writer.Write((UInt16)0x0000);
                     }
-                }
+
+                
             }
         }
 

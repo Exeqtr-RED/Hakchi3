@@ -60,13 +60,14 @@ namespace com.clusterrr.hakchi_gui.Tasks
             tasker.SetStatus(Resources.RunningFoldersManager);
             try
             {
-                using (FoldersManagerForm form = new FoldersManagerForm(Games, MainForm.StaticRef))
-                {
+                using FoldersManagerForm form = new FoldersManagerForm(Games, MainForm.StaticRef);
+
                     tasker.PushState(Tasker.State.Paused);
                     var result = form.ShowDialog() == DialogResult.OK ? Tasker.Conclusion.Success : Tasker.Conclusion.Abort;
                     tasker.PopState();
                     return result;
-                }
+
+                
             }
             catch (InvalidOperationException) { }
             return Tasker.Conclusion.Abort;
@@ -191,19 +192,20 @@ namespace com.clusterrr.hakchi_gui.Tasks
                 {
                     if (afi.FileSize > NesApplication.MaxCompress)
                     {
-                        using (var stream = new TrackableFileStream(afi.LocalFilePath, FileMode.Open, FileAccess.Read))
-                        {
+                        using var stream = new TrackableFileStream(afi.LocalFilePath, FileMode.Open, FileAccess.Read);
+
                             stream.OnProgress += ((long pos, long len) => {
-                                if (DateTime.Now.Subtract(lastTime).TotalMilliseconds > UpdateFreq)
-                                {
-                                    transferForm.SetAdvancedProgress(value + pos, max, afi.FilePath);
-                                    lastTime = DateTime.Now;
-                                }
+                            if (DateTime.Now.Subtract(lastTime).TotalMilliseconds > UpdateFreq)
+                            {
+                            transferForm.SetAdvancedProgress(value + pos, max, afi.FilePath);
+                            lastTime = DateTime.Now;
+                            }
                             });
                             using (var f = File.Open(path, FileMode.Create))
-                                stream.CopyTo(f);
+                            stream.CopyTo(f);
                             File.SetLastWriteTimeUtc(path, afi.ModifiedTime);
-                        }
+
+                        
                     }
                     else
                     {
@@ -328,29 +330,30 @@ namespace com.clusterrr.hakchi_gui.Tasks
             else
             {
                 Trace.WriteLine("Uploading through FTP");
-                using (var ftp = new FtpWrapper(transferGameSet))
-                {
+                using var ftp = new FtpWrapper(transferGameSet);
+
                     Trace.WriteLine($"Upload size: " + Shared.SizeSuffix(ftp.Length));
                     if (ftp.Length > 0)
                     {
-                        DateTime startTime = DateTime.Now, lastTime = DateTime.Now;
-                        ftp.OnReadProgress += delegate (long pos, long len, string filename)
-                        {
-                            if (DateTime.Now.Subtract(lastTime).TotalMilliseconds >= UpdateFreq)
-                            {
-                                transferForm.SetAdvancedProgress(pos, len, filename);
-                                lastTime = DateTime.Now;
-                            }
-                        };
-                        if (ftp.Connect((hakchi.Shell as INetworkShell).IPAddress, 21, hakchi.USERNAME, hakchi.PASSWORD))
-                        {
-                            ftp.Upload(uploadPath);
-                            uploadSuccessful = true;
-                            Trace.WriteLine("Uploaded " + (int)(ftp.Length / 1024) + "kb in " + DateTime.Now.Subtract(startTime).TotalSeconds + " seconds");
-                        }
+                    DateTime startTime = DateTime.Now, lastTime = DateTime.Now;
+                    ftp.OnReadProgress += delegate (long pos, long len, string filename)
+                    {
+                    if (DateTime.Now.Subtract(lastTime).TotalMilliseconds >= UpdateFreq)
+                    {
+                    transferForm.SetAdvancedProgress(pos, len, filename);
+                    lastTime = DateTime.Now;
+                    }
+                    };
+                    if (ftp.Connect((hakchi.Shell as INetworkShell).IPAddress, 21, hakchi.USERNAME, hakchi.PASSWORD))
+                    {
+                    ftp.Upload(uploadPath);
+                    uploadSuccessful = true;
+                    Trace.WriteLine("Uploaded " + (int)(ftp.Length / 1024) + "kb in " + DateTime.Now.Subtract(startTime).TotalSeconds + " seconds");
+                    }
                     }
                     transferForm.SetAdvancedProgress(ftp.Length, ftp.Length, "");
-                }
+
+                
             }
 
             // don't continue if upload wasn't successful
@@ -376,35 +379,36 @@ namespace com.clusterrr.hakchi_gui.Tasks
             else
             {
                 Trace.WriteLine("Uploading through tar file");
-                using (var gamesTar = new TarStream(transferGameSet, "."))
-                {
+                using var gamesTar = new TarStream(transferGameSet, ".");
+
                     Trace.WriteLine($"Upload size: " + Shared.SizeSuffix(gamesTar.Length));
                     if (gamesTar.Length > 0)
                     {
-                        DateTime startTime = DateTime.Now, lastTime = DateTime.Now;
-                        bool done = false;
-                        gamesTar.OnAdvancedReadProgress += delegate (long pos, long len, string filename)
-                        {
-                            if (done) return;
-                            if (DateTime.Now.Subtract(lastTime).TotalMilliseconds >= UpdateFreq)
-                            {
-                                transferForm.SetAdvancedProgress(pos, len, filename);
-                                lastTime = DateTime.Now;
-                            }
-                        };
-                        hakchi.Shell.Execute($"tar -xvC \"{uploadPath}\"", gamesTar, null, null, 0, true);
-                        Trace.WriteLine("Uploaded " + (int)(gamesTar.Length / 1024) + "kb in " + DateTime.Now.Subtract(startTime).TotalSeconds + " seconds");
+                    DateTime startTime = DateTime.Now, lastTime = DateTime.Now;
+                    bool done = false;
+                    gamesTar.OnAdvancedReadProgress += delegate (long pos, long len, string filename)
+                    {
+                    if (done) return;
+                    if (DateTime.Now.Subtract(lastTime).TotalMilliseconds >= UpdateFreq)
+                    {
+                    transferForm.SetAdvancedProgress(pos, len, filename);
+                    lastTime = DateTime.Now;
+                    }
+                    };
+                    hakchi.Shell.Execute($"tar -xvC \"{uploadPath}\"", gamesTar, null, null, 0, true);
+                    Trace.WriteLine("Uploaded " + (int)(gamesTar.Length / 1024) + "kb in " + DateTime.Now.Subtract(startTime).TotalSeconds + " seconds");
 
-                        uploadSuccessful = true;
-                        done = true;
-#if VERY_DEBUG
-                        File.Delete(Program.BaseDirectoryExternal + "\\DebugSyncOutput.tar");
-                        gamesTar.Position = 0;
-                        gamesTar.CopyTo(File.OpenWrite(Program.BaseDirectoryExternal + "\\DebugSyncOutput.tar"));
-#endif
+                    uploadSuccessful = true;
+                    done = true;
+                    #if VERY_DEBUG
+                    File.Delete(Program.BaseDirectoryExternal + "\\DebugSyncOutput.tar");
+                    gamesTar.Position = 0;
+                    gamesTar.CopyTo(File.OpenWrite(Program.BaseDirectoryExternal + "\\DebugSyncOutput.tar"));
+                    #endif
                     }
                     transferForm.SetAdvancedProgress(gamesTar.Length, gamesTar.Length, "");
-                }
+
+                
             }
 
             // don't continue if upload wasn't successful
@@ -708,18 +712,19 @@ namespace com.clusterrr.hakchi_gui.Tasks
 
         private static void DeleteRemoteApplicationFiles(IEnumerable<ApplicationFileInfo> filesToDelete, string remoteDirectory)
         {
-            using (MemoryStream commandBuilder = new MemoryStream())
-            {
+            using MemoryStream commandBuilder = new MemoryStream();
+
                 string data = $"#!/bin/sh\ncd \"{remoteDirectory}\"\n";
                 commandBuilder.Write(Encoding.UTF8.GetBytes(data), 0, data.Length);
 
                 foreach (ApplicationFileInfo appInfo in filesToDelete)
                 {
-                    data = $"rm \"{appInfo.FilePath}\"\n";
-                    commandBuilder.Write(Encoding.UTF8.GetBytes(data), 0, data.Length);
+                data = $"rm \"{appInfo.FilePath}\"\n";
+                commandBuilder.Write(Encoding.UTF8.GetBytes(data), 0, data.Length);
                 }
                 hakchi.RunTemporaryScript(commandBuilder, "cleanup.sh");
-            }
+
+            
         }
 
         private static void DeleteLocalApplicationFilesFromDirectory(IEnumerable<ApplicationFileInfo> filesToDelete, string rootDirectory)

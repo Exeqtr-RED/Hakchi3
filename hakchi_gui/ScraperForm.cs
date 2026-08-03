@@ -609,23 +609,24 @@ namespace com.clusterrr.hakchi_gui
 
                                 {
                                     var imageData = HakchiWebClient.HttpClient.GetByteArrayAsync(frontUrl, imageCts.Token).GetAwaiter().GetResult();
-                                    using (var ms = new MemoryStream(imageData))
-                                    {
+                                    using var ms = new MemoryStream(imageData);
+
                                         ms.Seek(0, SeekOrigin.Begin);
                                         var bitmap = new Bitmap(ms);
                                         item.Result.FrontArt = bitmap;
                                         item.Result.ChangedFrontArt = true;
                                         if (SelectedItem == item)
                                         {
-                                            Invoke(new Action(() =>
-                                            {
-                                                checkBoxFront.Enabled = true;
-                                                checkBoxFront.Checked = true;
-                                                ms.Seek(0, SeekOrigin.Begin);
-                                                pictureBoxM2Front.Image = new Bitmap(ms);
-                                            }));
+                                        Invoke(new Action(() =>
+                                        {
+                                        checkBoxFront.Enabled = true;
+                                        checkBoxFront.Checked = true;
+                                        ms.Seek(0, SeekOrigin.Begin);
+                                        pictureBoxM2Front.Image = new Bitmap(ms);
+                                        }));
                                         }
-                                    }
+
+                                    
                                 };
                             }
 
@@ -660,23 +661,24 @@ namespace com.clusterrr.hakchi_gui
                                     {
                                         var imageData = HakchiWebClient.HttpClient.GetByteArrayAsync($"https://cdn.thegamesdb.net/images/original/clearlogo/{tgdbResult.ID}.png", spineCts.Token).GetAwaiter().GetResult();
 
-                                        using (var ms = new MemoryStream(imageData))
-                                        {
+                                        using var ms = new MemoryStream(imageData);
+
                                             ms.Seek(0, SeekOrigin.Begin);
                                             item.Result.ClearLogo = new Bitmap(ms);
                                             if (item == SelectedItem)
                                             {
-                                                Invoke(new Action(() =>
-                                                {
-                                                    comboBoxSpineTemplates.Enabled = true;
-                                                    if (comboBoxSpineTemplates.SelectedItem == null)
-                                                    {
-                                                        comboBoxSpineTemplates.SelectedIndex = 0;
-                                                    }
-                                                    GenerateSpine();
-                                                }));
+                                            Invoke(new Action(() =>
+                                            {
+                                            comboBoxSpineTemplates.Enabled = true;
+                                            if (comboBoxSpineTemplates.SelectedItem == null)
+                                            {
+                                            comboBoxSpineTemplates.SelectedIndex = 0;
                                             }
-                                        }
+                                            GenerateSpine();
+                                            }));
+                                            }
+
+                                        
                                     }
                                     catch (OperationCanceledException) { /* user switched item or form closed */ }
                                     catch (HttpRequestException ex) { Trace.WriteLine($"Art download failed: {ex.Message}"); }

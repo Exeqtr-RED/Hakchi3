@@ -669,23 +669,24 @@ namespace com.clusterrr.hakchi_gui
                     Task.Delay(1000, token).Wait(token);
 
                     stdErr.Seek(0, SeekOrigin.Begin);
-                    using (var sr = new StreamReader(stdErr))
-                    {
+                    using var sr = new StreamReader(stdErr);
+
                         var line = sr.ReadLine();
                         // stdErr may have been closed externally by cancel —
                         // ReadLine returns null or throws ObjectDisposedException,
                         // both handled by the catch below.
                         if (line == null)
-                            return;
+                        return;
 
                         var match = Regex.Match(line, "^listening on (\\d+\\.\\d+\\.\\d+\\.\\d+):(\\d+)");
                         stdErr.Close();
                         splitStream.RemoveStream(stdErr).AddStreams(stderr);
                         if (match.Success)
                         {
-                            SocketTransfer((hakchi.Shell as INetworkShell).IPAddress, int.Parse(match.Groups[2].Value), stdin, stdout);
+                        SocketTransfer((hakchi.Shell as INetworkShell).IPAddress, int.Parse(match.Groups[2].Value), stdin, stdout);
                         }
-                    }
+
+                    
                 }
                 catch (OperationCanceledException) { }
                 catch (ObjectDisposedException) { }

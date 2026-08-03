@@ -50,14 +50,15 @@ namespace com.clusterrr.hakchi_gui
                         string key = reader.Entry.Key;
                         hakchi.ConsoleType c = hakchi.SystemCodeToConsoleType[key.Substring(2, key.IndexOf('/', 2) - 2)];
                         DefaultGames[c].Add(Path.GetFileNameWithoutExtension(key));
-                        using (var ms = new MemoryStream())
-                        {
+                        using var ms = new MemoryStream();
+
                             reader.WriteEntryTo(ms);
                             ms.Position = 0;
                             var desktopFile = new DesktopFile();
                             desktopFile.Load(ms);
                             AllDefaultGames[desktopFile.Code] = desktopFile;
-                        }
+
+                        
                     }
                 }
             }
@@ -219,13 +220,14 @@ namespace com.clusterrr.hakchi_gui
                     }
                     else
                     {
-                        using (MemoryStream ms = new MemoryStream())
-                        {
+                        using MemoryStream ms = new MemoryStream();
+
                             gameFileStream.CopyTo(ms);
                             byte[] buffer = ms.ToArray();
                             gameFileStream.Dispose();
                             return buffer;
-                        }
+
+                        
                     }
                 }
                 return null;
