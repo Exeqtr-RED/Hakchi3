@@ -104,7 +104,7 @@ namespace com.clusterrr.hakchi_gui
                 using (var writer = new StreamWriter(versionStream))
                 {
                     versionFormat = args[versionFormatArgIndex + 1];
-                    writer.Write(String.Format(versionFormat, Shared.AppDisplayVersion));
+                    writer.Write(string.Format(versionFormat, Shared.AppDisplayVersion));
                     writer.Flush();
                 }
 

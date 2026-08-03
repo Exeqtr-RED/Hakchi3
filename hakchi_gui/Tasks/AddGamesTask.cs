@@ -442,12 +442,12 @@ namespace com.clusterrr.hakchi_gui.Tasks
 
                             if (apiResult.Publishers != null && apiResult.Publishers.Length > 0)
                             {
-                                app.Desktop.Publisher = String.Join(", ", apiResult.Publishers).ToUpper();
+                                app.Desktop.Publisher = string.Join(", ", apiResult.Publishers).ToUpper();
                             }
                             else if (apiResult.Developers != null && apiResult.Developers.Length > 0)
                             {
                                 // ReleaseDate is DateTime (value type, never null) — always include year when developers are present
-                                app.Desktop.Copyright = $"© {apiResult.ReleaseDate.Year} {String.Join(", ", apiResult.Developers)}";
+                                app.Desktop.Copyright = $"© {apiResult.ReleaseDate.Year} {string.Join(", ", apiResult.Developers)}";
                             }
 
                             if (apiResult.Description != null)

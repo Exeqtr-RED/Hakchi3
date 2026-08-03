@@ -523,10 +523,10 @@ namespace com.clusterrr.hakchi_gui
                         textBoxName.Text = result.Name;
 
                     if (result.Publishers != null && result.Publishers.Length > 0)
-                        textBoxPublisher.Text = String.Join(", ", result.Publishers);
+                        textBoxPublisher.Text = string.Join(", ", result.Publishers);
 
                     if (result.Developers != null && result.Developers.Length > 0)
-                        textBoxDeveloper.Text = String.Join(", ", result.Developers);
+                        textBoxDeveloper.Text = string.Join(", ", result.Developers);
 
                     // ReleaseDate is DateTime (value type, never null) — assignment is unconditional
                     maskedTextBoxReleaseDate.Text = result.ReleaseDate.ToString("yyyy-MM-dd");

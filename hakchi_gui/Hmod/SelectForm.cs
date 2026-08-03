@@ -88,7 +88,7 @@ namespace com.clusterrr.hakchi_gui.Hmod
                 item.SubItems.Add(hmod.Creator);
                 item.Tag = hmod;
                 item.Group = group;
-                item.ToolTipText = String.Join("\r\n", hmod.Readme.headingLines);
+                item.ToolTipText = string.Join("\r\n", hmod.Readme.headingLines);
 
                 if (!onlyInstalledMods && hmod.isInstalled)
                 {

@@ -448,8 +448,8 @@ namespace com.clusterrr.hakchi_gui
                 {
                     StartInfo = new ProcessStartInfo()
                     {
-                        FileName = String.Format(ConfigIni.Instance.FtpCommand, "root", "clover", ip, port),
-                        Arguments = String.Format(ConfigIni.Instance.FtpArguments, "root", "clover", ip, port) + $"/var/saves/{listViewSaves.SelectedItems[0].SubItems["colCode"].Text}"
+                        FileName = string.Format(ConfigIni.Instance.FtpCommand, "root", "clover", ip, port),
+                        Arguments = string.Format(ConfigIni.Instance.FtpArguments, "root", "clover", ip, port) + $"/var/saves/{listViewSaves.SelectedItems[0].SubItems["colCode"].Text}"
                     }
                 }.Start();
             }

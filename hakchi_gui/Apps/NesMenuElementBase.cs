@@ -405,7 +405,7 @@ namespace com.clusterrr.hakchi_gui
 
         protected static void ProcessImageFile(string inPath, string outPath, int targetWidth, int targetHeight, bool expandHeight, bool upscale, bool quantize)
         {
-            if (String.IsNullOrEmpty(inPath) || !File.Exists(inPath)) // failsafe
+            if (string.IsNullOrEmpty(inPath) || !File.Exists(inPath)) // failsafe
                 throw new FileNotFoundException($"Image file \"{inPath}\" doesn't exist.");
 
             // load image
@@ -444,7 +444,7 @@ namespace com.clusterrr.hakchi_gui
 
         protected static Stream ProcessImageFileToStream(string inPath, int targetWidth, int targetHeight, bool expandHeight, bool upscale, bool quantize)
         {
-            if (String.IsNullOrEmpty(inPath) || !File.Exists(inPath)) // failsafe
+            if (string.IsNullOrEmpty(inPath) || !File.Exists(inPath)) // failsafe
                 throw new FileNotFoundException($"Image file \"{inPath}\" doesn't exist.");
 
             // load image

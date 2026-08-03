@@ -55,7 +55,7 @@ namespace com.clusterrr.hakchi_gui
         {
             get
             {
-                return Int16.Parse(this.Text, System.Globalization.NumberStyles.HexNumber);
+                return short.Parse(this.Text, System.Globalization.NumberStyles.HexNumber);
             }
             set
             {
@@ -87,7 +87,7 @@ namespace com.clusterrr.hakchi_gui
         {
             get
             {
-                return Int32.Parse(this.Text, System.Globalization.NumberStyles.HexNumber);
+                return int.Parse(this.Text, System.Globalization.NumberStyles.HexNumber);
             }
             set
             {
@@ -119,7 +119,7 @@ namespace com.clusterrr.hakchi_gui
         {
             get
             {
-                return Int64.Parse(this.Text, System.Globalization.NumberStyles.HexNumber);
+                return long.Parse(this.Text, System.Globalization.NumberStyles.HexNumber);
             }
             set
             {

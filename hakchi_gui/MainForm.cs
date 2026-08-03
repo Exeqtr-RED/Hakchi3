@@ -1066,8 +1066,8 @@ namespace com.clusterrr.hakchi_gui
                     groupBoxArtSega.Enabled =
                     groupBoxArtNintendo.Enabled =
                     groupBoxGameInfo.Enabled = false;
-                labelID.Text = String.Empty;
-                labelSize.Text = String.Empty;
+                labelID.Text = string.Empty;
+                labelSize.Text = string.Empty;
                 textBoxName.Text = "";
                 textBoxSortName.Text = "";
 
@@ -2999,8 +2999,8 @@ internal static
                 {
                     StartInfo = new ProcessStartInfo()
                     {
-                        FileName = String.Format(ConfigIni.Instance.FtpCommand, "root", "clover", ip, port),
-                        Arguments = String.Format(ConfigIni.Instance.FtpArguments, "root", "clover", ip, port)
+                        FileName = string.Format(ConfigIni.Instance.FtpCommand, "root", "clover", ip, port),
+                        Arguments = string.Format(ConfigIni.Instance.FtpArguments, "root", "clover", ip, port)
                     }
                 }.Start();
             }
@@ -3036,8 +3036,8 @@ internal static
                 {
                     StartInfo = new ProcessStartInfo()
                     {
-                        FileName = String.Format(ConfigIni.Instance.TelnetCommand, ip, port),
-                        Arguments = String.Format(ConfigIni.Instance.TelnetArguments, ip, port)
+                        FileName = string.Format(ConfigIni.Instance.TelnetCommand, ip, port),
+                        Arguments = string.Format(ConfigIni.Instance.TelnetArguments, ip, port)
                     }
                 }.Start();
             }
@@ -3669,7 +3669,7 @@ internal static
                 addModInfoToReport(ref outLines, ref availableMods);
                 outLines.Add("</div>");
 
-                File.WriteAllText(sfd.FileName, Resources.mod_report_template.Replace("<body></body>", $"<body>{String.Join("", outLines.ToArray())}</body>"));
+                File.WriteAllText(sfd.FileName, Resources.mod_report_template.Replace("<body></body>", $"<body>{string.Join("", outLines.ToArray())}</body>"));
             }
         }
 

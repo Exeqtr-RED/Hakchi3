@@ -16,14 +16,14 @@ namespace ManagedLzma.LZMA.Master
         internal static void DebugPrint(string format, params object[] args)
         {
 #if BUILD_TESTING
-            System.Diagnostics.Debug.Write(String.Format(format, args));
+            System.Diagnostics.Debug.Write(string.Format(format, args));
 #endif
         }
 
         internal static void Print(string format, params object[] args)
         {
 #if BUILD_TESTING
-            System.Diagnostics.Debug.Write(String.Format(format, args));
+            System.Diagnostics.Debug.Write(string.Format(format, args));
 #endif
         }
     }

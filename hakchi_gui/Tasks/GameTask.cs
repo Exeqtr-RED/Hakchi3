@@ -414,7 +414,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
 
             foreach (var game in Games)
             {
-                tasker.SetStatus(String.Format(Resources.Archiving, game.Name));
+                tasker.SetStatus(string.Format(Resources.Archiving, game.Name));
                 var fileName = Shared.ReplaceInvalidFilenameCharacters($"{game.Code} - {game.Name}.clvg");
 
                 if (directory == null)
@@ -430,7 +430,7 @@ namespace com.clusterrr.hakchi_gui.Tasks
                 else
                 {
                     var archivePath = Path.Combine(directory, fileName);
-                    if (File.Exists(archivePath) && tasker.ShowMessage(Resources.ReplaceFileQ, String.Format(Resources.ReplaceFollowingFileQ, archivePath), Resources.sign_question, new MessageForm.Button[] { MessageForm.Button.Yes, MessageForm.Button.No }) == MessageForm.Button.No)
+                    if (File.Exists(archivePath) && tasker.ShowMessage(Resources.ReplaceFileQ, string.Format(Resources.ReplaceFollowingFileQ, archivePath), Resources.sign_question, new MessageForm.Button[] { MessageForm.Button.Yes, MessageForm.Button.No }) == MessageForm.Button.No)
                     {
                         continue;
                     }

@@ -359,7 +359,7 @@ namespace com.clusterrr.hakchi_gui
                             }
                         }
                     }
-                    description = String.Join("\r\n", descriptionLines);
+                    description = string.Join("\r\n", descriptionLines);
                 }
             }
             catch (Exception ex)

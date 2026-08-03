@@ -11,18 +11,18 @@ namespace com.clusterrr.hakchi_gui
         public AboutBox()
         {
             InitializeComponent();
-            this.Text = String.Format("About {0}", AssemblyTitle);
+            this.Text = string.Format("About {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Version {0}", Shared.AppDisplayVersion);
-            this.labelGitCommit.Text = String.Format("Git Commit {0}", Shared.GitCommit);
-            this.labelGitTag.Text = String.Format("Git Tag {0}", Shared.GitTag ?? "Unknown");
+            this.labelVersion.Text = string.Format("Version {0}", Shared.AppDisplayVersion);
+            this.labelGitCommit.Text = string.Format("Git Commit {0}", Shared.GitCommit);
+            this.labelGitTag.Text = string.Format("Git Tag {0}", Shared.GitTag ?? "Unknown");
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
             this.textBoxDescription.Text = AssemblyDescription;
 
             commitsSinceTag = Encoding.UTF8.GetString(Properties.Resources.gitCommitsSinceLastTag).Trim();
 
-            buttonCommitsSinceTag.Visible = !String.IsNullOrEmpty(commitsSinceTag);
+            buttonCommitsSinceTag.Visible = !string.IsNullOrEmpty(commitsSinceTag);
 
         }
 
