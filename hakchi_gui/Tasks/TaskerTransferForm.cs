@@ -175,7 +175,8 @@ namespace com.clusterrr.hakchi_gui.Tasks
             }
             if (Visible)
             {
-                throw new UnauthorizedAccessException("TaskerTransferForm is already visible");
+                // Already visible — return silently instead of throwing.
+                return this;
             }
             if (Blocking)
             {
@@ -197,7 +198,9 @@ namespace com.clusterrr.hakchi_gui.Tasks
             }
             if (!Visible)
             {
-                throw new UnauthorizedAccessException("TaskerTransferForm is already hidden");
+                // Already hidden — return silently instead of throwing
+                // (Tasker.Close() may be called after the form was auto-closed).
+                return this;
             }
             this.isClosing = true;
             base.Close();

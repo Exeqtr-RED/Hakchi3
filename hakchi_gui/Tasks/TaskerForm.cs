@@ -115,7 +115,8 @@ namespace com.clusterrr.hakchi_gui.Tasks
             }
             if (Visible)
             {
-                throw new UnauthorizedAccessException("TaskerForm is already visible");
+                // Already visible — return silently instead of throwing.
+                return this;
             }
             if (Blocking)
             {
@@ -135,9 +136,14 @@ namespace com.clusterrr.hakchi_gui.Tasks
             {
                 return (ITaskerView)Invoke(new Func<ITaskerView>(Close));
             }
+            // Don't throw if the form is already hidden — this can happen when
+            // Tasker.Close() is called after the form was auto-closed (e.g. by
+            // Application.Exit, by the user clicking the X, or by a prior Close()
+            // from the worker thread). Throwing here crashes the app with an
+            // unhandled UnauthorizedAccessException.
             if (!Visible)
             {
-                throw new UnauthorizedAccessException("TaskerForm is already hidden");
+                return this;
             }
             this.isClosing = true;
             base.Close();
