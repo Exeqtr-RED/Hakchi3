@@ -61,6 +61,13 @@ Gert Driesen for SSH.NET.
 		<CleanDependsOn>$(CleanDependsOn); CustomAfterClean </CleanDependsOn>
 		<Configurations>Debug;Release;Dumper</Configurations>
 
+		<!-- The public API exposes a static class named `hakchi` (lowercase) for historical
+		     reasons (hakchi.Shell, hakchi.DetectedConsoleType, etc.). The .NET source generator
+		     for System.Text.RegularExpressions also emits a partial `hakchi` type, which triggers
+		     CS8981. Suppress the diagnostic project-wide rather than rename the type — renaming
+		     would break every caller in this codebase and downstream forks. -->
+		<NoWarn>$(NoWarn);CS8981</NoWarn>
+
 		<!-- Localized satellite assemblies stay in <OutDir>\<culture>\hakchi.resources.dll
                      (default .NET 8 layout). Do NOT move them into a custom "languages\" folder —
                      the .NET 8 runtime only probes the default culture subfolder next to the exe,
