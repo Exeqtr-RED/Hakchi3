@@ -68,6 +68,13 @@ Gert Driesen for SSH.NET.
 		     would break every caller in this codebase and downstream forks. -->
 		<NoWarn>$(NoWarn);CS8981</NoWarn>
 
+		<!-- WinForms designer persists ImageList.ImageStream via BinaryFormatter in .resx files
+		     (this is how the designer has always stored image lists). .NET 8 emits MSB3825 to
+		     warn that BinaryFormatter will be removed in .NET 9. Since we are on .NET 8 and the
+		     ImageStream data is designer-generated local content (not untrusted input), we
+		     silence the warning rather than rework every ImageList resource. -->
+		<GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
+
 		<!-- Localized satellite assemblies stay in <OutDir>\<culture>\hakchi.resources.dll
                      (default .NET 8 layout). Do NOT move them into a custom "languages\" folder —
                      the .NET 8 runtime only probes the default culture subfolder next to the exe,
