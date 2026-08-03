@@ -30,9 +30,10 @@ namespace com.clusterrr.hakchi_gui
     public partial class MainForm : Form
     {
         /// <summary>
-        /// The URL for the update metadata XML file
+        /// The URL for the update metadata XML file. Currently unused (autoupdate is disabled in this build),
+        /// kept here so the constant lives next to its siblings for easy re-enabling.
         /// </summary>
-        private static readonly string UPDATE_XML_URL = "https://teamshinkansen.github.io/xml/updates/update.xml";
+        private const string UPDATE_XML_URL = "https://teamshinkansen.github.io/xml/updates/update.xml";
         private static readonly string MOTD_URL = "https://teamshinkansen.github.io/motd.md";
         private static readonly string SFROM_TOOL_URL = "http://darkakuma.z-net.us/p/sfromtool.html";
         private static readonly string MotdFilename = Path.Combine(Program.BaseDirectoryExternal, "cache", "motd.md");
