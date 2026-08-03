@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-        <PropertyGroup>
-                <OutputType>WinExe</OutputType>
-                <TargetFramework>net8.0-windows</TargetFramework>
-                <AssemblyName>hakchi</AssemblyName>
-                <RootNamespace>com.clusterrr.hakchi_gui</RootNamespace>
-                <UseWindowsForms>true</UseWindowsForms>
-                <GenerateResourceDesignTimeOutput>True</GenerateResourceDesignTimeOutput>
-                <StartupObject>com.clusterrr.hakchi_gui.Program</StartupObject>
-                <ApplicationIcon>icon_app.ico</ApplicationIcon>
-                <Description>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<AssemblyName>hakchi</AssemblyName>
+		<RootNamespace>com.clusterrr.hakchi_gui</RootNamespace>
+		<UseWindowsForms>true</UseWindowsForms>
+		<GenerateResourceDesignTimeOutput>True</GenerateResourceDesignTimeOutput>
+		<StartupObject>com.clusterrr.hakchi_gui.Program</StartupObject>
+		<ApplicationIcon>icon_app.ico</ApplicationIcon>
+		<Description>
 Based on hakchi by madmonkey.
 
 Coders:
@@ -49,282 +49,282 @@ Nhakin for Game Genie database.
 Adam Hathcock for SharpCompress.
 BoneSoft software for ProgressODoom.
 Gert Driesen for SSH.NET.
-                </Description>
-                <Title>Hakchi3</Title>
-                <Version>0.3.5</Version>
-                <Authors>Exeqtr-RED</Authors>
-                <Company>Exeqtr-RED</Company>
-                <Copyright>Copyright © 2026</Copyright>
-                <RepositoryUrl>https://github.com/Exeqtr-RED/Hakchi3</RepositoryUrl>
-                <RepositoryType>git</RepositoryType>
-                <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-                <CleanDependsOn>$(CleanDependsOn); CustomAfterClean </CleanDependsOn>
-                <Configurations>Debug;Release;Dumper</Configurations>
+		</Description>
+		<Title>Hakchi3</Title>
+		<Version>0.3.5</Version>
+		<Authors>Exeqtr-RED</Authors>
+		<Company>Exeqtr-RED</Company>
+		<Copyright>Copyright © 2026</Copyright>
+		<RepositoryUrl>https://github.com/Exeqtr-RED/Hakchi3</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<CleanDependsOn>$(CleanDependsOn); CustomAfterClean </CleanDependsOn>
+		<Configurations>Debug;Release;Dumper</Configurations>
 
-                <!-- The public API exposes a static class named `hakchi` (lowercase) for historical
+		<!-- The public API exposes a static class named `hakchi` (lowercase) for historical
                      reasons (hakchi.Shell, hakchi.DetectedConsoleType, etc.). The .NET source generator
                      for System.Text.RegularExpressions also emits a partial `hakchi` type, which triggers
                      CS8981. Suppress the diagnostic project-wide rather than rename the type — renaming
                      would break every caller in this codebase and downstream forks. -->
-                <NoWarn>$(NoWarn);CS8981</NoWarn>
+		<NoWarn>$(NoWarn);CS8981</NoWarn>
 
-                <!-- WinForms designer persists ImageList.ImageStream via BinaryFormatter in .resx files
+		<!-- WinForms designer persists ImageList.ImageStream via BinaryFormatter in .resx files
                      (this is how the designer has always stored image lists). .NET 8 emits MSB3825 to
                      warn that BinaryFormatter will be removed in .NET 9. Since we are on .NET 8 and the
                      ImageStream data is designer-generated local content (not untrusted input), we
                      silence the warning rather than rework every ImageList resource. -->
-                <GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
+		<GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
 
-                <!-- Localized satellite assemblies stay in <OutDir>\<culture>\hakchi.resources.dll
+		<!-- Localized satellite assemblies stay in <OutDir>\<culture>\hakchi.resources.dll
                      (default .NET 8 layout). Do NOT move them into a custom "languages\" folder —
                      the .NET 8 runtime only probes the default culture subfolder next to the exe,
                      and AppendPrivatePath / <probing privatePath> no longer apply to satellites. -->
-        </PropertyGroup>
+	</PropertyGroup>
 
-        <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-                <DefineConstants>$(DefineConstants);TRACE;LIBUSBDOTNET WINDOWS_TESTING</DefineConstants>
-        </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>$(DefineConstants);TRACE;LIBUSBDOTNET WINDOWS_TESTING</DefineConstants>
+	</PropertyGroup>
 
-        <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dumper|AnyCPU'">
-                <DefineConstants>$(DefineConstants);TRACE;LIBUSBDOTNET WINDOWS_TESTING;DEBUG</DefineConstants>
-        </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dumper|AnyCPU'">
+		<DefineConstants>$(DefineConstants);TRACE;LIBUSBDOTNET WINDOWS_TESTING;DEBUG</DefineConstants>
+	</PropertyGroup>
 
-        <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-                <DefineConstants>$(DefineConstants);TRACE;LIBUSBDOTNET WINDOWS_TESTING</DefineConstants>
-        </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DefineConstants>$(DefineConstants);TRACE;LIBUSBDOTNET WINDOWS_TESTING</DefineConstants>
+	</PropertyGroup>
 
-        <ItemGroup>
-                <EmbeddedResource Remove="driver\source\**" />
-                <EmbeddedResource Remove="Libraries\**" />
-                <EmbeddedResource Remove="Makefile Projects\**" />
-                <EmbeddedResource Remove="NSI\nsi-helper\**" />
-                <EmbeddedResource Remove="Scrapers.Test\**" />
-                <EmbeddedResource Remove="Scrapers\**" />
-                <EmbeddedResource Remove="Zipper\**" />
-        </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Remove="driver\source\**" />
+		<EmbeddedResource Remove="Libraries\**" />
+		<EmbeddedResource Remove="Makefile Projects\**" />
+		<EmbeddedResource Remove="NSI\nsi-helper\**" />
+		<EmbeddedResource Remove="Scrapers.Test\**" />
+		<EmbeddedResource Remove="Scrapers\**" />
+		<EmbeddedResource Remove="Zipper\**" />
+	</ItemGroup>
 
-        <ItemGroup>
-                <Content Include="icon_app.ico" />
-        </ItemGroup>
+	<ItemGroup>
+		<Content Include="icon_app.ico" />
+	</ItemGroup>
 
-        <ItemGroup>
-                <PackageReference Include="ArxOne.Ftp" Version="1.41.4" />
-                <PackageReference Include="Autoupdater.NET.Official" Version="1.9.2" />
-                <PackageReference Include="LibUsbDotNet" Version="3.0.102-alpha" />
-                <PackageReference Include="Markdig" Version="1.3.2" />
-                <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-                <!-- nQuant 1.0.3 only ships .NET Framework assemblies, but its byte-level API
+	<ItemGroup>
+		<PackageReference Include="ArxOne.Ftp" Version="1.41.4" />
+		<PackageReference Include="Autoupdater.NET.Official" Version="1.9.2" />
+		<PackageReference Include="LibUsbDotNet" Version="3.0.102-alpha" />
+		<PackageReference Include="Markdig" Version="1.3.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<!-- nQuant 1.0.3 only ships .NET Framework assemblies, but its byte-level API
                      (WuQuantizer / QuantizationException) is managed code that runs fine on .NET 8.
                      We accept the framework mismatch and silence NU1701 explicitly. If nQuant stops
                      working on a future .NET version, swap for a maintained quantizer. -->
-                <PackageReference Include="nQuant" Version="1.0.3" NoWarn="NU1701" />
-                <PackageReference Include="SharpCompress" Version="0.48.0" />
-                <PackageReference Include="SSH.NET" Version="2025.1.0" />
-                <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-                <PackageReference Include="Tmds.MDns" Version="0.8.0" />
-        </ItemGroup>
+		<PackageReference Include="nQuant" Version="1.0.3" NoWarn="NU1701" />
+		<PackageReference Include="SharpCompress" Version="0.48.0" />
+		<PackageReference Include="SSH.NET" Version="2025.1.0" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+		<PackageReference Include="Tmds.MDns" Version="0.8.0" />
+	</ItemGroup>
 
-        <ItemGroup>
-                <ProjectReference Include="..\ce-data\ce-data.csproj">
-                        <Private>False</Private>
-                        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
-                </ProjectReference>
-                <ProjectReference Include="..\Libraries\CueSharp\CueSharp\CueSharp.csproj" />
-                <ProjectReference Include="..\Libraries\FelLib\FelLib\FelLib.csproj" />
-                <ProjectReference Include="..\Libraries\ProgressODoom\ProgressODoom.csproj" />
-                <ProjectReference Include="..\Libraries\SpineGen\SpineGen.Drawing.System.Drawing\SpineGen.Drawing.System.Drawing.csproj" />
-                <ProjectReference Include="..\Libraries\SpineGen\SpineGen.JSON\SpineGen.JSON.csproj" />
-                <ProjectReference Include="..\Libraries\SpineGen\SpineGen\SpineGen.csproj" />
-                <ProjectReference Include="..\Libraries\tiny7z\tiny7z\tiny7z.csproj" />
-                <ProjectReference Include="..\Scrapers\Scrapers.csproj" />
-        </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ce-data\ce-data.csproj">
+			<Private>False</Private>
+			<CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+		</ProjectReference>
+		<ProjectReference Include="..\Libraries\CueSharp\CueSharp\CueSharp.csproj" />
+		<ProjectReference Include="..\Libraries\FelLib\FelLib\FelLib.csproj" />
+		<ProjectReference Include="..\Libraries\ProgressODoom\ProgressODoom.csproj" />
+		<ProjectReference Include="..\Libraries\SpineGen\SpineGen.Drawing.System.Drawing\SpineGen.Drawing.System.Drawing.csproj" />
+		<ProjectReference Include="..\Libraries\SpineGen\SpineGen.JSON\SpineGen.JSON.csproj" />
+		<ProjectReference Include="..\Libraries\SpineGen\SpineGen\SpineGen.csproj" />
+		<ProjectReference Include="..\Libraries\tiny7z\tiny7z\tiny7z.csproj" />
+		<ProjectReference Include="..\Scrapers\Scrapers.csproj" />
+	</ItemGroup>
 
-        <ItemGroup Condition="'$(Configuration)|$(Platform)'!='Dumper|AnyCPU'">
-                <None Update="art\**">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="basehmods.tar">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="data\blankBoot.png">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="data\desktop_entries.tar">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="data\GameGenieDB.xml">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="data\libretro_cores.tar">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="data\licenses.tar">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="data\nescarts.xml">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="data\original_art.tar">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="data\romfiles.xml">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="data\snescarts.xml">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="driver\classic_driver.exe">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="folder_images\**">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="hakchi-debug.bat">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="hakchi-nonportable-debug.bat">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="hakchi-nonportable.bat">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="info\README.txt">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="LICENSE">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="patches\**">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="sfrom_tool\README.TXT">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="spine_templates\**">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="tools\arm\detached-fallback">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="tools\arm\kexec.static">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="tools\arm\mke2fs.static">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="tools\arm\sfdisk.static">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="tools\arm\unpackbootimg.static">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="tools\mksquashfs">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="tools\putty\LICENCE">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="tools\putty\puttytel.exe">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="user_mods\README.txt">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-        </ItemGroup>
-        <ItemGroup>
-                <None Update="tools\arm\detached-fallback">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-                <None Update="tools\arm\kexec.static">
-                        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-                </None>
-        </ItemGroup>
+	<ItemGroup Condition="'$(Configuration)|$(Platform)'!='Dumper|AnyCPU'">
+		<None Update="art\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="basehmods.tar">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="data\blankBoot.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="data\desktop_entries.tar">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="data\GameGenieDB.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="data\libretro_cores.tar">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="data\licenses.tar">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="data\nescarts.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="data\original_art.tar">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="data\romfiles.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="data\snescarts.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="driver\classic_driver.exe">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="folder_images\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="hakchi-debug.bat">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="hakchi-nonportable-debug.bat">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="hakchi-nonportable.bat">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="info\README.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="LICENSE">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="patches\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="sfrom_tool\README.TXT">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="spine_templates\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="tools\arm\detached-fallback">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="tools\arm\kexec.static">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="tools\arm\mke2fs.static">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="tools\arm\sfdisk.static">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="tools\arm\unpackbootimg.static">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="tools\mksquashfs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="tools\putty\LICENCE">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="tools\putty\puttytel.exe">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="user_mods\README.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="tools\arm\detached-fallback">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="tools\arm\kexec.static">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-        <Target Name="CustomAfterClean" AfterTargets="CoreClean">
-                <ItemGroup>
-                        <HakchiFiles Include="$(ProjectDir)basehmods.tar" />
-                        <HakchiFiles Include="$(ProjectDir)mods/hmods/hakchi.hmod" />
-                        <HakchiFiles Include="$(ProjectDir)tools/arm/detached-fallback" />
-                </ItemGroup>
-                <Delete Files="@(HakchiFiles)" />
-        </Target>
+	<Target Name="CustomAfterClean" AfterTargets="CoreClean">
+		<ItemGroup>
+			<HakchiFiles Include="$(ProjectDir)basehmods.tar" />
+			<HakchiFiles Include="$(ProjectDir)mods/hmods/hakchi.hmod" />
+			<HakchiFiles Include="$(ProjectDir)tools/arm/detached-fallback" />
+		</ItemGroup>
+		<Delete Files="@(HakchiFiles)" />
+	</Target>
 
-        <Target Name="RemoveUnwantedFiles" AfterTargets="PostBuildEvent">
-                <ItemGroup>
-                        <UnwantedFiles Include="$(OutDir)downloadedFiles.txt" />
-                        <UnwantedFiles Include="$(OutDir)Renci.SshNet.xml" />
-                        <UnwantedFiles Include="$(OutDir)CueSharp.xml" />
-                        <UnwantedFiles Include="$(OutDir)tiny7z.dll.config" />
-                        <UnwantedFiles Include="$(OutDir)data\licenses.tar" />
-                        <UnwantedFiles Include="$(OutDir)mods\hmods\hakchi.hmod" />
-                </ItemGroup>
-                <Delete Files="@(UnwantedFiles)" />
-        </Target>
+	<Target Name="RemoveUnwantedFiles" AfterTargets="PostBuildEvent">
+		<ItemGroup>
+			<UnwantedFiles Include="$(OutDir)downloadedFiles.txt" />
+			<UnwantedFiles Include="$(OutDir)Renci.SshNet.xml" />
+			<UnwantedFiles Include="$(OutDir)CueSharp.xml" />
+			<UnwantedFiles Include="$(OutDir)tiny7z.dll.config" />
+			<UnwantedFiles Include="$(OutDir)data\licenses.tar" />
+			<UnwantedFiles Include="$(OutDir)mods\hmods\hakchi.hmod" />
+		</ItemGroup>
+		<Delete Files="@(UnwantedFiles)" />
+	</Target>
 
-        <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-                <!-- Copy GeneratedData/* into the output directory so hakchi.exe can find
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<!-- Copy GeneratedData/* into the output directory so hakchi.exe can find
                      tarballs, hmods, tools at runtime. Originally used busybox tar piped
                      through tar; rewritten to use MSBuild Copy task with recursive glob. -->
-                <ItemGroup Condition="'$(Configuration)|$(Platform)'!='Dumper|AnyCPU' And Exists('$(SolutionDir)GeneratedData')">
-                        <GeneratedDataFiles Include="$(SolutionDir)GeneratedData/**/*.*" />
-                </ItemGroup>
-                <Copy SourceFiles="@(GeneratedDataFiles)"
-                      DestinationFiles="$(OutDir)%(RecursiveDir)%(Filename)%(Extension)"
-                      Condition="'@(GeneratedDataFiles)' != ''" />
+		<ItemGroup Condition="'$(Configuration)|$(Platform)'!='Dumper|AnyCPU' And Exists('$(SolutionDir)GeneratedData')">
+			<GeneratedDataFiles Include="$(SolutionDir)GeneratedData/**/*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(GeneratedDataFiles)"
+			  DestinationFiles="$(OutDir)%(RecursiveDir)%(Filename)%(Extension)"
+			  Condition="'@(GeneratedDataFiles)' != ''" />
 
-                <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Dumper|AnyCPU' And Exists('$(SolutionDir)GeneratedData')">
-                        <DumperFiles Include="$(SolutionDir)GeneratedData/basehmods.tar" />
-                        <DumperFiles Include="$(SolutionDir)driver/**/*.*" />
-                        <DumperFiles Include="$(SolutionDir)tools/arm/detached-fallback" />
-                </ItemGroup>
-                <Copy SourceFiles="@(DumperFiles)"
-                      DestinationFiles="$(OutDir)%(RecursiveDir)%(Filename)%(Extension)"
-                      Condition="'@(DumperFiles)' != ''" />
-        </Target>
+		<ItemGroup Condition="'$(Configuration)|$(Platform)'=='Dumper|AnyCPU' And Exists('$(SolutionDir)GeneratedData')">
+			<DumperFiles Include="$(SolutionDir)GeneratedData/basehmods.tar" />
+			<DumperFiles Include="$(SolutionDir)driver/**/*.*" />
+			<DumperFiles Include="$(SolutionDir)tools/arm/detached-fallback" />
+		</ItemGroup>
+		<Copy SourceFiles="@(DumperFiles)"
+			  DestinationFiles="$(OutDir)%(RecursiveDir)%(Filename)%(Extension)"
+			  Condition="'@(DumperFiles)' != ''" />
+	</Target>
 
-        <!-- PreBuild: generate build-metadata files consumed by Resources.resx.
+	<!-- PreBuild: generate build-metadata files consumed by Resources.resx.
              Previously this target shelled out to tools/busybox.exe with bash-style
              `cd /D` syntax, which failed silently on GitHub Actions windows-latest
              runner (busybox.exe exists but pwsh does not understand `cd /D`), so
              commit.txt was never created and the build failed with MSB3103.
              Rewritten to use native MSBuild tasks (MakeDir, WriteLinesToFile) and
              `git` invocations that work on every OS. -->
-        <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-                <MakeDir Directories="$(ProjectDir)ApiKeys" Condition="!Exists('$(ProjectDir)ApiKeys')" />
-                <WriteLinesToFile File="$(ProjectDir)ApiKeys/TheGamesDB.txt" Lines="" Overwrite="false" Condition="!Exists('$(ProjectDir)ApiKeys/TheGamesDB.txt')" />
-                <!-- Resources.resx references ..\apikeys\thegamesdb.txt (lowercase) — on case-sensitive
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<MakeDir Directories="$(ProjectDir)ApiKeys" Condition="!Exists('$(ProjectDir)ApiKeys')" />
+		<WriteLinesToFile File="$(ProjectDir)ApiKeys/TheGamesDB.txt" Lines="" Overwrite="false" Condition="!Exists('$(ProjectDir)ApiKeys/TheGamesDB.txt')" />
+		<!-- Resources.resx references ..\apikeys\thegamesdb.txt (lowercase) — on case-sensitive
                      filesystems (Linux CI) we need to create the lowercase path too. On Windows
                      this is a no-op because the filesystem is case-insensitive. -->
-                <MakeDir Directories="$(ProjectDir)apikeys" Condition="!Exists('$(ProjectDir)apikeys')" />
-                <WriteLinesToFile File="$(ProjectDir)apikeys/thegamesdb.txt" Lines="" Overwrite="false" Condition="!Exists('$(ProjectDir)apikeys/thegamesdb.txt')" />
+		<MakeDir Directories="$(ProjectDir)apikeys" Condition="!Exists('$(ProjectDir)apikeys')" />
+		<WriteLinesToFile File="$(ProjectDir)apikeys/thegamesdb.txt" Lines="" Overwrite="false" Condition="!Exists('$(ProjectDir)apikeys/thegamesdb.txt')" />
 
-                <!-- commit.txt: short hash + -dirty suffix if working tree is dirty -->
-                <Exec Command="git rev-parse --short HEAD" ConsoleToMSBuild="true" IgnoreExitCode="true">
-                        <Output TaskParameter="ConsoleOutput" PropertyName="GitShortHash" />
-                </Exec>
-                <Exec Command="git diff-index --quiet HEAD --" IgnoreExitCode="true">
-                        <Output TaskParameter="ExitCode" PropertyName="GitDirtyExitCode" />
-                </Exec>
-                <PropertyGroup Condition="'$(GitDirtyExitCode)' != '0' And '$(GitShortHash)' != ''">
-                        <GitShortHash>$(GitShortHash)-dirty</GitShortHash>
-                </PropertyGroup>
-                <WriteLinesToFile File="$(ProjectDir)commit.txt" Lines="$(GitShortHash)" />
+		<!-- commit.txt: short hash + -dirty suffix if working tree is dirty -->
+		<Exec Command="git rev-parse --short HEAD" ConsoleToMSBuild="true" IgnoreExitCode="true">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitShortHash" />
+		</Exec>
+		<Exec Command="git diff-index --quiet HEAD --" IgnoreExitCode="true">
+			<Output TaskParameter="ExitCode" PropertyName="GitDirtyExitCode" />
+		</Exec>
+		<PropertyGroup Condition="'$(GitDirtyExitCode)' != '0' And '$(GitShortHash)' != ''">
+			<GitShortHash>$(GitShortHash)-dirty</GitShortHash>
+		</PropertyGroup>
+		<WriteLinesToFile File="$(ProjectDir)commit.txt" Lines="$(GitShortHash)" />
 
-                <!-- tag.txt: tag pointing exactly at HEAD, or empty -->
-                <Exec Command="git describe --tags --exact-match" ConsoleToMSBuild="true" IgnoreExitCode="true">
-                        <Output TaskParameter="ConsoleOutput" PropertyName="GitTag" />
-                </Exec>
-                <WriteLinesToFile File="$(ProjectDir)tag.txt" Lines="$(GitTag)" />
+		<!-- tag.txt: tag pointing exactly at HEAD, or empty -->
+		<Exec Command="git describe --tags --exact-match" ConsoleToMSBuild="true" IgnoreExitCode="true">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitTag" />
+		</Exec>
+		<WriteLinesToFile File="$(ProjectDir)tag.txt" Lines="$(GitTag)" />
 
-                <!-- git-commits-since-last-tag.txt: log since the most recent tag -->
-                <Exec Command="git log $(GitTag)..HEAD --oneline --no-decorate" ConsoleToMSBuild="true" IgnoreExitCode="true" Condition="'$(GitTag)' != ''">
-                        <Output TaskParameter="ConsoleOutput" PropertyName="GitCommitsSinceTag" />
-                </Exec>
-                <WriteLinesToFile File="$(ProjectDir)git-commits-since-last-tag.txt" Lines="$(GitCommitsSinceTag)" />
+		<!-- git-commits-since-last-tag.txt: log since the most recent tag -->
+		<Exec Command="git log $(GitTag)..HEAD --oneline --no-decorate" ConsoleToMSBuild="true" IgnoreExitCode="true" Condition="'$(GitTag)' != ''">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommitsSinceTag" />
+		</Exec>
+		<WriteLinesToFile File="$(ProjectDir)git-commits-since-last-tag.txt" Lines="$(GitCommitsSinceTag)" />
 
-                <!-- Note: licenses.tar is created by ce-data.csproj PreBuild (it bundles
+		<!-- Note: licenses.tar is created by ce-data.csproj PreBuild (it bundles
                      hakchi_gui/Licenses/*.txt into GeneratedData/data/licenses.tar).
                      hakchi_gui depends on ce-data via ProjectReference, so ce-data builds
                      first and licenses.tar is ready before hakchi_gui's CoreResGen runs. -->
-        </Target>
+	</Target>
 </Project>
