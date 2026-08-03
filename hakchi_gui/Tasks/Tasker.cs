@@ -385,13 +385,23 @@ namespace com.clusterrr.hakchi_gui.Tasks
         {
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(ConfigIni.Instance.Language);
 
-            // Wait for Ready signal or cancellation
-            while (!Ready && !_cts.IsCancellationRequested)
+            // Wait for Ready signal or cancellation.
+            // Use a local snapshot of _cts — Dispose() can null it out from another thread
+            // while we are sleeping here (race condition that previously caused
+            // NullReferenceException at line 408 below).
+            var cts = _cts;
+            if (cts == null)
+            {
+                TaskConclusion = Conclusion.Abort;
+                Close();
+                return;
+            }
+            while (!Ready && !cts.IsCancellationRequested)
             {
                 Thread.Sleep(10);
             }
 
-            if (_cts.IsCancellationRequested)
+            if (cts.IsCancellationRequested)
             {
                 TaskConclusion = Conclusion.Abort;
                 Close();
@@ -403,9 +413,13 @@ namespace com.clusterrr.hakchi_gui.Tasks
             SetProgress(0, 1);
             try
             {
-                // iterate through tasks queue
+                // iterate through tasks queue.
+                // Re-check _cts on every iteration — Dispose() may null it from
+                // another thread between iterations. The previous code dereferenced
+                // _cts directly, which caused NullReferenceException when the form
+                // was closed during task execution.
                 bool firstTask = true;
-                while (tasks.Any() && !_cts.IsCancellationRequested)
+                while (tasks != null && tasks.Any() && _cts != null && !_cts.IsCancellationRequested)
                 {
                     // pop out next task
                     CurrentTask = tasks.Dequeue();
