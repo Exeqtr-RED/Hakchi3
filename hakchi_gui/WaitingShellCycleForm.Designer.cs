@@ -34,9 +34,9 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.progressBarEx1 = new ProgressODoom.ProgressBarEx();
-            this.pixelBackgroundPainter1 = new ProgressODoom.PixelBackgroundPainter();
-            this.pixelBorderPainter1 = new ProgressODoom.PixelBorderPainter();
-            this.pixelProgressPainter1 = new ProgressODoom.PixelProgressPainter();
+            this.fruityLoopsBackgroundPainter1 = new ProgressODoom.FruityLoopsBackgroundPainter();
+            this.styledBorderPainter1 = new ProgressODoom.StyledBorderPainter();
+            this.fruityLoopsProgressPainter1 = new ProgressODoom.FruityLoopsProgressPainter();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,8 +59,8 @@
             // progressBarEx1
             // 
             resources.ApplyResources(this.progressBarEx1, "progressBarEx1");
-            this.progressBarEx1.BackgroundPainter = this.pixelBackgroundPainter1;
-            this.progressBarEx1.BorderPainter = this.pixelBorderPainter1;
+            this.progressBarEx1.BackgroundPainter = this.fruityLoopsBackgroundPainter1;
+            this.progressBarEx1.BorderPainter = this.styledBorderPainter1;
             this.progressBarEx1.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.progressBarEx1.MarqueePercentage = 25;
             this.progressBarEx1.MarqueeSpeed = 30;
@@ -69,31 +69,25 @@
             this.progressBarEx1.Minimum = 0;
             this.progressBarEx1.Name = "progressBarEx1";
             this.progressBarEx1.ProgressPadding = 0;
-            this.progressBarEx1.ProgressPainter = this.pixelProgressPainter1;
+            this.progressBarEx1.ProgressPainter = this.fruityLoopsProgressPainter1;
             this.progressBarEx1.ProgressType = ProgressODoom.ProgressType.Smooth;
             this.progressBarEx1.ShowPercentage = false;
             this.progressBarEx1.Value = 30;
             // 
-            // pixelBackgroundPainter1
+            // fruityLoopsBackgroundPainter1
             // 
-            this.pixelBackgroundPainter1.ShowGrid = true;
-            this.pixelBackgroundPainter1.ShowScanlines = true;
-            this.pixelBackgroundPainter1.PixelSize = 8;
-            this.pixelBackgroundPainter1.GlossPainter = null;
+            this.fruityLoopsBackgroundPainter1.FruityType = ProgressODoom.FruityLoopsProgressPainter.FruityLoopsProgressType.DoubleLayer;
+            this.fruityLoopsBackgroundPainter1.GlossPainter = null;
             // 
-            // pixelBorderPainter1
+            // styledBorderPainter1
             // 
-            this.pixelBorderPainter1.BorderWidth = 2;
+            this.styledBorderPainter1.Border3D = System.Windows.Forms.Border3DStyle.Flat;
             // 
-            // pixelProgressPainter1
+            // fruityLoopsProgressPainter1
             // 
-            this.pixelProgressPainter1.PixelCount = 20;
-            this.pixelProgressPainter1.PixelGap = 2;
-            this.pixelProgressPainter1.BlinkLeading = true;
-            this.pixelProgressPainter1.Animating = true;
-            this.pixelProgressPainter1.AnimationSpeed = 8;
-            this.pixelProgressPainter1.GlossPainter = null;
-            this.pixelProgressPainter1.ProgressBorderPainter = null;
+            this.fruityLoopsProgressPainter1.FruityType = ProgressODoom.FruityLoopsProgressPainter.FruityLoopsProgressType.DoubleLayer;
+            this.fruityLoopsProgressPainter1.GlossPainter = null;
+            this.fruityLoopsProgressPainter1.ProgressBorderPainter = null;
             // 
             // WaitingShellCycleForm
             // 
@@ -121,8 +115,8 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label label1;
         private ProgressODoom.ProgressBarEx progressBarEx1;
-        private ProgressODoom.PixelBackgroundPainter pixelBackgroundPainter1;
-        private ProgressODoom.PixelBorderPainter pixelBorderPainter1;
-        private ProgressODoom.PixelProgressPainter pixelProgressPainter1;
+        private ProgressODoom.FruityLoopsBackgroundPainter fruityLoopsBackgroundPainter1;
+        private ProgressODoom.StyledBorderPainter styledBorderPainter1;
+        private ProgressODoom.FruityLoopsProgressPainter fruityLoopsProgressPainter1;
     }
 }
