@@ -376,16 +376,17 @@ namespace com.clusterrr.hakchi_gui.ModHub.Repository
 
         public Item[] LoadTasker(Form hostForm)
         {
-            using (var tasker = new Tasks.Tasker(hostForm))
-            {
+            using var tasker = new Tasks.Tasker(hostForm);
+
                 tasker.AttachViews(new TaskerTaskbar(), new TaskerForm());
                 tasker.SetStatusImage(Resources.sign_cogs);
                 tasker.SetTitle("Loading Repository");
                 tasker.AddTask(LoadTask);
                 if (tasker.Start() == Tasker.Conclusion.Success)
-                    return Items.ToArray();
+                return Items.ToArray();
                 return null;
-            }
+
+            
         }
 
         private Conclusion LoadTask(Tasker tasker, Object syncObject)

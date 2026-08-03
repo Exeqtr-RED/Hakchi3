@@ -190,12 +190,13 @@ namespace com.clusterrr.hakchi_gui.Controls
                 try
                 {
                     string metadata = WebUtility.HtmlDecode(match.Groups["metadata"].Value);
-                    using (JsonDocument document = JsonDocument.Parse(metadata))
-                    {
+                    using JsonDocument document = JsonDocument.Parse(metadata);
+
                         JsonElement imageUrl;
                         if (document.RootElement.TryGetProperty("murl", out imageUrl))
-                            AddImageUrl(urls, imageUrl.GetString());
-                    }
+                        AddImageUrl(urls, imageUrl.GetString());
+
+                    
                 }
                 catch (JsonException)
                 {

@@ -189,7 +189,7 @@ namespace TeamShinkansen.Scrapers.TheGamesDB
         /// <param name="id">(Required) - supports , delimited list</param>
         /// <param name="fields">(Optional) - valid , delimited options: icon, console, controller, developer, manufacturer, media, cpu, memory, graphics, sound, maxcontrollers, display, overview, youtube</param>
         /// <returns></returns>
-        public async Task<PlatformDataResponse> GetPlatformsByPlatformID(int[] id, string fields = "icon,console,controller,developer,manufacturer,media,cpu,memory,graphics,sound,maxcontrollers,display,overview,youtube") => await GetPlatformsByPlatformID(string.Join(",", id.Cast<string>()), fields);
+        public async Task<PlatformDataResponse> GetPlatformsByPlatformID(int[] id, string fields = "icon,console,controller,developer,manufacturer,media,cpu,memory,graphics,sound,maxcontrollers,display,overview,youtube") => await GetPlatformsByPlatformID(string.Join(",", id.Select(i => i.ToString())), fields);
        
         /// <summary>
         /// Fetch platforms list by id
@@ -197,7 +197,7 @@ namespace TeamShinkansen.Scrapers.TheGamesDB
         /// <param name="id">(Required) - supports , delimited list</param>
         /// <param name="fields">(Optional) - valid , delimited options: icon, console, controller, developer, manufacturer, media, cpu, memory, graphics, sound, maxcontrollers, display, overview, youtube</param>
         /// <returns></returns>
-        public async Task<PlatformDataResponse> GetPlatformsByPlatformID(int[] id, string[] fields) => await GetPlatformsByPlatformID(string.Join(",", id.Cast<string>()), string.Join(",", fields));
+        public async Task<PlatformDataResponse> GetPlatformsByPlatformID(int[] id, string[] fields) => await GetPlatformsByPlatformID(string.Join(",", id.Select(i => i.ToString())), string.Join(",", fields));
        
         /// <summary>
         /// Fetch platforms list by id
@@ -245,7 +245,7 @@ namespace TeamShinkansen.Scrapers.TheGamesDB
         /// <param name="platformsId">(Required) - platform(s) id can be obtain from the above platforms api, supports , delimited list</param>
         /// <param name="filter">(Optional) - valid , delimited options: fanart, banner, boxart</param>
         /// <returns></returns>
-        public async Task<PlatformsImagesResponse> GetPlatformsImages(int[] platformsId, string filter = "") => await (GetPlatformsImages(string.Join(",", platformsId.Cast<string>())));
+        public async Task<PlatformsImagesResponse> GetPlatformsImages(int[] platformsId, string filter = "") => await (GetPlatformsImages(string.Join(",", platformsId.Select(i => i.ToString()))));
       
         /// <summary>
         /// Fetch Genres list

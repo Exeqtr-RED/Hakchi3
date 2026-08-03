@@ -92,14 +92,15 @@ namespace com.clusterrr.hakchi_gui.ModHub
         {
             if (hakchi.Shell.IsOnline && hakchi.Shell.Execute("[ -e /mod-recovery.flag ]") == 0)
             {
-                using (var tasker = new Tasker(this))
-                {
+                using var tasker = new Tasker(this);
+
                     tasker.AttachViews(new TaskerTaskbar(), new TaskerForm());
                     tasker.SetStatusImage(Resources.sign_sync);
                     tasker.SetTitle(Resources.Rebooting);
                     tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.Memboot));
                     tasker.Start();
-                }
+
+                
             }
         }
     }

@@ -236,131 +236,132 @@ namespace com.clusterrr.hakchi_gui
         {
             try
             {
-                using (StreamReader reader = new StreamReader(configStream))
-                {
+                using StreamReader reader = new StreamReader(configStream);
+
                     string line;
                     bool hitDescription = false;
                     var descriptionLines = new List<string>();
                     while ((line = reader.ReadLine()) != null)
                     {
-                        if (line == "[Description]")
-                        {
-                            hitDescription = true;
-                            if ((line = reader.ReadLine()) == "Text = ")
-                                continue;
-                        }
-                            
-                        if (hitDescription)
-                        {
-                            descriptionLines.Add(line);
-                        }
-
-                        else
-                        {
-                            int pos = line.IndexOf('=');
-                            if (pos <= 0)
-                                continue;
-                            var param = line.Substring(0, pos).Trim().ToLower();
-                            var value = line.Substring(pos + 1).Trim();
-                            if (param.Length <= 0)
-                                continue;
-
-                            switch (param)
-                            {
-                                case "exec":
-                                    Exec = value;
-                                    break;
-                                case "ceprefix":
-                                    CePrefix = value;
-                                    break;
-                                case "path":
-                                    if (string.IsNullOrEmpty(value))
-                                        ProfilePath = string.Empty;
-                                    else
-                                        try
-                                        {
-                                            ProfilePath = Path.GetDirectoryName(value).Replace("\\", "/").Replace("//", "/");
-                                        }
-                                        catch
-                                        {
-                                            System.Diagnostics.Trace.WriteLine($"Error parsing desktop file. Invalid profile path \"{value}\"");
-                                            ProfilePath = string.Empty;
-                                        }
-                                    break;
-                                case "name":
-                                    Name = value;
-                                    break;
-                                case "icon":
-                                    if (string.IsNullOrEmpty(value))
-                                    {
-                                        IconPath = string.Empty;
-                                        IconFilename = string.Empty;
-                                    }
-                                    else
-                                    {
-                                        try
-                                        {
-                                            IconPath = Path.GetDirectoryName(Path.GetDirectoryName(value)).Replace("\\", "/").Replace("//", "/");
-                                            IconFilename = Path.GetFileName(value);
-                                        }
-                                        catch
-                                        {
-                                            System.Diagnostics.Trace.WriteLine($"Error parsing desktop file. Invalid icon path \"{value}\"");
-                                            IconPath = string.Empty;
-                                            IconFilename = string.Empty;
-                                        }
-                                    }
-                                    break;
-                                case "code":
-                                    Code = value;
-                                    break;
-                                case "testid":
-                                    TestId = int.Parse(value);
-                                    break;
-                                case "status":
-                                    Status = value;
-                                    break;
-                                case "players":
-                                    Players = byte.Parse(value);
-                                    break;
-                                case "simultaneous":
-                                    Simultaneous = (bool)(int.Parse(value) != 0);
-                                    break;
-                                case "releasedate":
-                                    ReleaseDate = value;
-                                    break;
-                                case "savecount":
-                                    SaveCount = byte.Parse(value);
-                                    break;
-                                case "sortrawtitle":
-                                    SortName = value;
-                                    break;
-                                case "sortrawpublisher":
-                                    Publisher = value;
-                                    break;
-                                case "copyright":
-                                    Copyright = value;
-                                    break;
-                                case "sortrawgenre":
-                                    Genre = value;
-                                    break;
-                                case "index":
-                                    Index = value;
-                                    break;
-                                case "demo_time":
-                                    DemoTime = value;
-                                    break;
-                                case "country":
-                                    Country = value;
-                                    break;
-                                case "regiontag":
-                                    RegionTag = value;
-                                    break;
-                            }
-                        }
+                    if (line == "[Description]")
+                    {
+                    hitDescription = true;
+                    if ((line = reader.ReadLine()) == "Text = ")
+                    continue;
                     }
-                    description = String.Join("\r\n", descriptionLines);
-                }
+
+                    if (hitDescription)
+                    {
+                    descriptionLines.Add(line);
+                    }
+
+                    else
+                    {
+                    int pos = line.IndexOf('=');
+                    if (pos <= 0)
+                    continue;
+                    var param = line.Substring(0, pos).Trim().ToLower();
+                    var value = line.Substring(pos + 1).Trim();
+                    if (param.Length <= 0)
+                    continue;
+
+                    switch (param)
+                    {
+                    case "exec":
+                    Exec = value;
+                    break;
+                    case "ceprefix":
+                    CePrefix = value;
+                    break;
+                    case "path":
+                    if (string.IsNullOrEmpty(value))
+                    ProfilePath = string.Empty;
+                    else
+                    try
+                    {
+                    ProfilePath = Path.GetDirectoryName(value).Replace("\\", "/").Replace("//", "/");
+                    }
+                    catch
+                    {
+                    System.Diagnostics.Trace.WriteLine($"Error parsing desktop file. Invalid profile path \"{value}\"");
+                    ProfilePath = string.Empty;
+                    }
+                    break;
+                    case "name":
+                    Name = value;
+                    break;
+                    case "icon":
+                    if (string.IsNullOrEmpty(value))
+                    {
+                    IconPath = string.Empty;
+                    IconFilename = string.Empty;
+                    }
+                    else
+                    {
+                    try
+                    {
+                    IconPath = Path.GetDirectoryName(Path.GetDirectoryName(value)).Replace("\\", "/").Replace("//", "/");
+                    IconFilename = Path.GetFileName(value);
+                    }
+                    catch
+                    {
+                    System.Diagnostics.Trace.WriteLine($"Error parsing desktop file. Invalid icon path \"{value}\"");
+                    IconPath = string.Empty;
+                    IconFilename = string.Empty;
+                    }
+                    }
+                    break;
+                    case "code":
+                    Code = value;
+                    break;
+                    case "testid":
+                    TestId = int.Parse(value);
+                    break;
+                    case "status":
+                    Status = value;
+                    break;
+                    case "players":
+                    Players = byte.Parse(value);
+                    break;
+                    case "simultaneous":
+                    Simultaneous = (bool)(int.Parse(value) != 0);
+                    break;
+                    case "releasedate":
+                    ReleaseDate = value;
+                    break;
+                    case "savecount":
+                    SaveCount = byte.Parse(value);
+                    break;
+                    case "sortrawtitle":
+                    SortName = value;
+                    break;
+                    case "sortrawpublisher":
+                    Publisher = value;
+                    break;
+                    case "copyright":
+                    Copyright = value;
+                    break;
+                    case "sortrawgenre":
+                    Genre = value;
+                    break;
+                    case "index":
+                    Index = value;
+                    break;
+                    case "demo_time":
+                    DemoTime = value;
+                    break;
+                    case "country":
+                    Country = value;
+                    break;
+                    case "regiontag":
+                    RegionTag = value;
+                    break;
+                    }
+                    }
+                    }
+                    description = string.Join("\r\n", descriptionLines);
+
+                
             }
             catch (Exception ex)
             {

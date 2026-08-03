@@ -121,14 +121,15 @@ namespace com.clusterrr.hakchi_gui
                     if (m.Success && !string.IsNullOrEmpty(m.Groups[1].ToString()))
                     {
                         var bin = m.Groups[1].ToString();
-                        using (var fileStream = new MemoryStream())
-                        {
+                        using var fileStream = new MemoryStream();
+
                             reader.WriteEntryTo(fileStream);
                             fileStream.Position = 0;
                             var core = parseInfoFile(fileStream, bin);
                             if (core != null)
-                                cores[bin] = core;
-                        }
+                            cores[bin] = core;
+
+                        
                     }
                 }
             }
@@ -141,14 +142,15 @@ namespace com.clusterrr.hakchi_gui
             {
                 foreach (string file in hmod.LibretroInfo.Keys)
                 {
-                    using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(hmod.LibretroInfo[file])))
-                    {
+                    using var stream = new MemoryStream(Encoding.UTF8.GetBytes(hmod.LibretroInfo[file]));
+
                         var filename = Path.GetFileName(file);
                         var bin = filename.Substring(0, filename.IndexOf("_libretro.info"));
                         var core = parseInfoFile(stream, bin);
                         if (core != null)
-                            cores[bin] = core;
-                    }
+                        cores[bin] = core;
+
+                    
                 }
             }
 
@@ -157,14 +159,15 @@ namespace com.clusterrr.hakchi_gui
                 Directory.CreateDirectory(Path.Combine(Program.BaseDirectoryExternal, "info"));
             foreach (var file in Directory.EnumerateFiles(Path.Combine(Program.BaseDirectoryExternal, "info"), "*_libretro.info"))
             {
-                using (var stream = File.OpenRead(file))
-                {
+                using var stream = File.OpenRead(file);
+
                     var filename = Path.GetFileName(file);
                     var bin = filename.Substring(0, filename.IndexOf("_libretro.info"));
                     var core = parseInfoFile(stream, bin);
                     if (core != null)
-                        cores[bin] = core;
-                }
+                    cores[bin] = core;
+
+                
             }
 
             // add built-in cores

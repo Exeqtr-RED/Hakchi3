@@ -30,9 +30,10 @@ namespace com.clusterrr.hakchi_gui
     public partial class MainForm : Form
     {
         /// <summary>
-        /// The URL for the update metadata XML file
+        /// The URL for the update metadata XML file. Currently unused (autoupdate is disabled in this build),
+        /// kept here so the constant lives next to its siblings for easy re-enabling.
         /// </summary>
-        private static readonly string UPDATE_XML_URL = "https://teamshinkansen.github.io/xml/updates/update.xml";
+        private const string UPDATE_XML_URL = "https://teamshinkansen.github.io/xml/updates/update.xml";
         private static readonly string MOTD_URL = "https://teamshinkansen.github.io/motd.md";
         private static readonly string SFROM_TOOL_URL = "http://darkakuma.z-net.us/p/sfromtool.html";
         private static readonly string MotdFilename = Path.Combine(Program.BaseDirectoryExternal, "cache", "motd.md");
@@ -246,7 +247,7 @@ namespace com.clusterrr.hakchi_gui
                 }
                 new Motd(message).ShowDialog(this);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Trace.WriteLine("Could not show \"Message of the day\"");
             }
@@ -259,8 +260,8 @@ namespace com.clusterrr.hakchi_gui
 
             TempHelpers.doWithTempFolder((tempPath) =>
             {
-                using (var tasker = new Tasker(this))
-                {
+                using var tasker = new Tasker(this);
+
                     var hakchiTemp = Path.Combine(tempPath, "hakchi-latest.hmod");
                     var listTemp = Path.Combine(tempPath, "romfiles.xml");
                     var listOutput = Path.Combine(Program.BaseDirectoryExternal, "data", "romfiles.xml");
@@ -277,7 +278,8 @@ namespace com.clusterrr.hakchi_gui
                     tasker.AddTask(FileTasks.MoveFile(listTemp, listOutput, true, true));
 
                     tasker.Start();
-                }
+
+                
             });
         }
         private void UpdateMOTD()
@@ -405,15 +407,16 @@ namespace com.clusterrr.hakchi_gui
                 var result = MessageForm.Show(this, Resources.Warning, Resources.RecoveryModeCloseWarning, Resources.sign_life_buoy, new MessageForm.Button[] { MessageForm.Button.Yes, MessageForm.Button.No, MessageForm.Button.Cancel }, MessageForm.DefaultButton.Button1);
                 if (result == MessageForm.Button.Yes)
                 {
-                    using (var tasker = new Tasker(this))
-                    {
+                    using var tasker = new Tasker(this);
+
                         tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                         tasker.SetStatusImage(Resources.sign_sync);
                         tasker.SetTitle(Resources.Rebooting);
                         tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.Memboot));
                         tasker.AddTask(Tasker.Wait(1000, Resources.WaitingForDevice));
                         tasker.Start();
-                    }
+
+                    
                 }
                 else if (result == MessageForm.Button.Cancel)
                 {
@@ -741,19 +744,20 @@ namespace com.clusterrr.hakchi_gui
                 return;
             }
 
-            using (var tasker = new Tasks.Tasker(this))
-            {
+            using var tasker = new Tasks.Tasker(this);
+
                 var task = new Tasks.GameCacheTask();
                 tasker.AttachView(new Tasks.TaskerTaskbar());
                 tasker.AttachView(new Tasks.TaskerForm());
                 tasker.AddTask(task.UpdateLocal);
                 if (tasker.Start() == Tasks.Tasker.Conclusion.Success)
                 {
-                    Trace.WriteLine("Done refreshing local original games cache.");
-                    if (ConfigIni.Instance.AlwaysCopyOriginalGames && task.LoadedGames > 0)
-                        LoadGames();
+                Trace.WriteLine("Done refreshing local original games cache.");
+                if (ConfigIni.Instance.AlwaysCopyOriginalGames && task.LoadedGames > 0)
+                LoadGames();
                 }
-            }
+
+            
         }
 
         public void LoadGames(bool reloadFromFiles = true)
@@ -990,24 +994,25 @@ namespace com.clusterrr.hakchi_gui
 
         private void AddPreset(object sender, EventArgs e)
         {
-            using (var form = new StringInputForm()
+            using var form = new StringInputForm()
             {
                 Text = Resources.NewPreset,
                 Comments = Resources.InputPreset
-            })
-            {
+            };
+
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    var name = form.Value.Replace("=", " ");
-                    if (!string.IsNullOrEmpty(name))
-                    {
-                        SaveSelectedGames();
-                        ConfigIni.Instance.Presets[name] =
-                            Shared.ConcatArrays(ConfigIni.Instance.SelectedGames.ToArray(), ConfigIni.Instance.OriginalGames.ToArray()).ToList();
-                        LoadPresets();
-                    }
+                var name = form.Value.Replace("=", " ");
+                if (!string.IsNullOrEmpty(name))
+                {
+                SaveSelectedGames();
+                ConfigIni.Instance.Presets[name] =
+                Shared.ConcatArrays(ConfigIni.Instance.SelectedGames.ToArray(), ConfigIni.Instance.OriginalGames.ToArray()).ToList();
+                LoadPresets();
                 }
-            }
+                }
+
+            
         }
 
         private void SelectAll(bool selected = true)
@@ -1065,8 +1070,8 @@ namespace com.clusterrr.hakchi_gui
                     groupBoxArtSega.Enabled =
                     groupBoxArtNintendo.Enabled =
                     groupBoxGameInfo.Enabled = false;
-                labelID.Text = String.Empty;
-                labelSize.Text = String.Empty;
+                labelID.Text = string.Empty;
+                labelSize.Text = string.Empty;
                 textBoxName.Text = "";
                 textBoxSortName.Text = "";
 
@@ -1556,22 +1561,23 @@ namespace com.clusterrr.hakchi_gui
                 case GameImageType.MdSpine:
                     if (image.Size.Width == 182 && image.Size.Height == 216)
                     {
-                        using (var bImage = new SystemDrawingBitmap(image.Clone() as Bitmap))
-                        {
+                        using var bImage = new SystemDrawingBitmap(image.Clone() as Bitmap);
+
                             if (bImage.EmptyRow(0) && bImage.EmptyRow(215) && bImage.EmptyColumn(0) && bImage.EmptyColumn(181) && bImage.EmptyColumn(29) && bImage.EmptyColumn(30))
                             {
-                                using (var spine = bImage.Bitmap.Clone(new Rectangle(1, 1, 28, 214), PixelFormat.Format32bppArgb))
-                                using (var front = bImage.Bitmap.Clone(new Rectangle(31, 1, 150, 214), PixelFormat.Format32bppArgb))
-                                {
-                                    app.SetMdMini(spine, GameImageType.MdSpine);
-                                    app.SetMdMini(front, GameImageType.MdFront);
-                                }
+                            using (var spine = bImage.Bitmap.Clone(new Rectangle(1, 1, 28, 214), PixelFormat.Format32bppArgb))
+                            using (var front = bImage.Bitmap.Clone(new Rectangle(31, 1, 150, 214), PixelFormat.Format32bppArgb))
+                            {
+                            app.SetMdMini(spine, GameImageType.MdSpine);
+                            app.SetMdMini(front, GameImageType.MdFront);
+                            }
                             }
                             else
                             {
-                                app.SetMdMini(image, type, stretch: stretch);
+                            app.SetMdMini(image, type, stretch: stretch);
                             }
-                        }
+
+                        
                     }
                     else
                     {
@@ -1586,15 +1592,16 @@ namespace com.clusterrr.hakchi_gui
             var app = GetSelectedGame();
             if (app == null) return;
 
-            using (var googler = new ImageGooglerForm(app))
-            {
+            using var googler = new ImageGooglerForm(app);
+
                 if (googler.ShowDialog() == DialogResult.OK)
                 {
-                    app.Image = googler.Result;
-                    ShowSelected();
-                    timerCalculateGames.Enabled = true;
+                app.Image = googler.Result;
+                ShowSelected();
+                timerCalculateGames.Enabled = true;
                 }
-            }
+
+            
         }
 
         private void buttonSpine_Click(object sender, EventArgs e)
@@ -1602,35 +1609,36 @@ namespace com.clusterrr.hakchi_gui
             var app = GetSelectedGame();
             if (app == null) return;
 
-            using (var spineForm = new SpineForm(app))
-            {
+            using var spineForm = new SpineForm(app);
+
                 var logoPath = Path.Combine(app.BasePath, $"{app.Code}_logo.png");
 
                 if (File.Exists(logoPath))
                 {
-                    using (var file = File.OpenRead(logoPath))
-                        spineForm.ClearLogo = new Bitmap(file);
+                using (var file = File.OpenRead(logoPath))
+                spineForm.ClearLogo = new Bitmap(file);
                 }
 
                 if (spineForm.ShowDialog() == DialogResult.OK)
                 {
-                    if (spineForm.ClearLogo != null)
-                    {
-                        using (Bitmap cl = new Bitmap(spineForm.ClearLogo.Width, spineForm.ClearLogo.Height, PixelFormat.Format32bppArgb))
-                        using (var g = Graphics.FromImage(cl))
-                        {
-                            g.DrawImage(spineForm.ClearLogo, new Point(0, 0));
-                            cl.Save(logoPath, ImageFormat.Png);
-                        }
-                    }
-
-                    app.SetMdMini(spineForm.Spine as Bitmap, NesMenuElementBase.GameImageType.MdSpine);
-                    spineForm.Spine?.Dispose();
-                    spineForm.ClearLogo?.Dispose();
-                    ShowSelected();
-                    timerCalculateGames.Enabled = true;
+                if (spineForm.ClearLogo != null)
+                {
+                using (Bitmap cl = new Bitmap(spineForm.ClearLogo.Width, spineForm.ClearLogo.Height, PixelFormat.Format32bppArgb))
+                using (var g = Graphics.FromImage(cl))
+                {
+                g.DrawImage(spineForm.ClearLogo, new Point(0, 0));
+                cl.Save(logoPath, ImageFormat.Png);
                 }
-            }
+                }
+
+                app.SetMdMini(spineForm.Spine as Bitmap, NesMenuElementBase.GameImageType.MdSpine);
+                spineForm.Spine?.Dispose();
+                spineForm.ClearLogo?.Dispose();
+                ShowSelected();
+                timerCalculateGames.Enabled = true;
+                }
+
+            
         }
 
         private void textBoxName_TextChanged(object sender, EventArgs e)
@@ -2010,15 +2018,16 @@ namespace com.clusterrr.hakchi_gui
 
         bool UploadGames(bool exportGames = false)
         {
-            using (var tasker = new Tasks.Tasker(this, new Tasks.TaskerTaskbar(), new Tasks.TaskerTransferForm()))
-            {
+            using var tasker = new Tasks.Tasker(this, new Tasks.TaskerTaskbar(), new Tasks.TaskerTransferForm());
+
                 var syncTask = new Tasks.SyncTask();
                 syncTask.Games.AddRange(listViewGames.CheckedItems.Cast<ListViewItem>().
-                    Where(item => item.Tag is NesApplication).
-                    Select(item => item.Tag as NesApplication));
+                Where(item => item.Tag is NesApplication).
+                Select(item => item.Tag as NesApplication));
                 tasker.AddTask(exportGames ? (Tasks.Tasker.TaskFunc)syncTask.ExportGames : syncTask.UploadGames, 0);
                 return tasker.Start() == Tasker.Conclusion.Success;
-            }
+
+            
         }
 
 #if DUMPER
@@ -2081,8 +2090,8 @@ internal static
 #endif
         bool DoNand(MembootTasks.NandTasks task, string title, Form owner)
         {
-            using (Tasker tasker = new Tasker(owner))
-            {
+            using Tasker tasker = new Tasker(owner);
+
                 tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                 tasker.SetStatusImage(Resources.sign_cogs);
                 tasker.SetTitle(title);
@@ -2091,69 +2100,71 @@ internal static
 
                 switch (task)
                 {
-                    case MembootTasks.NandTasks.DumpNand:
-                        if (!DumpDialog(FileAccess.Write, "nand.bin", "bin", out dumpFilename))
-                            return false;
+                case MembootTasks.NandTasks.DumpNand:
+                if (!DumpDialog(FileAccess.Write, "nand.bin", "bin", out dumpFilename))
+                return false;
 
-                        tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.DumpNand, dumpPath: dumpFilename));
-                        break;
+                tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.DumpNand, dumpPath: dumpFilename));
+                break;
 
-                    case MembootTasks.NandTasks.DumpSystemPartition:
-                        if (!DumpDialog(FileAccess.Write, $"{systemSuggestedFilename}.hsqs", "hsqs", out dumpFilename, $"{Resources.SystemSoftwareBackup}|*.hsqs"))
-                            return false;
+                case MembootTasks.NandTasks.DumpSystemPartition:
+                if (!DumpDialog(FileAccess.Write, $"{systemSuggestedFilename}.hsqs", "hsqs", out dumpFilename, $"{Resources.SystemSoftwareBackup}|*.hsqs"))
+                return false;
 
-                        tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.DumpSystemPartition, dumpPath: dumpFilename));
-                        break;
+                tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.DumpSystemPartition, dumpPath: dumpFilename));
+                break;
 
-                    case MembootTasks.NandTasks.DumpUserPartition:
-                        if (!DumpDialog(FileAccess.Write, "user_data.tar", "tar", out dumpFilename, $"{Resources.UserDataBackup}|*.tar"))
-                            return false;
+                case MembootTasks.NandTasks.DumpUserPartition:
+                if (!DumpDialog(FileAccess.Write, "user_data.tar", "tar", out dumpFilename, $"{Resources.UserDataBackup}|*.tar"))
+                return false;
 
-                        tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.DumpUserPartition, dumpPath: dumpFilename));
-                        break;
+                tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.DumpUserPartition, dumpPath: dumpFilename));
+                break;
 
-                    case MembootTasks.NandTasks.FlashSystemPartition:
-                        if (!DumpDialog(FileAccess.Read, "system_software.hsqs", "hsqs", out dumpFilename, $"{Resources.SystemSoftwareBackup}|*.bin;*.bz2;*.gz;*.hsqs;*.tar;*.tgz;*.xz"))
-                            return false;
+                case MembootTasks.NandTasks.FlashSystemPartition:
+                if (!DumpDialog(FileAccess.Read, "system_software.hsqs", "hsqs", out dumpFilename, $"{Resources.SystemSoftwareBackup}|*.bin;*.bz2;*.gz;*.hsqs;*.tar;*.tgz;*.xz"))
+                return false;
 
-                        tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.FlashSystemPartition, dumpPath: dumpFilename));
-                        break;
+                tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.FlashSystemPartition, dumpPath: dumpFilename));
+                break;
 
-                    case MembootTasks.NandTasks.FlashUserPartition:
-                        if (!DumpDialog(FileAccess.Read, "user_data.tar", "tar", out dumpFilename, $"{Resources.UserDataBackup}|*.bz2;*.gz;*.hsqs;*.tar;*.xz"))
-                            return false;
+                case MembootTasks.NandTasks.FlashUserPartition:
+                if (!DumpDialog(FileAccess.Read, "user_data.tar", "tar", out dumpFilename, $"{Resources.UserDataBackup}|*.bz2;*.gz;*.hsqs;*.tar;*.xz"))
+                return false;
 
-                        tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.FlashUserPartition, dumpPath: dumpFilename));
-                        break;
+                tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.FlashUserPartition, dumpPath: dumpFilename));
+                break;
 
-                    case MembootTasks.NandTasks.FormatUserPartition:
-                        tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.FormatUserPartition));
-                        break;
+                case MembootTasks.NandTasks.FormatUserPartition:
+                tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.FormatUserPartition));
+                break;
 
-                    default:
-                        throw new ArgumentOutOfRangeException("task");
+                default:
+                throw new ArgumentOutOfRangeException("task");
                 }
                 return tasker.Start() == Tasker.Conclusion.Success;
-            }
+
+            
         }
 
         bool InstallHakchi(bool reset = false)
         {
-            using (var tasker = new Tasker(this))
-            {
+            using var tasker = new Tasker(this);
+
                 tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                 tasker.SetTitle(reset ? Resources.ResettingHakchi : Resources.InstallingHakchi);
                 tasker.SetStatusImage(reset ? Resources.sign_sync : Resources.sign_keyring);
                 if (reset)
                 {
-                    tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.ResetHakchi));
+                tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.ResetHakchi));
                 }
                 else
                 {
-                    tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.InstallHakchi));
+                tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.InstallHakchi));
                 }
                 return tasker.Start() == Tasker.Conclusion.Success;
-            }
+
+            
         }
 
         bool FormatSD()
@@ -2162,14 +2173,15 @@ internal static
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    using (var tasker = new Tasker(this))
-                    {
+                    using var tasker = new Tasker(this);
+
                         tasker.AttachViews(new TaskerTaskbar(), new TaskerForm());
                         tasker.SetStatusImage(Resources.sign_cogs);
                         tasker.SetTitle(Resources.FormattingSDCard);
                         tasker.AddTasks(dialog.GetTasks());
                         return tasker.Start() == Tasker.Conclusion.Success;
-                    }
+
+                    
                 }
             }
             return false;
@@ -2177,20 +2189,21 @@ internal static
 
         bool MembootCustomKernel()
         {
-            using (var tasker = new Tasker(this))
-            {
+            using var tasker = new Tasker(this);
+
                 tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                 tasker.SetStatusImage(Resources.sign_keyring);
                 tasker.SetTitle(Resources.Membooting);
                 tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.Memboot));
                 return tasker.Start() == Tasker.Conclusion.Success;
-            }
+
+            
         }
 
         public void AddGames(IEnumerable<string> files, bool asIs = false, Form parentForm = null)
         {
-            using (var tasker = new Tasks.Tasker(parentForm ?? this))
-            {
+            using var tasker = new Tasks.Tasker(parentForm ?? this);
+
                 tasker.AttachView(new Tasks.TaskerTaskbar());
                 tasker.AttachView(new Tasks.TaskerForm());
                 var task = new Tasks.AddGamesTask(listViewGames, files, asIs);
@@ -2198,42 +2211,44 @@ internal static
 
                 if (ConfigIni.Instance.EnableImportScraper && Program.TheGamesDBAPI != null)
                 {
-                    tasker.AddTask(task.ScrapeGames, 4);
+                tasker.AddTask(task.ScrapeGames, 4);
                 }
 
                 tasker.AddTask(task.UpdateListView);
 
                 if (tasker.Start() == Tasks.Tasker.Conclusion.Success)
                 {
-                    // Schedule recalculation
-                    timerCalculateGames.Enabled = true;
+                // Schedule recalculation
+                timerCalculateGames.Enabled = true;
                 }
                 else
                 {
-                    LoadGames(); // Reload all games (maybe process was terminated?)
+                LoadGames(); // Reload all games (maybe process was terminated?)
                 }
-            }
+
+            
         }
 
         bool Uninstall(bool ignoreBackupKernel = false)
         {
-            using (var tasker = new Tasker(this))
-            {
+            using var tasker = new Tasker(this);
+
                 tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                 tasker.SetStatusImage(Resources.sign_delete);
                 tasker.SetTitle(Resources.UninstallingHakchi);
                 tasker.AddTasks(new MembootTasks(
-                    MembootTasks.MembootTaskType.UninstallHakchi,
-                    ignoreBackupKernel: ignoreBackupKernel
+                MembootTasks.MembootTaskType.UninstallHakchi,
+                ignoreBackupKernel: ignoreBackupKernel
                 ));
                 return tasker.Start() == Tasker.Conclusion.Success;
-            }
+
+            
         }
 
         public bool InstallMods(string[] mods)
         {
-            using (var tasker = new Tasker(this))
-            {
+            using var tasker = new Tasker(this);
+
                 tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                 tasker.SetTitle(Resources.InstallingMods);
                 tasker.SetStatusImage(Resources.sign_brick);
@@ -2243,13 +2258,14 @@ internal static
                 tasker.AddTasks(new ModTasks(mods));
                 tasker.AddFinalTask(MembootTasks.BootHakchi);
                 return tasker.Start() == Tasker.Conclusion.Success;
-            }
+
+            
         }
 
         bool UninstallMods(string[] mods)
         {
-            using (var tasker = new Tasker(this))
-            {
+            using var tasker = new Tasker(this);
+
                 tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                 tasker.SetTitle(Resources.UninstallingMods);
                 tasker.SetStatusImage(Resources.sign_brick);
@@ -2259,7 +2275,8 @@ internal static
                 tasker.AddTasks(new ModTasks(null, mods));
                 tasker.AddFinalTask(MembootTasks.BootHakchi);
                 return tasker.Start() == Tasker.Conclusion.Success;
-            }
+
+            
         }
 
         private void uninstallToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2279,17 +2296,18 @@ internal static
 
             if (Tasks.MessageForm.Show(Resources.AreYouSure, tag == MembootTasks.MembootTaskType.FlashNormalUboot ? Resources.FlashUbootNormalQ : Resources.FlashUbootSDQ, Resources.sign_warning, new Tasks.MessageForm.Button[] { Tasks.MessageForm.Button.Yes, Tasks.MessageForm.Button.No }, Tasks.MessageForm.DefaultButton.Button1) == Tasks.MessageForm.Button.Yes)
             {
-                using (var tasker = new Tasker(this))
-                {
+                using var tasker = new Tasker(this);
+
                     tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                     tasker.SetTitle(Resources.FlashingUboot);
                     tasker.SetStatusImage(Resources.sign_cogs);
                     tasker.AddTasks(new MembootTasks(tag));
                     if (tasker.Start() == Tasker.Conclusion.Success)
-                        if (!ConfigIni.Instance.DisablePopups)
-                            Tasks.MessageForm.Show(Resources.FlashingUboot, Resources.Done, Resources.sign_check);
+                    if (!ConfigIni.Instance.DisablePopups)
+                    Tasks.MessageForm.Show(Resources.FlashingUboot, Resources.Done, Resources.sign_check);
 
-                }
+
+                
             }
         }
 
@@ -2363,14 +2381,15 @@ internal static
 
         private void membootOriginalKernelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var tasker = new Tasker(this))
-            {
+            using var tasker = new Tasker(this);
+
                 tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                 tasker.SetStatusImage(Resources.sign_keyring);
                 tasker.SetTitle(((ToolStripMenuItem)sender).Text);
                 tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.MembootOriginal));
                 tasker.Start();
-            }
+
+            
         }
 
         private void membootCustomKernelToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2386,16 +2405,17 @@ internal static
                 forceRecoveryReload = (Control.ModifierKeys == Keys.Shift) || (Tasks.MessageForm.Show(this, Resources.AlreadyInRecovery, Resources.AlreadyInRecoveryQ, Resources.sign_question, new Tasks.MessageForm.Button[] { Tasks.MessageForm.Button.Yes, Tasks.MessageForm.Button.No }, Tasks.MessageForm.DefaultButton.Button1) == Tasks.MessageForm.Button.Yes);
             }
 
-            using (var tasker = new Tasker(this))
-            {
+            using var tasker = new Tasker(this);
+
                 tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                 tasker.SetStatusImage(Resources.sign_life_buoy);
                 tasker.SetTitle(((ToolStripMenuItem)sender).Text);
                 tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.MembootRecovery, forceRecoveryReload: forceRecoveryReload));
                 tasker.AddTask(ShellTasks.ShellCommand("touch /user-recovery.flag"));
                 if (tasker.Start() == Tasker.Conclusion.Success)
-                    Tasks.MessageForm.Show(Resources.RecoveryKernel, Resources.RecoveryModeMessage, Resources.sign_life_buoy);
-            }
+                Tasks.MessageForm.Show(Resources.RecoveryKernel, Resources.RecoveryModeMessage, Resources.sign_life_buoy);
+
+            
         }
 
         private void resetToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2414,19 +2434,20 @@ internal static
 
             if (Tasks.MessageForm.Show(this, Resources.Warning, Resources.FactoryResetQ, Resources.sign_warning, new MessageForm.Button[] { MessageForm.Button.Yes, MessageForm.Button.No }, MessageForm.DefaultButton.Button1) == MessageForm.Button.Yes)
             {
-                using (var tasker = new Tasker(this))
-                {
+                using var tasker = new Tasker(this);
+
                     tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                     tasker.SetStatusImage(Resources.sign_delete);
                     tasker.SetTitle(((ToolStripMenuItem)sender).Text);
                     tasker.AddTasks(new MembootTasks(
-                        MembootTasks.MembootTaskType.FactoryReset,
-                        ignoreBackupKernel: ignoreBackupKernel
+                    MembootTasks.MembootTaskType.FactoryReset,
+                    ignoreBackupKernel: ignoreBackupKernel
                     ));
                     if (tasker.Start() == Tasker.Conclusion.Success)
-                        if (!ConfigIni.Instance.DisablePopups)
-                            Tasks.MessageForm.Show(Resources.Done, Resources.FactoryResetNote, Resources.sign_check);
-                }
+                    if (!ConfigIni.Instance.DisablePopups)
+                    Tasks.MessageForm.Show(Resources.Done, Resources.FactoryResetNote, Resources.sign_check);
+
+                
             }
         }
 
@@ -2437,55 +2458,58 @@ internal static
 
         private void installModules(string[] add = null)
         {
-            using (var form = new Hmod.SelectForm(false, true, add))
-            {
+            using var form = new Hmod.SelectForm(false, true, add);
+
                 form.Text = Resources.SelectModsInstall;
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    List<string> hmods = new List<string>();
-                    foreach (ListViewItem item in form.listViewHmods.CheckedItems)
-                    {
-                        hmods.Add(((Hmod.Hmod)item.Tag).RawName);
-                    }
-                    if (hmods.Count == 0) return;
-                    if (InstallMods(hmods.ToArray()))
-                    {
-                        if (!ConfigIni.Instance.DisablePopups)
-                            Tasks.MessageForm.Show(Resources.Wow, Resources.Done, Resources.sign_check);
-                    }
+                List<string> hmods = new List<string>();
+                foreach (ListViewItem item in form.listViewHmods.CheckedItems)
+                {
+                hmods.Add(((Hmod.Hmod)item.Tag).RawName);
                 }
-            }
+                if (hmods.Count == 0) return;
+                if (InstallMods(hmods.ToArray()))
+                {
+                if (!ConfigIni.Instance.DisablePopups)
+                Tasks.MessageForm.Show(Resources.Wow, Resources.Done, Resources.sign_check);
+                }
+                }
+
+            
         }
 
         private void uninstallModulesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var form = new Hmod.SelectForm(true, false))
-            {
+            using var form = new Hmod.SelectForm(true, false);
+
                 form.Text = Resources.SelectModsUninstall;
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    List<string> hmods = new List<string>();
-                    foreach (ListViewItem item in form.listViewHmods.CheckedItems)
-                    {
-                        hmods.Add(((Hmod.Hmod)item.Tag).RawName);
-                    }
-                    if (hmods.Count == 0) return;
-                    if (UninstallMods(hmods.ToArray()))
-                    {
-                        if (!ConfigIni.Instance.DisablePopups)
-                            Tasks.MessageForm.Show(Resources.Wow, Resources.Done, Resources.sign_check);
-                    }
+                List<string> hmods = new List<string>();
+                foreach (ListViewItem item in form.listViewHmods.CheckedItems)
+                {
+                hmods.Add(((Hmod.Hmod)item.Tag).RawName);
                 }
-            }
+                if (hmods.Count == 0) return;
+                if (UninstallMods(hmods.ToArray()))
+                {
+                if (!ConfigIni.Instance.DisablePopups)
+                Tasks.MessageForm.Show(Resources.Wow, Resources.Done, Resources.sign_check);
+                }
+                }
+
+            
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var about = new AboutBox())
-            {
+            using var about = new AboutBox();
+
                 about.Text = aboutToolStripMenuItem.Text.Replace("&", "");
                 about.ShowDialog();
-            }
+
+            
         }
 
         private void openWebsiteLink(Object sender, EventArgs e) => Process.Start(new ProcessStartInfo((string)((ToolStripMenuItem)sender).Tag) { UseShellExecute = true });
@@ -2631,16 +2655,17 @@ internal static
         {
             var menuItem = sender as ToolStripMenuItem;
             var cmdLineType = (ConfigIni.ExtraCmdLineTypes)byte.Parse(menuItem.Tag.ToString());
-            using (var form = new StringInputForm()
+            using var form = new StringInputForm()
             {
                 Text = Resources.ExtraArgsTitle + " (" + menuItem.Text + ")",
                 Comments = Resources.ExtraArgsInfo,
                 Value = ConfigIni.Instance.ExtraCommandLineArguments[cmdLineType]
-            })
-            {
+            };
+
                 if (form.ShowDialog() == DialogResult.OK)
-                    ConfigIni.Instance.ExtraCommandLineArguments[cmdLineType] = form.Value;
-            }
+                ConfigIni.Instance.ExtraCommandLineArguments[cmdLineType] = form.Value;
+
+            
         }
 
         private void dragEnter(object sender, DragEventArgs e)
@@ -2717,15 +2742,16 @@ internal static
                     bool isMod = false;
                     if (ext == ".7z")
                     {
-                        using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(file))
-                        {
+                        using var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(file);
+
                             foreach (var f in extractor.Entries)
-                                if (Path.GetExtension(f.Key).ToLower() == ".hmod")
-                                {
-                                    isMod = true;
-                                    break;
-                                }
-                        }
+                            if (Path.GetExtension(f.Key).ToLower() == ".hmod")
+                            {
+                            isMod = true;
+                            break;
+                            }
+
+                        
                     }
                     else
                     {
@@ -2967,10 +2993,11 @@ internal static
                         if (item.Tag is NesApplication)
                             gameNames[(item.Tag as NesApplication).Code] = (item.Tag as NesApplication).Name;
                     }
-                    using (var form = new SaveStateManager(gameNames))
-                    {
+                    using var form = new SaveStateManager(gameNames);
+
                         form.ShowDialog();
-                    }
+
+                    
                 }
             }
             catch (Exception ex)
@@ -2998,8 +3025,8 @@ internal static
                 {
                     StartInfo = new ProcessStartInfo()
                     {
-                        FileName = String.Format(ConfigIni.Instance.FtpCommand, "root", "clover", ip, port),
-                        Arguments = String.Format(ConfigIni.Instance.FtpArguments, "root", "clover", ip, port)
+                        FileName = string.Format(ConfigIni.Instance.FtpCommand, "root", "clover", ip, port),
+                        Arguments = string.Format(ConfigIni.Instance.FtpArguments, "root", "clover", ip, port)
                     }
                 }.Start();
             }
@@ -3035,8 +3062,8 @@ internal static
                 {
                     StartInfo = new ProcessStartInfo()
                     {
-                        FileName = String.Format(ConfigIni.Instance.TelnetCommand, ip, port),
-                        Arguments = String.Format(ConfigIni.Instance.TelnetArguments, ip, port)
+                        FileName = string.Format(ConfigIni.Instance.TelnetCommand, ip, port),
+                        Arguments = string.Format(ConfigIni.Instance.TelnetArguments, ip, port)
                     }
                 }.Start();
             }
@@ -3312,14 +3339,15 @@ internal static
         private void openFoldersManager()
         {
             SaveConfig();
-            using (var tasker = new Tasker(this))
-            {
+            using var tasker = new Tasker(this);
+
                 var task = new Tasks.SyncTask();
                 task.Games.AddRange(listViewGames.CheckedItems.OfType<ListViewItem>()
-                    .Where(item => item.Tag is NesApplication)
-                    .Select(item => item.Tag as NesApplication));
+                .Where(item => item.Tag is NesApplication)
+                .Select(item => item.Tag as NesApplication));
                 task.ShowFoldersManager(tasker, task.Games);
-            }
+
+            
         }
 
         private void changeBootImageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3338,38 +3366,39 @@ internal static
                         Tasks.MessageForm.Show(this, Resources.Warning, Resources.CannotProceedCannotInteract, Resources.sign_ban);
                         return;
                     }
-                    using (OpenFileDialog ofdPng = new OpenFileDialog())
-                    {
+                    using OpenFileDialog ofdPng = new OpenFileDialog();
+
                         ofdPng.Filter = $"{Resources.Images}|*.bmp;*.gif;*.jpg;*.jpeg;*.png;*.tif;*.tiff";
                         if (ofdPng.ShowDialog(this) != DialogResult.OK) return;
 
                         string imageFile = ofdPng.FileName;
                         using (Image image = Image.FromFile(imageFile))
                         {
-                            if (Path.GetExtension(imageFile) != ".png" || image.Height != 720 || image.Width != 1280)
-                            {
-                                var outImage = Shared.ResizeImage(image, PixelFormat.Format24bppRgb, null, 1280, 720, true, false, true, true);
-                                imageFile = Shared.PathCombine(Path.GetTempPath(), "hakchi-temp", "tempBootImage.png");
-                                try
-                                {
-                                    Directory.CreateDirectory(Path.GetDirectoryName(imageFile));
-                                    File.Delete(imageFile);
-                                }
-                                catch { }
-                                outImage.Save(imageFile, ImageFormat.Png);
-                            }
+                        if (Path.GetExtension(imageFile) != ".png" || image.Height != 720 || image.Width != 1280)
+                        {
+                        var outImage = Shared.ResizeImage(image, PixelFormat.Format24bppRgb, null, 1280, 720, true, false, true, true);
+                        imageFile = Shared.PathCombine(Path.GetTempPath(), "hakchi-temp", "tempBootImage.png");
+                        try
+                        {
+                        Directory.CreateDirectory(Path.GetDirectoryName(imageFile));
+                        File.Delete(imageFile);
+                        }
+                        catch { }
+                        outImage.Save(imageFile, ImageFormat.Png);
+                        }
                         }
 
                         hakchi.Shell.Execute("hakchi unset cfg_boot_logo; cat > \"$(hakchi get rootfs)/etc/boot.png\"", File.OpenRead(imageFile));
                         bool usbHost = hakchi.Shell.ExecuteSimple("if [ -d /media/hakchi/ ]; then echo 1; else echo 0; fi;").Equals("1");
                         if (usbHost)
                         {
-                            hakchi.Shell.Execute("cat > \"/media/hakchi/boot.png\"", File.OpenRead(imageFile));
+                        hakchi.Shell.Execute("cat > \"/media/hakchi/boot.png\"", File.OpenRead(imageFile));
                         }
 
                         if (!ConfigIni.Instance.DisablePopups)
-                            Tasks.MessageForm.Show(Resources.Wow, Resources.Done, Resources.sign_check);
-                    }
+                        Tasks.MessageForm.Show(Resources.Wow, Resources.Done, Resources.sign_check);
+
+                    
                 }
             }
             catch (Exception ex)
@@ -3448,53 +3477,56 @@ internal static
                 return;
 
             SaveConfig();
-            using (SelectCoreDialog selectCoreDialog = new SelectCoreDialog())
-            {
+            using SelectCoreDialog selectCoreDialog = new SelectCoreDialog();
+
                 selectCoreDialog.Games.AddRange(listViewGames.SelectedItems.Cast<ListViewItem>().
-                    Select(item => item.Tag).
-                    Where(tag => tag != null && tag is NesApplication).
-                    Select(tag => tag as NesApplication));
+                Select(item => item.Tag).
+                Where(tag => tag != null && tag is NesApplication).
+                Select(tag => tag as NesApplication));
                 if (selectCoreDialog.Games.Count == 0)
-                    return;
+                return;
                 if (selectCoreDialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (selectCoreDialog.Modified)
-                    {
-                        SaveConfig();
-                        LoadGames(false);
-                    }
+                if (selectCoreDialog.Modified)
+                {
+                SaveConfig();
+                LoadGames(false);
                 }
-            }
+                }
+
+            
 
         }
 
         private void addCustomAppToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (NewCustomGameForm customGameForm = new NewCustomGameForm())
-            {
+            using NewCustomGameForm customGameForm = new NewCustomGameForm();
+
                 if (customGameForm.ShowDialog(this) == DialogResult.OK)
                 {
-                    SelectAll(false);
+                SelectAll(false);
 
-                    var newGroup = listViewGames.Groups.OfType<ListViewGroup>().Where(group => group.Header == Resources.ListCategoryNew).First();
-                    var item = new ListViewItem(customGameForm.NewApp.Name);
-                    item.Group = newGroup;
-                    item.Tag = customGameForm.NewApp;
-                    item.Checked = true;
-                    item.Selected = true;
+                var newGroup = listViewGames.Groups.OfType<ListViewGroup>().Where(group => group.Header == Resources.ListCategoryNew).First();
+                var item = new ListViewItem(customGameForm.NewApp.Name);
+                item.Group = newGroup;
+                item.Tag = customGameForm.NewApp;
+                item.Checked = true;
+                item.Selected = true;
 
-                    listViewGames.Items.Add(item);
-                    listViewGames.EnsureVisible(item.Index);
+                listViewGames.Items.Add(item);
+                listViewGames.EnsureVisible(item.Index);
                 }
-            }
+
+            
         }
 
         private void prepareArtDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var selectSystemDialog = new SelectSystemDialog())
-            {
+            using var selectSystemDialog = new SelectSystemDialog();
+
                 selectSystemDialog.ShowDialog();
-            }
+
+            
         }
 
         private void rebootToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3515,17 +3547,18 @@ internal static
                     }
                 }
 
-                using (var tasker = new Tasker(this))
-                {
+                using var tasker = new Tasker(this);
+
                     tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                     tasker.SetStatusImage(Resources.sign_sync);
                     tasker.SetTitle(Resources.Rebooting);
                     if (justBoot)
-                        tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.Memboot));
+                    tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.Memboot));
                     else
-                        tasker.AddTask(Tasks.ShellTasks.Reboot);
+                    tasker.AddTask(Tasks.ShellTasks.Reboot);
                     tasker.Start();
-                }
+
+                
             }
         }
 
@@ -3563,15 +3596,16 @@ internal static
             if (!DumpDialog(FileAccess.Write, "kernel.img", "img", out dumpFilename, $"{Resources.KernelDump} (*.img)|*.img"))
                 return;
 
-            using (var tasker = new Tasker(this))
-            {
+            using var tasker = new Tasker(this);
+
                 tasker.AttachViews(new TaskerTaskbar(), new TaskerForm());
                 tasker.SetStatusImage(Resources.sign_cogs);
                 tasker.SetTitle(Resources.DumpingKernel);
                 tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.DumpStockKernel, dumpPath: dumpFilename));
                 if (tasker.Start() == Tasker.Conclusion.Success)
-                    MessageForm.Show(this, Resources.DumpOriginalKernelCompleteTitle, Resources.DumpOriginalKernelCompleteMessage, Resources.sign_check);
-            }
+                MessageForm.Show(this, Resources.DumpOriginalKernelCompleteTitle, Resources.DumpOriginalKernelCompleteMessage, Resources.sign_check);
+
+            
         }
 
         private void convertSNESROMSToSFROMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3637,14 +3671,14 @@ internal static
 
         private void generateModulesReportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var sfd = new SaveFileDialog()
+            using var sfd = new SaveFileDialog()
             {
                 Filter = "HTML File|*.html",
                 FileName = "hmod_audit.html"
-            })
-            {
+            };
+
                 if (sfd.ShowDialog(this) != DialogResult.OK)
-                    return;
+                return;
 
                 var installedMods = Hmod.Hmod.GetMods(true, null, this).OrderBy(o => o.RawName).ToList();
                 var availableMods = Hmod.Hmod.GetMods(false, null, this).OrderBy(o => o.RawName).ToList();
@@ -3653,14 +3687,14 @@ internal static
 
                 if (hakchi.CanInteract)
                 {
-                    outLines.Add("<h1>Installed Mods</h1>");
-                    outLines.Add("<div class=\"ModList\">");
-                    addModInfoToReport(ref outLines, ref installedMods);
-                    outLines.Add("</div>");
+                outLines.Add("<h1>Installed Mods</h1>");
+                outLines.Add("<div class=\"ModList\">");
+                addModInfoToReport(ref outLines, ref installedMods);
+                outLines.Add("</div>");
                 }
                 else
                 {
-                    outLines.Add("<h1>System Not Online</h1>");
+                outLines.Add("<h1>System Not Online</h1>");
                 }
 
                 outLines.Add("<h1>Available Mods</h1>");
@@ -3668,8 +3702,9 @@ internal static
                 addModInfoToReport(ref outLines, ref availableMods);
                 outLines.Add("</div>");
 
-                File.WriteAllText(sfd.FileName, Resources.mod_report_template.Replace("<body></body>", $"<body>{String.Join("", outLines.ToArray())}</body>"));
-            }
+                File.WriteAllText(sfd.FileName, Resources.mod_report_template.Replace("<body></body>", $"<body>{string.Join("", outLines.ToArray())}</body>"));
+
+            
         }
 
         private List<ToolStripMenuItem> repoMenuItems = new List<ToolStripMenuItem>();
@@ -3725,12 +3760,13 @@ internal static
                         var repo = new ModHub.Repository.Repository(url);
                         if (repo.LoadTasker(this) != null)
                         {
-                            using (var hub = new ModHub.ModHubForm())
-                            {
+                            using var hub = new ModHub.ModHubForm();
+
                                 hub.Text = unboxed.Text;
                                 hub.LoadData(repo);
                                 hub.ShowDialog(this);
-                            }
+
+                            
                         }
                     }
                 }
@@ -3746,22 +3782,23 @@ internal static
         {
             if (hakchi.Shell.IsOnline || WaitingShellForm.WaitForDevice(this))
             {
-                using (var sfd = new SaveFileDialog() { Filter = "Text Files|*.txt" })
-                {
+                using var sfd = new SaveFileDialog() { Filter = "Text Files|*.txt" };
+
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
-                        using (var outputFile = File.Create(sfd.FileName))
-                        using (var tasker = new Tasks.Tasker(this))
-                        {
-                            tasker.AttachView(new TaskerTaskbar());
-                            tasker.AttachView(new TaskerForm());
-                            tasker.AddTask(ShellTasks.ShellCommand("dmesg", null, outputFile, outputFile));
-                            tasker.Start();
-                            outputFile.Close();
-                            Tasks.MessageForm.Show(Resources.Wow, Resources.Done, Resources.sign_check);
-                        }
+                    using (var outputFile = File.Create(sfd.FileName))
+                    using (var tasker = new Tasks.Tasker(this))
+                    {
+                    tasker.AttachView(new TaskerTaskbar());
+                    tasker.AttachView(new TaskerForm());
+                    tasker.AddTask(ShellTasks.ShellCommand("dmesg", null, outputFile, outputFile));
+                    tasker.Start();
+                    outputFile.Close();
+                    Tasks.MessageForm.Show(Resources.Wow, Resources.Done, Resources.sign_check);
                     }
-                }
+                    }
+
+                
             }
         }
 
@@ -3774,42 +3811,44 @@ internal static
 
             listViewGames.SelectedItems.Clear();
 
-            using (var tasker = new Tasks.Tasker(this))
-            {
+            using var tasker = new Tasks.Tasker(this);
+
 
                 tasker.AttachView(new TaskerTaskbar());
                 tasker.AttachView(new TaskerForm());
                 tasker.SetTitle(Resources.ImportGames);
                 if (!hakchi.Shell.IsOnline)
                 {
-                    tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.MembootRecovery).Tasks);
-                    tasker.AddTasks(ShellTasks.MountBase);
-                    tasker.AddTasks(ShellTasks.CheckExternalStorage);
+                tasker.AddTasks(new MembootTasks(MembootTasks.MembootTaskType.MembootRecovery).Tasks);
+                tasker.AddTasks(ShellTasks.MountBase);
+                tasker.AddTasks(ShellTasks.CheckExternalStorage);
                 }
                 tasker.AddTask(GameImporterForm.FindGamesTask(foundGames));
                 if (tasker.Start() == Conclusion.Success)
                 {
-                    using (var form = new GameImporterForm(foundGames.Values.ToList()))
-                    {
-                        form.ShowDialog();
-                        gameCopied = form.gameCopied;
-                    }
+                using var form = new GameImporterForm(foundGames.Values.ToList());
+
+                    form.ShowDialog();
+                    gameCopied = form.gameCopied;
+
+                
                 }
 
                 if (gameCopied)
                 {
-                    LoadGames(true);
+                LoadGames(true);
                 }
                 else
                 {
-                    previousSelected.ForEach(item => item.Selected = true);
+                previousSelected.ForEach(item => item.Selected = true);
                 }
 
                 if (!online && hakchi.Shell.IsOnline)
                 {
-                    ShellTasks.Reboot(null);
+                ShellTasks.Reboot(null);
                 }
-            }
+
+            
         }
 
         private void MenuStrip_MenuActivate(object sender, EventArgs e)
@@ -3835,8 +3874,8 @@ internal static
 
             TempHelpers.doWithTempFolder((tempPath) =>
             {
-                using (var tasker = new Tasker(this))
-                {
+                using var tasker = new Tasker(this);
+
                     var hakchiTemp = Path.Combine(tempPath, "hakchi-latest.hmod");
                     tasker.AttachViews(new Tasks.TaskerTaskbar(), new Tasks.TaskerForm());
                     tasker.SetStatusImage(Resources.sign_cogs);
@@ -3844,7 +3883,8 @@ internal static
                     tasker.AddTasks(WebClientTasks.DownloadFile(hakchi.latestHmodUrl, hakchiTemp, true, ModifierKeys != Keys.Shift, hakchi.Hmod.Get().LastModified));
                     tasker.AddTask(FileTasks.MoveFile(hakchiTemp, hakchi.latestHmodFile, true, true));
                     tasker.Start();
-                }
+
+                
             });
         }
 
@@ -4032,47 +4072,48 @@ internal static
                 return;
 
             SaveConfig();
-            using (ScraperForm scraperForm = new ScraperForm()
+            using ScraperForm scraperForm = new ScraperForm()
             {
 
-            })
-            {
+            };
+
                 scraperForm.Games.AddRange(listViewGames.SelectedItems.Cast<ListViewItem>().
-                    Select(item => item.Tag).
-                    Where(tag => tag != null && tag is NesApplication).
-                    Select(tag => tag as NesApplication));
+                Select(item => item.Tag).
+                Where(tag => tag != null && tag is NesApplication).
+                Select(tag => tag as NesApplication));
 
                 if (scraperForm.Games.Count == 0)
-                    return;
+                return;
 
                 scraperForm.StartPosition = FormStartPosition.CenterParent;
                 if (scraperForm.ShowDialog(this) == DialogResult.OK)
                 {
-                    using (var tasker = new Tasker(this))
-                    {
-                        tasker.AttachViews(new TaskerTaskbar(), new TaskerForm());
-                        tasker.SetStatusImage(Resources.sign_sync);
-                        tasker.SetTitle(Resources.ApplyingChanges);
+                using (var tasker = new Tasker(this))
+                {
+                tasker.AttachViews(new TaskerTaskbar(), new TaskerForm());
+                tasker.SetStatusImage(Resources.sign_sync);
+                tasker.SetTitle(Resources.ApplyingChanges);
 
-                        foreach (var result in scraperForm.Results)
-                        {
-                            tasker.AddTask(ApplyScraperData(result));
-                        }
-
-                        tasker.Start();
-                    }
-
-                    listViewGames.BeginUpdate();
-                    LoadGames(false);
-
-                    foreach (ListViewItem item in listViewGames.Items)
-                    {
-                        item.Selected = scraperForm.Games.Contains(item.Tag);
-                    }
-
-                    listViewGames.EndUpdate();
+                foreach (var result in scraperForm.Results)
+                {
+                tasker.AddTask(ApplyScraperData(result));
                 }
-            }
+
+                tasker.Start();
+                }
+
+                listViewGames.BeginUpdate();
+                LoadGames(false);
+
+                foreach (ListViewItem item in listViewGames.Items)
+                {
+                item.Selected = scraperForm.Games.Contains(item.Tag);
+                }
+
+                listViewGames.EndUpdate();
+                }
+
+            
         }
 
         private void listViewGames_Resize(object sender, EventArgs e)
@@ -4101,31 +4142,32 @@ internal static
         {
             if (listViewGames.SelectedItems.Count > 0)
             {
-                using (var prefix = new StringInputForm()
+                using var prefix = new StringInputForm()
                 {
                     Text = Resources.EnterAPrefix,
                     Comments = Resources.AddPrefixMessage
-                })
-                {
+                };
+
                     if (prefix.ShowDialog() == DialogResult.OK && prefix.Value != null && prefix.Value.Trim().Length > 0)
                     {
-                        foreach (var game in listViewGames.SelectedItems.Cast<ListViewItem>())
-                        {
-                            if (game.Tag != null && game.Tag is NesApplication)
-                            {
-                                var tag = (NesApplication)(game.Tag);
-                                tag.Name = $"{(prefix.Value ?? "").Trim()}: {tag.Name.Trim()}";
-                                tag.Desktop.SortName = $"{(prefix.Value ?? "").Trim().ToLower()}: {tag.SortName.Trim().ToLower()}";
-                                tag.Save();
-                                game.Text = tag.Name;
-                            }
-
-                        }
-                        listViewGames.BeginUpdate();
-                        LoadGames(false);
-                        listViewGames.EndUpdate();
+                    foreach (var game in listViewGames.SelectedItems.Cast<ListViewItem>())
+                    {
+                    if (game.Tag != null && game.Tag is NesApplication)
+                    {
+                    var tag = (NesApplication)(game.Tag);
+                    tag.Name = $"{(prefix.Value ?? "").Trim()}: {tag.Name.Trim()}";
+                    tag.Desktop.SortName = $"{(prefix.Value ?? "").Trim().ToLower()}: {tag.SortName.Trim().ToLower()}";
+                    tag.Save();
+                    game.Text = tag.Name;
                     }
-                }
+
+                    }
+                    listViewGames.BeginUpdate();
+                    LoadGames(false);
+                    listViewGames.EndUpdate();
+                    }
+
+                
             }
         }
 
@@ -4133,41 +4175,42 @@ internal static
         {
             if (listViewGames.SelectedItems.Count > 0)
             {
-                using (var prefix = new StringInputForm()
+                using var prefix = new StringInputForm()
                 {
                     Text = Resources.EnterAPrefix,
                     Comments = Resources.RemovePrefixMessage
-                })
-                {
+                };
+
                     if (prefix.ShowDialog() == DialogResult.OK && prefix.Value != null && prefix.Value.Trim().Length > 0)
                     {
-                        var formattedPrefix = $"{(prefix.Value ?? "").Trim()}: ";
-                        foreach (var game in listViewGames.SelectedItems.Cast<ListViewItem>())
-                        {
-                            if (game.Tag != null && game.Tag is NesApplication)
-                            {
-                                var tag = (NesApplication)(game.Tag);
+                    var formattedPrefix = $"{(prefix.Value ?? "").Trim()}: ";
+                    foreach (var game in listViewGames.SelectedItems.Cast<ListViewItem>())
+                    {
+                    if (game.Tag != null && game.Tag is NesApplication)
+                    {
+                    var tag = (NesApplication)(game.Tag);
 
-                                if (tag.Name.StartsWith(formattedPrefix))
-                                {
-                                    tag.Name = tag.Name.Substring(formattedPrefix.Length);
-                                }
-
-                                if (tag.Desktop.SortName.StartsWith(formattedPrefix.ToLower()))
-                                {
-                                    tag.Desktop.SortName = tag.Desktop.SortName.Substring(formattedPrefix.Length);
-                                }
-
-                                tag.Save();
-                                game.Text = tag.Name;
-                            }
-
-                        }
-                        listViewGames.BeginUpdate();
-                        LoadGames(false);
-                        listViewGames.EndUpdate();
+                    if (tag.Name.StartsWith(formattedPrefix))
+                    {
+                    tag.Name = tag.Name.Substring(formattedPrefix.Length);
                     }
-                }
+
+                    if (tag.Desktop.SortName.StartsWith(formattedPrefix.ToLower()))
+                    {
+                    tag.Desktop.SortName = tag.Desktop.SortName.Substring(formattedPrefix.Length);
+                    }
+
+                    tag.Save();
+                    game.Text = tag.Name;
+                    }
+
+                    }
+                    listViewGames.BeginUpdate();
+                    LoadGames(false);
+                    listViewGames.EndUpdate();
+                    }
+
+                
             }
         }
 

@@ -11,18 +11,23 @@ namespace com.clusterrr.hakchi_gui
         public AboutBox()
         {
             InitializeComponent();
-            this.Text = String.Format("About {0}", AssemblyTitle);
+            this.Text = string.Format("About {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Version {0}", Shared.AppDisplayVersion);
-            this.labelGitCommit.Text = String.Format("Git Commit {0}", Shared.GitCommit);
-            this.labelGitTag.Text = String.Format("Git Tag {0}", Shared.GitTag ?? "Unknown");
+            this.labelVersion.Text = string.Format("Version {0}", Shared.AppDisplayVersion);
+            this.labelGitCommit.Text = string.Format("Git Commit {0}", Shared.GitCommit);
+            this.labelGitTag.Text = string.Format("Git Tag {0}", Shared.GitTag ?? "Unknown");
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            // WinForms TextBox.Multiline on Windows requires \r\n line endings to render
+            // line breaks. The AssemblyDescription attribute is copied verbatim from
+            // <Description>...</Description> in the .csproj, which uses LF-only endings
+            // (see .gitattributes: *.csproj text eol=lf). Normalize to \r\n here so the
+            // AboutBox renders multi-line credits correctly.
+            this.textBoxDescription.Text = AssemblyDescription?.Replace("\r\n", "\n").Replace("\n", "\r\n") ?? string.Empty;
 
             commitsSinceTag = Encoding.UTF8.GetString(Properties.Resources.gitCommitsSinceLastTag).Trim();
 
-            buttonCommitsSinceTag.Visible = !String.IsNullOrEmpty(commitsSinceTag);
+            buttonCommitsSinceTag.Visible = !string.IsNullOrEmpty(commitsSinceTag);
 
         }
 
@@ -108,20 +113,22 @@ namespace com.clusterrr.hakchi_gui
 
         private void licenseInfo_Click(object sender, EventArgs e)
         {
-            using (var info = new LicenseInfo())
-            {
+            using var info = new LicenseInfo();
+
                 info.ShowDialog();
-            }
+
+            
         }
 
         private void buttonCommitsSinceTag_Click(object sender, EventArgs e)
         {
-            using (var info = new TextInfo())
-            {
+            using var info = new TextInfo();
+
                 info.Text = "Commits Since Last Tag";
                 info.textBoxInfo.Text = commitsSinceTag.Replace("\r", "").Replace("\n", "\r\n");
                 info.ShowDialog();
-            }
+
+            
         }
     }
 }

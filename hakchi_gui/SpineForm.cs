@@ -104,19 +104,20 @@ namespace com.clusterrr.hakchi_gui
 
         private void buttonLoadLogo_Click(object sender, EventArgs e)
         {
-            using (var ofd = new OpenFileDialog() { Filter = Resources.Images + "|*.bmp;*.png;*.jpg;*.jpeg;*.gif;*.tif;*.tiff|" + Resources.AllFiles + "|*.*"})
-            {
+            using var ofd = new OpenFileDialog() { Filter = Resources.Images + "|*.bmp;*.png;*.jpg;*.jpeg;*.gif;*.tif;*.tiff|" + Resources.AllFiles + "|*.*"};
+
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    imageGoogler1.Deselect();
-                    using (var file = File.OpenRead(ofd.FileName))
-                    {
-                        ClearLogo?.Dispose();
-                        ClearLogo = new Bitmap(file);
-                    }
-                    GenerateSpine();
+                imageGoogler1.Deselect();
+                using (var file = File.OpenRead(ofd.FileName))
+                {
+                ClearLogo?.Dispose();
+                ClearLogo = new Bitmap(file);
                 }
-            }
+                GenerateSpine();
+                }
+
+            
         }
     }
 }

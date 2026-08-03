@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<!-- Изменено на net8.0-windows -->
@@ -6,8 +6,67 @@
 		<RootNamespace>ce_data</RootNamespace>
 	</PropertyGroup>
 
+	<!--
+                PreBuild: assemble GeneratedData/ tarballs consumed by hakchi_gui Resources.resx
+                and copied to the output directory by hakchi_gui PostBuild.
+
+                Originally this target shelled out to tools/busybox.exe with bash-style `cd /D`
+                syntax, which failed on GitHub Actions windows-latest runner (busybox.exe
+                exists but pwsh does not understand `cd /D`). Rewritten to use native MSBuild
+                tasks (MakeDir) and the system `tar` command (bsdtar on Windows 10+, gtar on
+                Linux/macOS). Forward slashes are used throughout so paths work on every OS.
+
+                `hakchi.hmod` is fetched from GitHub (TeamShinkansen/Hakchi2-CE releases) using
+                `curl` (available on Windows 10+ and Linux/macOS). If the download fails the
+                build still proceeds — basehmods.tar will be created without hakchi.hmod, and
+                hakchi_gui will throw InvalidOperationException at runtime when trying to read
+                it. To develop offline, place hakchi.hmod manually in
+                hakchi_gui/mods/hmods/hakchi.hmod before building.
+        -->
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="cd /D &quot;$(SolutionDir)tools&quot; || cd &quot;$(SolutionDir)tools&quot;&#xD;&#xA;&quot;./busybox&quot; mkdir -p &quot;../GeneratedData&#xD;&#xA;&quot;./busybox&quot; sh -e &quot;./downloadfiles&quot; &quot;../GeneratedData&quot;&#xD;&#xA;&#xD;&#xA;&quot;./busybox&quot; mv &quot;../GeneratedData/mods/hmods/hakchi.hmod&quot; &quot;../hakchi_gui/mods/hmods/hakchi.hmod&quot;&#xD;&#xA;&quot;./busybox&quot; tar -cvf &quot;../GeneratedData/basehmods.tar&quot; -C &quot;../hakchi_gui/mods/hmods&quot; &quot;.&quot;&#xD;&#xA;&quot;./busybox&quot; mv &quot;../hakchi_gui/mods/hmods/hakchi.hmod&quot; &quot;../GeneratedData/mods/hmods/hakchi.hmod&quot;&#xD;&#xA;&quot;./busybox&quot; sh -e &quot;./copypackedhmods&quot; &quot;../hakchi_gui/mods/hmods&quot; &quot;../GeneratedData/user_mods&quot;&#xD;&#xA;&#xD;&#xA;&quot;./busybox&quot; cp -R &quot;../hakchi_gui/user_mods/&quot; &quot;../GeneratedData/&quot;&#xD;&#xA;&quot;./busybox&quot; rm &quot;../GeneratedData/data/libretro_cores.tar&quot;&#xD;&#xA;&quot;./busybox&quot; rm &quot;../GeneratedData/data/desktop_entries.tar&quot;&#xD;&#xA;&quot;./busybox&quot; rm &quot;../GeneratedData/data/original_art.tar&quot;&#xD;&#xA;&quot;./busybox&quot; tar -cvf &quot;../GeneratedData/data/libretro_cores.tar&quot; -C &quot;../hakchi_gui/data/libretro_cores/&quot; &quot;.&quot;&#xD;&#xA;&quot;./busybox&quot; tar -cvf &quot;../GeneratedData/data/desktop_entries.tar&quot; -C &quot;../hakchi_gui/data/desktop_entries/&quot; &quot;.&quot;&#xD;&#xA;&quot;./busybox&quot; tar -cvf &quot;../GeneratedData/data/original_art.tar&quot; -C &quot;../hakchi_gui/data/original_art/&quot; &quot;.&quot;&#xD;&#xA;&quot;./busybox&quot; tar -cvf &quot;../GeneratedData/data/licenses.tar&quot; -C &quot;../hakchi_gui/Licenses/&quot; &quot;.&quot;" />
+		<MakeDir Directories="$(SolutionDir)GeneratedData/data" Condition="!Exists('$(SolutionDir)GeneratedData/data')" />
+		<MakeDir Directories="$(SolutionDir)GeneratedData/mods/hmods" Condition="!Exists('$(SolutionDir)GeneratedData/mods/hmods')" />
+		<MakeDir Directories="$(SolutionDir)GeneratedData/user_mods" Condition="!Exists('$(SolutionDir)GeneratedData/user_mods')" />
+
+		<!-- Fetch hakchi.hmod from GitHub if not already present in hakchi_gui/mods/hmods/.
+                     The hmod is required by hakchi_gui at runtime (hakchi.Hmod.Get() reads it
+                     from basehmods.tar). curl is available on Windows 10+ (bsdtar bundle),
+                     Linux, and macOS. IgnoreExitCode=true so offline builds don't fail. -->
+		<Exec Command="curl -L -s -o &quot;$(SolutionDir)hakchi_gui/mods/hmods/hakchi.hmod&quot; &quot;https://github.com/TeamShinkansen/Hakchi2-CE/releases/download/supplemental/hakchi-v1.0.4-126.Fri.03.Apr.2020.11_12_31.AM.GMT.hmod&quot;"
+				IgnoreExitCode="true"
+				Condition="!Exists('$(SolutionDir)hakchi_gui/mods/hmods/hakchi.hmod')" />
+
+		<!-- licenses.tar — needed by hakchi_gui Resources.resx at compile time -->
+		<Exec Command="tar -cf &quot;$(SolutionDir)GeneratedData/data/licenses.tar&quot; -C &quot;$(SolutionDir)hakchi_gui/Licenses&quot; ."
+				IgnoreExitCode="true"
+				Condition="Exists('$(SolutionDir)hakchi_gui/Licenses')" />
+
+		<!-- libretro_cores.tar, desktop_entries.tar, original_art.tar — only needed
+                     for the distributable build (PostBuild copies them to output). Build
+                     them if the source directories exist; ignore if missing. -->
+		<Exec Command="tar -cf &quot;$(SolutionDir)GeneratedData/data/libretro_cores.tar&quot; -C &quot;$(SolutionDir)hakchi_gui/data/libretro_cores&quot; ."
+				IgnoreExitCode="true"
+				Condition="Exists('$(SolutionDir)hakchi_gui/data/libretro_cores')" />
+		<Exec Command="tar -cf &quot;$(SolutionDir)GeneratedData/data/desktop_entries.tar&quot; -C &quot;$(SolutionDir)hakchi_gui/data/desktop_entries&quot; ."
+				IgnoreExitCode="true"
+				Condition="Exists('$(SolutionDir)hakchi_gui/data/desktop_entries')" />
+		<Exec Command="tar -cf &quot;$(SolutionDir)GeneratedData/data/original_art.tar&quot; -C &quot;$(SolutionDir)hakchi_gui/data/original_art&quot; ."
+				IgnoreExitCode="true"
+				Condition="Exists('$(SolutionDir)hakchi_gui/data/original_art')" />
+
+		<!-- basehmods.tar — bundle of all *.hmod files from hakchi_gui/mods/hmods.
+                     This must include hakchi.hmod (fetched above). -->
+		<Exec Command="tar -cf &quot;$(SolutionDir)GeneratedData/basehmods.tar&quot; -C &quot;$(SolutionDir)hakchi_gui/mods/hmods&quot; ."
+				IgnoreExitCode="true"
+				Condition="Exists('$(SolutionDir)hakchi_gui/mods/hmods')" />
+
+		<!-- Copy user_mods/ directory as-is (recursive) -->
+		<ItemGroup Condition="Exists('$(SolutionDir)hakchi_gui/user_mods')">
+			<UserModsFiles Include="$(SolutionDir)hakchi_gui/user_mods/**/*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(UserModsFiles)"
+				DestinationFiles="$(SolutionDir)GeneratedData/user_mods/%(RecursiveDir)%(Filename)%(Extension)"
+				Condition="'@(UserModsFiles)' != ''" />
 	</Target>
 
 </Project>

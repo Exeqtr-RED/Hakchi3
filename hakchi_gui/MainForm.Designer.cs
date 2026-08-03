@@ -2320,7 +2320,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ProgressBar toolStripProgressBar;
         private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        // tableLayoutPanel1 was a leftover designer field that was never instantiated or referenced.
+        // Removed to silence CS0169. If you re-add this control in the WinForms designer, it will be re-declared.
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelStatusBarInner;
         private System.Windows.Forms.GroupBox groupBoxButtons;
         private System.Windows.Forms.ToolStripMenuItem addPrefixToolStripMenuItem;

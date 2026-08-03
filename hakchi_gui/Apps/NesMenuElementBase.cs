@@ -243,17 +243,18 @@ namespace com.clusterrr.hakchi_gui
 
             if (img.Size.Width == 182 && img.Size.Height == 216)
             {
-                using (var bImage = new SystemDrawingBitmap(img.Clone() as Bitmap))
-                {
+                using var bImage = new SystemDrawingBitmap(img.Clone() as Bitmap);
+
                     if (bImage.EmptyRow(0) && bImage.EmptyRow(215) && bImage.EmptyColumn(0) && bImage.EmptyColumn(181) && bImage.EmptyColumn(29) && bImage.EmptyColumn(30))
                     {
-                        mdminiFormatted = true;
-                        using (var file = File.OpenWrite(mdMiniIconPath))
-                            bImage.Bitmap.Save(file, ImageFormat.Png);
+                    mdminiFormatted = true;
+                    using (var file = File.OpenWrite(mdMiniIconPath))
+                    bImage.Bitmap.Save(file, ImageFormat.Png);
 
-                        img = bImage.Bitmap.Clone(new Rectangle(31, 1, 150, 214), PixelFormat.Format32bppArgb);
+                    img = bImage.Bitmap.Clone(new Rectangle(31, 1, 150, 214), PixelFormat.Format32bppArgb);
                     }
-                }
+
+                
             }
 
             using (var file = File.OpenWrite(originalArtPath))
@@ -346,7 +347,7 @@ namespace com.clusterrr.hakchi_gui
                 }
             }
 
-            using (var template = new SpineGen.Spine.Template<Bitmap>()
+            using var template = new SpineGen.Spine.Template<Bitmap>()
             {
                 Image = GetMdMiniBitmap(bitmapStream),
                 LogoArea = new Rectangle(type == GameImageType.MdFront ? 31 : 1, 1, type == GameImageType.MdFront ? 150 : 28, 214),
@@ -354,20 +355,21 @@ namespace com.clusterrr.hakchi_gui
                 LogoHorizontalAlignment = SpineGen.Drawing.HorizontalAlignment.Middle,
                 LogoVerticalAlignment = SpineGen.Drawing.VerticalAlignment.Middle,
                 AspectRange = type == GameImageType.MdFront ? 0.04 : 0.01
-            }) {
+            };
+
                 if (stretch)
                 {
-                    template.AspectRange = 100;
+                template.AspectRange = 100;
                 }
 
                 template.Image.ClearRegion(template.LogoArea);
 
-                using (var output = template.Process(new SystemDrawingBitmap(new Bitmap(image))))
-                {
+                using var output = template.Process(new SystemDrawingBitmap(new Bitmap(image)));
+
                     if (bitmapStream == null)
                     {
-                        if (File.Exists(mdMiniIconPath))
-                            File.Delete(mdMiniIconPath);
+                    if (File.Exists(mdMiniIconPath))
+                    File.Delete(mdMiniIconPath);
                     }
 
                     var bitmap = output.Bitmap;
@@ -377,19 +379,21 @@ namespace com.clusterrr.hakchi_gui
 
                     if (bitmapStream == null)
                     {
-                        using (var file = File.OpenWrite(mdMiniIconPath))
-                            bitmap.Save(file, ImageFormat.Png);
+                    using (var file = File.OpenWrite(mdMiniIconPath))
+                    bitmap.Save(file, ImageFormat.Png);
                     }
                     else
                     {
-                        bitmapStream.Seek(0, SeekOrigin.Begin);
-                        bitmapStream.SetLength(0);
-                        bitmap.Save(bitmapStream, ImageFormat.Png);
-                        bitmapStream.Seek(0, SeekOrigin.Begin);
+                    bitmapStream.Seek(0, SeekOrigin.Begin);
+                    bitmapStream.SetLength(0);
+                    bitmap.Save(bitmapStream, ImageFormat.Png);
+                    bitmapStream.Seek(0, SeekOrigin.Begin);
                     }
-                    
-                }
-            }
+
+
+                
+
+            
         }
 
         protected static void ProcessImage(Image inImage, string outPath, int targetWidth, int targetHeight, bool expandHeight, bool upscale, bool quantize)
@@ -405,7 +409,7 @@ namespace com.clusterrr.hakchi_gui
 
         protected static void ProcessImageFile(string inPath, string outPath, int targetWidth, int targetHeight, bool expandHeight, bool upscale, bool quantize)
         {
-            if (String.IsNullOrEmpty(inPath) || !File.Exists(inPath)) // failsafe
+            if (string.IsNullOrEmpty(inPath) || !File.Exists(inPath)) // failsafe
                 throw new FileNotFoundException($"Image file \"{inPath}\" doesn't exist.");
 
             // load image
@@ -444,7 +448,7 @@ namespace com.clusterrr.hakchi_gui
 
         protected static Stream ProcessImageFileToStream(string inPath, int targetWidth, int targetHeight, bool expandHeight, bool upscale, bool quantize)
         {
-            if (String.IsNullOrEmpty(inPath) || !File.Exists(inPath)) // failsafe
+            if (string.IsNullOrEmpty(inPath) || !File.Exists(inPath)) // failsafe
                 throw new FileNotFoundException($"Image file \"{inPath}\" doesn't exist.");
 
             // load image

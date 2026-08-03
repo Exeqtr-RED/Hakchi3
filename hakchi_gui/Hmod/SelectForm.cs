@@ -88,7 +88,7 @@ namespace com.clusterrr.hakchi_gui.Hmod
                 item.SubItems.Add(hmod.Creator);
                 item.Tag = hmod;
                 item.Group = group;
-                item.ToolTipText = String.Join("\r\n", hmod.Readme.headingLines);
+                item.ToolTipText = string.Join("\r\n", hmod.Readme.headingLines);
 
                 if (!onlyInstalledMods && hmod.isInstalled)
                 {
@@ -201,10 +201,11 @@ namespace com.clusterrr.hakchi_gui.Hmod
                     {
                         if (ext == ".7z")
                         {
-                            using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(file))
-                            {
+                            using var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(file);
+
                                 extractor.WriteToDirectory(temp, new ExtractionOptions() { ExtractFullPath = true });
-                            }
+
+                            
                         }
                         else
                         {

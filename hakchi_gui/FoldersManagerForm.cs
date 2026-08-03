@@ -951,7 +951,7 @@ namespace com.clusterrr.hakchi_gui
             htmlNode.SetAttribute("lang", ConfigIni.Instance.Language);
             htmlNode.AppendChild(headNode);
             headNode.AppendChild(titleNode);
-            titleNode.AppendChild(xml.CreateTextNode(String.Format(Resources.Hakchi3Games0, title)));
+            titleNode.AppendChild(xml.CreateTextNode(string.Format(Resources.Hakchi3Games0, title)));
             headNode.AppendChild(styleNode);
             styleNode.AppendChild(xml.CreateTextNode(Resources.folderListCss));
             htmlNode.AppendChild(bodyNode);
@@ -965,11 +965,12 @@ namespace com.clusterrr.hakchi_gui
 
             foreach(int key in icons.Keys)
             {
-                using (var imageStream = new MemoryStream())
-                {
+                using var imageStream = new MemoryStream();
+
                     icons[key].Save(imageStream, ImageFormat.Png);
                     styleNode.AppendChild(xml.CreateTextNode($"\n.icon-{key} {{ background-image: url('data:image/png;base64,{Convert.ToBase64String(imageStream.ToArray())}') }}"));
-                }
+
+                
             }
 
             return $"<!DOCTYPE html>\n{xml.OuterXml}";
@@ -1088,15 +1089,16 @@ namespace com.clusterrr.hakchi_gui
         {
             try
             {
-                using (var ofd = new OpenFileDialog())
-                {
+                using var ofd = new OpenFileDialog();
+
                     ofd.Filter = Resources.SupportedFiles + " (*.htm, *.xml)|*.xml;*.htm|" + Resources.HTMLFiles + " (*.htm)|*.htm|" + Resources.XMLFiles + " (*.xml)|*.xml";
                     if (ofd.ShowDialog(this) == DialogResult.OK)
                     {
-                        needsSave = true;
-                        XmlToTree(File.ReadAllText(ofd.FileName));
+                    needsSave = true;
+                    XmlToTree(File.ReadAllText(ofd.FileName));
                     }
-                }
+
+                
             }
             catch (Exception ex)
             {
@@ -1123,14 +1125,15 @@ namespace com.clusterrr.hakchi_gui
         {
             try
             {
-                using (var sfd = new SaveFileDialog())
-                {
+                using var sfd = new SaveFileDialog();
+
                     sfd.Filter = $"{Resources.HTMLFiles}|*.htm";
                     if (sfd.ShowDialog(this) == DialogResult.OK)
                     {
-                        SaveTree(sfd.FileName);
+                    SaveTree(sfd.FileName);
                     }
-                }
+
+                
             }
             catch (Exception ex)
             {

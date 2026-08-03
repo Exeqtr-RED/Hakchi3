@@ -50,7 +50,7 @@ namespace ProgressODoom {
 				highlightShadeColor = HSV.FromHsv(shade.Hue, shade.Saturation + 15, shade.Value - 2);
 				stripeShadeColor = HSV.FromHsv(shade.Hue, shade.Saturation + 24, shade.Value - 5);
 
-				try { if (box != null) { RepaintImage(box); } } catch { }
+				try { RepaintImage(box); } catch { }
 				FireChange();
 			}
 		}

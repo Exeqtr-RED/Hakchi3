@@ -310,7 +310,7 @@ namespace com.clusterrr.hakchi_gui
                         {
                             resultsTask.Wait();
                         } 
-                        catch (OperationCanceledException ex)
+                        catch (OperationCanceledException)
                         {
                             Threads.Remove(Thread.CurrentThread);
                             item.ScraperTasks[scraper].Remove(resultsTask);
@@ -523,13 +523,13 @@ namespace com.clusterrr.hakchi_gui
                         textBoxName.Text = result.Name;
 
                     if (result.Publishers != null && result.Publishers.Length > 0)
-                        textBoxPublisher.Text = String.Join(", ", result.Publishers);
+                        textBoxPublisher.Text = string.Join(", ", result.Publishers);
 
                     if (result.Developers != null && result.Developers.Length > 0)
-                        textBoxDeveloper.Text = String.Join(", ", result.Developers);
+                        textBoxDeveloper.Text = string.Join(", ", result.Developers);
 
-                    if (result.ReleaseDate != null)
-                        maskedTextBoxReleaseDate.Text = result.ReleaseDate.ToString("yyyy-MM-dd");
+                    // ReleaseDate is DateTime (value type, never null) — assignment is unconditional
+                    maskedTextBoxReleaseDate.Text = result.ReleaseDate.ToString("yyyy-MM-dd");
 
                     if (result.Copyright != null)
                         textBoxCopyright.Text = result.Copyright;
@@ -554,37 +554,35 @@ namespace com.clusterrr.hakchi_gui
                         }
                     }
 
-                    if (result.PlayerCount != null)
+                    // PlayerCount is int (value type, never null) — switch is unconditional
+                    switch (result.PlayerCount)
                     {
-                        switch (result.PlayerCount)
-                        {
-                            case 0:
-                            case 1:
-                                maxPlayersComboBox.SelectedIndex = (int)MaxPlayers.OnePlayer;
-                                break;
+                        case 0:
+                        case 1:
+                            maxPlayersComboBox.SelectedIndex = (int)MaxPlayers.OnePlayer;
+                            break;
 
-                            case 2:
-                                maxPlayersComboBox.SelectedIndex = (int)MaxPlayers.TwoPlayer;
-                                break;
+                        case 2:
+                            maxPlayersComboBox.SelectedIndex = (int)MaxPlayers.TwoPlayer;
+                            break;
 
-                            case 3:
-                                maxPlayersComboBox.SelectedIndex = (int)MaxPlayers.ThreePlayer;
-                                break;
+                        case 3:
+                            maxPlayersComboBox.SelectedIndex = (int)MaxPlayers.ThreePlayer;
+                            break;
 
-                            case 4:
-                                maxPlayersComboBox.SelectedIndex = (int)MaxPlayers.FourPlayer;
-                                break;
+                        case 4:
+                            maxPlayersComboBox.SelectedIndex = (int)MaxPlayers.FourPlayer;
+                            break;
 
-                            default:
-                                maxPlayersComboBox.SelectedIndex = (int)MaxPlayers.FivePlayer;
-                                break;
-                        }
+                        default:
+                            maxPlayersComboBox.SelectedIndex = (int)MaxPlayers.FivePlayer;
+                            break;
                     }
 
-                    if (result.Description != null)
-                    {
-                        textBoxDescription.Text = result.Description;
-                    }
+                if (result.Description != null)
+                {
+                    textBoxDescription.Text = result.Description;
+                }
 
                     // Cancel any in-flight image fetch for this item, then start a new one.
                     SelectedItem.ScraperImageFetchCts?.Cancel();
@@ -611,23 +609,24 @@ namespace com.clusterrr.hakchi_gui
 
                                 {
                                     var imageData = HakchiWebClient.HttpClient.GetByteArrayAsync(frontUrl, imageCts.Token).GetAwaiter().GetResult();
-                                    using (var ms = new MemoryStream(imageData))
-                                    {
+                                    using var ms = new MemoryStream(imageData);
+
                                         ms.Seek(0, SeekOrigin.Begin);
                                         var bitmap = new Bitmap(ms);
                                         item.Result.FrontArt = bitmap;
                                         item.Result.ChangedFrontArt = true;
                                         if (SelectedItem == item)
                                         {
-                                            Invoke(new Action(() =>
-                                            {
-                                                checkBoxFront.Enabled = true;
-                                                checkBoxFront.Checked = true;
-                                                ms.Seek(0, SeekOrigin.Begin);
-                                                pictureBoxM2Front.Image = new Bitmap(ms);
-                                            }));
+                                        Invoke(new Action(() =>
+                                        {
+                                        checkBoxFront.Enabled = true;
+                                        checkBoxFront.Checked = true;
+                                        ms.Seek(0, SeekOrigin.Begin);
+                                        pictureBoxM2Front.Image = new Bitmap(ms);
+                                        }));
                                         }
-                                    }
+
+                                    
                                 };
                             }
 
@@ -662,23 +661,24 @@ namespace com.clusterrr.hakchi_gui
                                     {
                                         var imageData = HakchiWebClient.HttpClient.GetByteArrayAsync($"https://cdn.thegamesdb.net/images/original/clearlogo/{tgdbResult.ID}.png", spineCts.Token).GetAwaiter().GetResult();
 
-                                        using (var ms = new MemoryStream(imageData))
-                                        {
+                                        using var ms = new MemoryStream(imageData);
+
                                             ms.Seek(0, SeekOrigin.Begin);
                                             item.Result.ClearLogo = new Bitmap(ms);
                                             if (item == SelectedItem)
                                             {
-                                                Invoke(new Action(() =>
-                                                {
-                                                    comboBoxSpineTemplates.Enabled = true;
-                                                    if (comboBoxSpineTemplates.SelectedItem == null)
-                                                    {
-                                                        comboBoxSpineTemplates.SelectedIndex = 0;
-                                                    }
-                                                    GenerateSpine();
-                                                }));
+                                            Invoke(new Action(() =>
+                                            {
+                                            comboBoxSpineTemplates.Enabled = true;
+                                            if (comboBoxSpineTemplates.SelectedItem == null)
+                                            {
+                                            comboBoxSpineTemplates.SelectedIndex = 0;
                                             }
-                                        }
+                                            GenerateSpine();
+                                            }));
+                                            }
+
+                                        
                                     }
                                     catch (OperationCanceledException) { /* user switched item or form closed */ }
                                     catch (HttpRequestException ex) { Trace.WriteLine($"Art download failed: {ex.Message}"); }
@@ -783,7 +783,7 @@ namespace com.clusterrr.hakchi_gui
                                 {
                                     resultsTask.Wait();
                                 }
-                                catch (OperationCanceledException ex)
+                                catch (OperationCanceledException)
                                 {
                                     Threads.Remove(Thread.CurrentThread);
                                     item.ScraperTasks[scraper].Remove(resultsTask);
@@ -928,7 +928,7 @@ namespace com.clusterrr.hakchi_gui
                     {
                         resultsTask.Wait();
                     }
-                    catch (OperationCanceledException ex)
+                    catch (OperationCanceledException)
                     {
                         Threads.Remove(Thread.CurrentThread);
                         item.ScraperTasks[scraper].Remove(resultsTask);

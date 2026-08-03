@@ -438,14 +438,8 @@ namespace TeamShinkansen.Scrapers.TheGamesDB
                 data.Platform = platformValue?.Name;
                 data.Images = Images.ToArray();
 
-                if (data.ReleaseDate != null)
-                {
-                    data.Copyright = $"© {data.ReleaseDate.Year} {String.Join(", ", data.Developers)}";
-                }
-                else
-                {
-                    data.Copyright = $"© {String.Join(", ", data.Developers)}";
-                }
+                // ReleaseDate is DateTime (value type, never null) — always include year
+                data.Copyright = $"© {data.ReleaseDate.Year} {string.Join(", ", data.Developers)}";
 
                 items.Add(data);
 
@@ -457,7 +451,7 @@ namespace TeamShinkansen.Scrapers.TheGamesDB
 
         public async Task<IScraperResult> GetInfoById(params int[] id)
         {
-            var response = await TgdbApi.GetGamesByGameID(String.Join(",", id));
+            var response = await TgdbApi.GetGamesByGameID(string.Join(",", id));
             return await ApiToResult(response);
         }
         public async Task<IScraperResult> GetInfoByName(string gameName)
@@ -468,7 +462,7 @@ namespace TeamShinkansen.Scrapers.TheGamesDB
 
         public async Task<IScraperResult> GetInfoByID(params int[] id)
         {
-            var response = await TgdbApi.GetGamesByGameID(String.Join(",", Array.ConvertAll(id, i => i.ToString())));
+            var response = await TgdbApi.GetGamesByGameID(string.Join(",", Array.ConvertAll(id, i => i.ToString())));
             return await ApiToResult(response);
         }
 

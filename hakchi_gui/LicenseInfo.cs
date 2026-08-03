@@ -17,19 +17,21 @@ namespace com.clusterrr.hakchi_gui
                 while (reader.MoveToNextEntry())
                 {
                     if (reader.Entry.IsDirectory) continue;
-                    using (var ms = new MemoryStream())
-                    {
+                    using var ms = new MemoryStream();
+
                         reader.WriteEntryTo(ms);
                         ms.Position = 0;
-                        using (var sr = new StreamReader(ms))
-                        {
+                        using var sr = new StreamReader(ms);
+
                             var license = sr.ReadToEnd();
                             if (license.Length > 0)
                             {
-                                licenses.Add(license);
+                            licenses.Add(license);
                             }
-                        }
-                    }
+
+                        
+
+                    
                 }
             }
 

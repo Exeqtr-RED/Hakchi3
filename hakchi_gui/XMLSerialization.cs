@@ -17,11 +17,12 @@ namespace com.clusterrr.hakchi_gui
             {
                 var xmlserializer = new XmlSerializer(typeof(T));
                 var stringWriter = new StringWriter();
-                using (var writer = XmlWriter.Create(stringWriter))
-                {
+                using var writer = XmlWriter.Create(stringWriter);
+
                     xmlserializer.Serialize(writer, value);
                     return stringWriter.ToString();
-                }
+
+                
             }
             catch (Exception ex)
             {

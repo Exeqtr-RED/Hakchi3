@@ -56,13 +56,14 @@ namespace com.clusterrr.hakchi_gui.Tasks
                         {
                             if (hmodTar.Length > 0)
                             {
-                                using (TrackableStream hmodStream = new TrackableStream(hmodTar))
-                                {
+                                using TrackableStream hmodStream = new TrackableStream(hmodTar);
+
                                     hmodStream.OnProgress += tasker.OnProgress;
-                                    
+
                                     hakchi.Shell.Execute($"tar -xvC {hmodHakchiPath}", hmodStream, null, null, 0, true);
 
-                                }
+
+                                
                             }
                         }
                         break;

@@ -271,10 +271,10 @@ namespace com.clusterrr.hakchi_gui
         public static string ToReadableString(this TimeSpan span)
         {
             string formatted = string.Format("{0}{1}{2}{3}",
-                span.Duration().Days > 0 ? string.Format("{0:0} day{1}, ", span.Days, span.Days == 1 ? String.Empty : "s") : string.Empty,
-                span.Duration().Hours > 0 ? string.Format("{0:0} hour{1}, ", span.Hours, span.Hours == 1 ? String.Empty : "s") : string.Empty,
-                span.Duration().Minutes > 0 ? string.Format("{0:0} minute{1}, ", span.Minutes, span.Minutes == 1 ? String.Empty : "s") : string.Empty,
-                span.Duration().Seconds > 0 ? string.Format("{0:0} second{1}", span.Seconds, span.Seconds == 1 ? String.Empty : "s") : string.Empty);
+                span.Duration().Days > 0 ? string.Format("{0:0} day{1}, ", span.Days, span.Days == 1 ? string.Empty : "s") : string.Empty,
+                span.Duration().Hours > 0 ? string.Format("{0:0} hour{1}, ", span.Hours, span.Hours == 1 ? string.Empty : "s") : string.Empty,
+                span.Duration().Minutes > 0 ? string.Format("{0:0} minute{1}, ", span.Minutes, span.Minutes == 1 ? string.Empty : "s") : string.Empty,
+                span.Duration().Seconds > 0 ? string.Format("{0:0} second{1}", span.Seconds, span.Seconds == 1 ? string.Empty : "s") : string.Empty);
 
             if (formatted.EndsWith(", ")) formatted = formatted.Substring(0, formatted.Length - 2);
 
@@ -449,7 +449,7 @@ namespace com.clusterrr.hakchi_gui
             // and add it to the final roman numeral string
             while (i-- > 0)
             {
-                romanNumeral += RomanNumerals[i][Int32.Parse(intArr[i].ToString())];
+                romanNumeral += RomanNumerals[i][int.Parse(intArr[i].ToString())];
             }
 
             return romanNumeral;
@@ -669,23 +669,24 @@ namespace com.clusterrr.hakchi_gui
                     Task.Delay(1000, token).Wait(token);
 
                     stdErr.Seek(0, SeekOrigin.Begin);
-                    using (var sr = new StreamReader(stdErr))
-                    {
+                    using var sr = new StreamReader(stdErr);
+
                         var line = sr.ReadLine();
                         // stdErr may have been closed externally by cancel —
                         // ReadLine returns null or throws ObjectDisposedException,
                         // both handled by the catch below.
                         if (line == null)
-                            return;
+                        return;
 
                         var match = Regex.Match(line, "^listening on (\\d+\\.\\d+\\.\\d+\\.\\d+):(\\d+)");
                         stdErr.Close();
                         splitStream.RemoveStream(stdErr).AddStreams(stderr);
                         if (match.Success)
                         {
-                            SocketTransfer((hakchi.Shell as INetworkShell).IPAddress, int.Parse(match.Groups[2].Value), stdin, stdout);
+                        SocketTransfer((hakchi.Shell as INetworkShell).IPAddress, int.Parse(match.Groups[2].Value), stdin, stdout);
                         }
-                    }
+
+                    
                 }
                 catch (OperationCanceledException) { }
                 catch (ObjectDisposedException) { }

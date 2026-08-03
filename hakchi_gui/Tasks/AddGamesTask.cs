@@ -34,14 +34,15 @@ namespace com.clusterrr.hakchi_gui.Tasks
             }
             try
             {
-                using (var form = new SelectFileForm(files))
-                {
+                using var form = new SelectFileForm(files);
+
                     tasker.PushState(Tasker.State.Paused);
                     var result = form.ShowDialog();
                     tasker.PopState();
                     selectedFile = form.listBoxFiles.SelectedItem != null ? form.listBoxFiles.SelectedItem.ToString() : null;
                     return result;
-                }
+
+                
             }
             catch (InvalidOperationException) { }
             return DialogResult.Cancel;
@@ -128,76 +129,77 @@ namespace com.clusterrr.hakchi_gui.Tasks
                         else if (ext == ".7z")
                         {
                             // 7zip supports random access; keep using Archive API
-                            using (var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(sourceFileName))
-                            {
+                            using var extractor = SharpCompress.Archives.ArchiveFactory.OpenArchive(sourceFileName);
+
                                 var filesInArchive = extractor.Entries;
                                 var gameFilesInArchive = new List<string>();
                                 foreach (var f in extractor.Entries)
                                 {
-                                    if (!f.IsDirectory)
-                                    {
-                                        var e = Path.GetExtension(f.Key).ToLower();
-                                        if (e == ".desktop")
-                                        {
-                                            gameFilesInArchive.Clear();
-                                            gameFilesInArchive.Add(f.Key);
-                                            break;
-                                        }
-                                        else if (CoreCollection.Extensions.Contains(e))
-                                        {
-                                            gameFilesInArchive.Add(f.Key);
-                                        }
-                                    }
+                                if (!f.IsDirectory)
+                                {
+                                var e = Path.GetExtension(f.Key).ToLower();
+                                if (e == ".desktop")
+                                {
+                                gameFilesInArchive.Clear();
+                                gameFilesInArchive.Add(f.Key);
+                                break;
+                                }
+                                else if (CoreCollection.Extensions.Contains(e))
+                                {
+                                gameFilesInArchive.Add(f.Key);
+                                }
+                                }
                                 }
                                 if (gameFilesInArchive.Count == 1) // Only one known file (or app)
                                 {
-                                    fileName = gameFilesInArchive[0];
+                                fileName = gameFilesInArchive[0];
                                 }
                                 else if (gameFilesInArchive.Count > 1) // Many known files, need to select
                                 {
-                                    var r = SelectFile(tasker, gameFilesInArchive.ToArray());
-                                    if (r == DialogResult.OK)
-                                        fileName = selectedFile;
-                                    else if (r == DialogResult.Ignore)
-                                        fileName = sourceFileName;
-                                    else continue;
+                                var r = SelectFile(tasker, gameFilesInArchive.ToArray());
+                                if (r == DialogResult.OK)
+                                fileName = selectedFile;
+                                else if (r == DialogResult.Ignore)
+                                fileName = sourceFileName;
+                                else continue;
                                 }
                                 else if (filesInArchive.Count() == 1) // No known files but only one another file
                                 {
-                                    fileName = filesInArchive.First().Key;
+                                fileName = filesInArchive.First().Key;
                                 }
                                 else // Need to select
                                 {
-                                    var r = SelectFile(tasker, filesInArchive.Select(f => f.Key).ToArray());
-                                    if (r == DialogResult.OK)
-                                        fileName = selectedFile;
-                                    else if (r == DialogResult.Ignore)
-                                        fileName = sourceFileName;
-                                    else continue;
+                                var r = SelectFile(tasker, filesInArchive.Select(f => f.Key).ToArray());
+                                if (r == DialogResult.OK)
+                                fileName = selectedFile;
+                                else if (r == DialogResult.Ignore)
+                                fileName = sourceFileName;
+                                else continue;
                                 }
                                 if (fileName != sourceFileName)
                                 {
-                                    var o = new MemoryStream();
-                                    if (Path.GetExtension(fileName).ToLower() == ".desktop" // App in archive, need the whole directory
-                                        || filesInArchive.Select(f => f.Key).Contains(Path.GetFileNameWithoutExtension(fileName) + ".jpg") // Or it has cover in archive
-                                        || filesInArchive.Select(f => f.Key).Contains(Path.GetFileNameWithoutExtension(fileName) + ".png")
-                                        || filesInArchive.Select(f => f.Key).Contains(Path.GetFileNameWithoutExtension(fileName) + ".ips") // Or IPS file
-                                        )
-                                    {
-                                        tmp = Path.Combine(tempDirectory, fileName);
-                                        Directory.CreateDirectory(tmp);
-                                        extractor.WriteToDirectory(tmp, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
-                                        fileName = Path.Combine(tmp, fileName);
-                                    }
-                                    else
-                                    {
-                                        extractor.Entries.Where(f => f.Key == fileName).First().WriteTo(o);
-                                        rawData = new byte[o.Length];
-                                        o.Seek(0, SeekOrigin.Begin);
-                                        o.Read(rawData, 0, (int)o.Length);
-                                    }
+                                var o = new MemoryStream();
+                                if (Path.GetExtension(fileName).ToLower() == ".desktop" // App in archive, need the whole directory
+                                || filesInArchive.Select(f => f.Key).Contains(Path.GetFileNameWithoutExtension(fileName) + ".jpg") // Or it has cover in archive
+                                || filesInArchive.Select(f => f.Key).Contains(Path.GetFileNameWithoutExtension(fileName) + ".png")
+                                || filesInArchive.Select(f => f.Key).Contains(Path.GetFileNameWithoutExtension(fileName) + ".ips") // Or IPS file
+                                )
+                                {
+                                tmp = Path.Combine(tempDirectory, fileName);
+                                Directory.CreateDirectory(tmp);
+                                extractor.WriteToDirectory(tmp, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                                fileName = Path.Combine(tmp, fileName);
                                 }
-                            }
+                                else
+                                {
+                                extractor.Entries.Where(f => f.Key == fileName).First().WriteTo(o);
+                                rawData = new byte[o.Length];
+                                o.Seek(0, SeekOrigin.Begin);
+                                o.Read(rawData, 0, (int)o.Length);
+                                }
+                                }
+
+                            
                         }
                         else // .zip or .rar - use Reader API (streaming, two-pass)
                         {
@@ -350,11 +352,12 @@ namespace com.clusterrr.hakchi_gui.Tasks
             if (gamesWithMultipleArt.Count > 0)
             {
                 tasker.HostForm.Invoke(new Action(() => {
-                    using (SelectCoverDialog selectCoverDialog = new SelectCoverDialog())
-                    {
+                    using SelectCoverDialog selectCoverDialog = new SelectCoverDialog();
+
                         selectCoverDialog.Games.AddRange(gamesWithMultipleArt);
                         selectCoverDialog.ShowDialog(tasker.HostForm);
-                    }
+
+                    
                 }));
             }
             return Tasker.Conclusion.Success;
@@ -442,25 +445,19 @@ namespace com.clusterrr.hakchi_gui.Tasks
 
                             if (apiResult.Publishers != null && apiResult.Publishers.Length > 0)
                             {
-                                app.Desktop.Publisher = String.Join(", ", apiResult.Publishers).ToUpper();
+                                app.Desktop.Publisher = string.Join(", ", apiResult.Publishers).ToUpper();
                             }
                             else if (apiResult.Developers != null && apiResult.Developers.Length > 0)
                             {
-                                if (apiResult.ReleaseDate != null)
-                                {
-                                    app.Desktop.Copyright = $"© {apiResult.ReleaseDate.Year} {String.Join(", ", apiResult.Developers)}";
-                                }
-                                else
-                                {
-                                    app.Desktop.Copyright = $"© {String.Join(", ", apiResult.Developers)}";
-                                }
+                                // ReleaseDate is DateTime (value type, never null) — always include year when developers are present
+                                app.Desktop.Copyright = $"© {apiResult.ReleaseDate.Year} {string.Join(", ", apiResult.Developers)}";
                             }
 
                             if (apiResult.Description != null)
                                 app.Desktop.Description = apiResult.Description;
 
-                            if (apiResult.ReleaseDate != null)
-                                app.Desktop.ReleaseDate = apiResult.ReleaseDate.ToString("yyyy-MM-dd");
+                            // ReleaseDate is DateTime (value type, never null) — assignment is unconditional
+                            app.Desktop.ReleaseDate = apiResult.ReleaseDate.ToString("yyyy-MM-dd");
 
                             if (apiResult.PlayerCount > 0)
                             {
@@ -556,11 +553,12 @@ namespace com.clusterrr.hakchi_gui.Tasks
                 }
                 if (unknownApps.Count > 0)
                 {
-                    using (SelectCoreDialog selectCoreDialog = new SelectCoreDialog())
-                    {
+                    using SelectCoreDialog selectCoreDialog = new SelectCoreDialog();
+
                         selectCoreDialog.Games.AddRange(unknownApps);
                         selectCoreDialog.ShowDialog(tasker.HostForm);
-                    }
+
+                    
                 }
 
                 // show select cover dialog if applicable
@@ -572,11 +570,12 @@ namespace com.clusterrr.hakchi_gui.Tasks
                 }
                 if (unknownApps.Count > 0)
                 {
-                    using (SelectCoverDialog selectCoverDialog = new SelectCoverDialog())
-                    {
+                    using SelectCoverDialog selectCoverDialog = new SelectCoverDialog();
+
                         selectCoverDialog.Games.AddRange(unknownApps);
                         selectCoverDialog.ShowDialog(tasker.HostForm);
-                    }
+
+                    
                 }
 
                 // update list view

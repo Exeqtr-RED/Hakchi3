@@ -191,19 +191,20 @@ namespace FelCli
                         FelDevice().Wait();
                         try
                         {
-                            using (FelLib.Fel fel = new FelLib.Fel())
-                            {
+                            using FelLib.Fel fel = new FelLib.Fel();
+
                                 fel.WriteLine += Console.WriteLine;
                                 if (!fel.Open(isFel: false))
                                 {
-                                    throw new Exception("USB Device Not Found");
+                                throw new Exception("USB Device Not Found");
                                 }
 
                                 if (!fel.UsbUpdateProbe())
-                                    throw new Exception("Failed to handshake with burn mode");
+                                throw new Exception("Failed to handshake with burn mode");
                                 if (!fel.UsbUpdateEnterFel())
-                                    throw new Exception("Failed to enter FEL");
-                            }
+                                throw new Exception("Failed to enter FEL");
+
+                            
                         }
                         catch (Exception ex)
                         {

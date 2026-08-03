@@ -14,6 +14,11 @@ using System.Threading;
 
 namespace com.clusterrr.hakchi_gui
 {
+    // The class name 'hakchi' is intentionally lowercased to preserve backward compatibility
+    // with the historical public API used across the codebase (hakchi.Shell, hakchi.DetectedConsoleType, etc.).
+    // CS8981 warns about lowercased type names becoming reserved in the future; we accept the risk
+    // and silence the diagnostic at the project level (see hakchi_gui.csproj <NoWarn>CS8981</NoWarn>)
+    // rather than renaming the type, which would break every caller in this codebase and downstream forks.
     public static partial class hakchi
     {
         public const string SERVICE_NAME = "hakchi";

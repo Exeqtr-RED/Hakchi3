@@ -61,6 +61,20 @@ Gert Driesen for SSH.NET.
 		<CleanDependsOn>$(CleanDependsOn); CustomAfterClean </CleanDependsOn>
 		<Configurations>Debug;Release;Dumper</Configurations>
 
+		<!-- The public API exposes a static class named `hakchi` (lowercase) for historical
+                     reasons (hakchi.Shell, hakchi.DetectedConsoleType, etc.). The .NET source generator
+                     for System.Text.RegularExpressions also emits a partial `hakchi` type, which triggers
+                     CS8981. Suppress the diagnostic project-wide rather than rename the type — renaming
+                     would break every caller in this codebase and downstream forks. -->
+		<NoWarn>$(NoWarn);CS8981</NoWarn>
+
+		<!-- WinForms designer persists ImageList.ImageStream via BinaryFormatter in .resx files
+                     (this is how the designer has always stored image lists). .NET 8 emits MSB3825 to
+                     warn that BinaryFormatter will be removed in .NET 9. Since we are on .NET 8 and the
+                     ImageStream data is designer-generated local content (not untrusted input), we
+                     silence the warning rather than rework every ImageList resource. -->
+		<GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
+
 		<!-- Localized satellite assemblies stay in <OutDir>\<culture>\hakchi.resources.dll
                      (default .NET 8 layout). Do NOT move them into a custom "languages\" folder —
                      the .NET 8 runtime only probes the default culture subfolder next to the exe,
@@ -99,7 +113,11 @@ Gert Driesen for SSH.NET.
 		<PackageReference Include="LibUsbDotNet" Version="3.0.102-alpha" />
 		<PackageReference Include="Markdig" Version="1.3.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="nQuant" Version="1.0.3" />
+		<!-- nQuant 1.0.3 only ships .NET Framework assemblies, but its byte-level API
+                     (WuQuantizer / QuantizationException) is managed code that runs fine on .NET 8.
+                     We accept the framework mismatch and silence NU1701 explicitly. If nQuant stops
+                     working on a future .NET version, swap for a maintained quantizer. -->
+		<PackageReference Include="nQuant" Version="1.0.3" NoWarn="NU1701" />
 		<PackageReference Include="SharpCompress" Version="0.48.0" />
 		<PackageReference Include="SSH.NET" Version="2025.1.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
@@ -244,11 +262,69 @@ Gert Driesen for SSH.NET.
 	</Target>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Condition="'$(Configuration)|$(Platform)'!='Dumper|AnyCPU' And (Exists('$(SolutionDir)tools/busybox') Or Exists('$(SolutionDir)tools/busybox.exe'))" Command="cd /D &quot;$(SolutionDir)tools/&quot; || cd &quot;$(SolutionDir)tools/&quot;&#xD;&#xA;&quot;./busybox&quot; tar -cf - -C ../GeneratedData . | &quot;busybox&quot; tar -xvf - -C &quot;../hakchi_gui/bin/$(Configuration)/$(TargetFramework)&quot;" />
-		<Exec Condition="'$(Configuration)|$(Platform)'=='Dumper|AnyCPU' And (Exists('$(SolutionDir)tools/busybox') Or Exists('$(SolutionDir)tools/busybox.exe'))" Command="cd /D &quot;$(SolutionDir)tools/&quot; || cd &quot;$(SolutionDir)tools/&quot;&#xD;&#xA;&quot;./busybox&quot; tar -cf - -C ../GeneratedData basehmods.tar driver tools/arm/detached-fallback | &quot;busybox&quot; tar -xvf - -C &quot;../hakchi_gui/bin/$(Configuration)/$(TargetFramework)&quot;" />
+		<!-- Copy GeneratedData/* into the output directory so hakchi.exe can find
+                     tarballs, hmods, tools at runtime. Originally used busybox tar piped
+                     through tar; rewritten to use MSBuild Copy task with recursive glob. -->
+		<ItemGroup Condition="'$(Configuration)|$(Platform)'!='Dumper|AnyCPU' And Exists('$(SolutionDir)GeneratedData')">
+			<GeneratedDataFiles Include="$(SolutionDir)GeneratedData/**/*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(GeneratedDataFiles)"
+			  DestinationFiles="$(OutDir)%(RecursiveDir)%(Filename)%(Extension)"
+			  Condition="'@(GeneratedDataFiles)' != ''" />
+
+		<ItemGroup Condition="'$(Configuration)|$(Platform)'=='Dumper|AnyCPU' And Exists('$(SolutionDir)GeneratedData')">
+			<DumperFiles Include="$(SolutionDir)GeneratedData/basehmods.tar" />
+			<DumperFiles Include="$(SolutionDir)driver/**/*.*" />
+			<DumperFiles Include="$(SolutionDir)tools/arm/detached-fallback" />
+		</ItemGroup>
+		<Copy SourceFiles="@(DumperFiles)"
+			  DestinationFiles="$(OutDir)%(RecursiveDir)%(Filename)%(Extension)"
+			  Condition="'@(DumperFiles)' != ''" />
 	</Target>
 
+	<!-- PreBuild: generate build-metadata files consumed by Resources.resx.
+             Previously this target shelled out to tools/busybox.exe with bash-style
+             `cd /D` syntax, which failed silently on GitHub Actions windows-latest
+             runner (busybox.exe exists but pwsh does not understand `cd /D`), so
+             commit.txt was never created and the build failed with MSB3103.
+             Rewritten to use native MSBuild tasks (MakeDir, WriteLinesToFile) and
+             `git` invocations that work on every OS. -->
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Condition="(Exists('$(SolutionDir)tools/busybox') Or Exists('$(SolutionDir)tools/busybox.exe'))" Command="cd /D &quot;$(SolutionDir)tools/&quot; || cd &quot;$(SolutionDir)tools/&quot;&#xD;&#xA;&quot;./busybox&quot; mkdir -p &quot;../hakchi_gui/ApiKeys&quot;&#xD;&#xA;&quot;./busybox&quot; touch &quot;../hakchi_gui/ApiKeys/TheGamesDB.txt&quot;&#xD;&#xA;&quot;./busybox&quot; sh -e &quot;./gitcommit&quot; &gt; &quot;../hakchi_gui/commit.txt&quot;&#xD;&#xA;&quot;./busybox&quot; sh -e &quot;./git-commits-since-last-tag&quot; &gt; &quot;../hakchi_gui/git-commits-since-last-tag.txt&quot;&#xD;&#xA;&quot;./busybox&quot; sh -e &quot;./gittag&quot; &gt; &quot;../hakchi_gui/tag.txt&quot;&#xD;&#xA;" />
+		<MakeDir Directories="$(ProjectDir)ApiKeys" Condition="!Exists('$(ProjectDir)ApiKeys')" />
+		<WriteLinesToFile File="$(ProjectDir)ApiKeys/TheGamesDB.txt" Lines="" Overwrite="false" Condition="!Exists('$(ProjectDir)ApiKeys/TheGamesDB.txt')" />
+		<!-- Resources.resx references ..\apikeys\thegamesdb.txt (lowercase) — on case-sensitive
+                     filesystems (Linux CI) we need to create the lowercase path too. On Windows
+                     this is a no-op because the filesystem is case-insensitive. -->
+		<MakeDir Directories="$(ProjectDir)apikeys" Condition="!Exists('$(ProjectDir)apikeys')" />
+		<WriteLinesToFile File="$(ProjectDir)apikeys/thegamesdb.txt" Lines="" Overwrite="false" Condition="!Exists('$(ProjectDir)apikeys/thegamesdb.txt')" />
+
+		<!-- commit.txt: short hash + -dirty suffix if working tree is dirty -->
+		<Exec Command="git rev-parse --short HEAD" ConsoleToMSBuild="true" IgnoreExitCode="true">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitShortHash" />
+		</Exec>
+		<Exec Command="git diff-index --quiet HEAD --" IgnoreExitCode="true">
+			<Output TaskParameter="ExitCode" PropertyName="GitDirtyExitCode" />
+		</Exec>
+		<PropertyGroup Condition="'$(GitDirtyExitCode)' != '0' And '$(GitShortHash)' != ''">
+			<GitShortHash>$(GitShortHash)-dirty</GitShortHash>
+		</PropertyGroup>
+		<WriteLinesToFile File="$(ProjectDir)commit.txt" Lines="$(GitShortHash)" />
+
+		<!-- tag.txt: tag pointing exactly at HEAD, or empty -->
+		<Exec Command="git describe --tags --exact-match" ConsoleToMSBuild="true" IgnoreExitCode="true">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitTag" />
+		</Exec>
+		<WriteLinesToFile File="$(ProjectDir)tag.txt" Lines="$(GitTag)" />
+
+		<!-- git-commits-since-last-tag.txt: log since the most recent tag -->
+		<Exec Command="git log $(GitTag)..HEAD --oneline --no-decorate" ConsoleToMSBuild="true" IgnoreExitCode="true" Condition="'$(GitTag)' != ''">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommitsSinceTag" />
+		</Exec>
+		<WriteLinesToFile File="$(ProjectDir)git-commits-since-last-tag.txt" Lines="$(GitCommitsSinceTag)" />
+
+		<!-- Note: licenses.tar is created by ce-data.csproj PreBuild (it bundles
+                     hakchi_gui/Licenses/*.txt into GeneratedData/data/licenses.tar).
+                     hakchi_gui depends on ce-data via ProjectReference, so ce-data builds
+                     first and licenses.tar is ready before hakchi_gui's CoreResGen runs. -->
 	</Target>
 </Project>

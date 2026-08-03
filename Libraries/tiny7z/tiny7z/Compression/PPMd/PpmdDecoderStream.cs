@@ -1318,9 +1318,12 @@ namespace pdj.tiny7z.Compression
                 MASK_SET(charMask, Ppmd7Context_OneState(p.MinContext)->Symbol, 0);
                 p.PrevSuccess = 0;
             }
+            // Move stackalloc out of the loop to avoid potential stack overflow (CA2014).
+            // `ps` is overwritten on every iteration before being read, so reusing one
+            // 256-element buffer outside the loop is safe and semantically identical.
+            CPpmd_State** ps = stackalloc CPpmd_State*[256];
             for (;;)
             {
-                CPpmd_State** ps = stackalloc CPpmd_State*[256];
                 CPpmd_State* s;
                 uint freqSum, count, hiCnt;
                 CPpmd_See* see;

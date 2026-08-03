@@ -1,4 +1,4 @@
-using Markdig;
+﻿using Markdig;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -16,7 +16,7 @@ namespace com.clusterrr.hakchi_gui.Hmod.Controls
 
             wbReadme.Navigate("about:blank");
             HtmlDocument doc = wbReadme.Document;
-            doc.Write(String.Empty);
+            doc.Write(string.Empty);
 
             clear();
         }
@@ -24,7 +24,7 @@ namespace com.clusterrr.hakchi_gui.Hmod.Controls
         private string formatReadme(string name, ref HmodReadme hReadme)
         {
             string markdownTitle = (name != null && name.Trim() != "" ? $"# {name}\n\n" : "");
-            return Markdown.ToHtml(markdownTitle + String.Join("  \n", hReadme.headingLines) + "\n\n" + (hReadme.isMarkdown || hReadme.readme.Length == 0 ? hReadme.readme : $"```\n{hReadme.readme}\n```"));
+            return Markdown.ToHtml(markdownTitle + string.Join("  \n", hReadme.headingLines) + "\n\n" + (hReadme.isMarkdown || hReadme.readme.Length == 0 ? hReadme.readme : $"```\n{hReadme.readme}\n```"));
         }
 
         private string buildHTML(string css, string bodyContent)

@@ -104,7 +104,7 @@ namespace com.clusterrr.hakchi_gui
                 using (var writer = new StreamWriter(versionStream))
                 {
                     versionFormat = args[versionFormatArgIndex + 1];
-                    writer.Write(String.Format(versionFormat, Shared.AppDisplayVersion));
+                    writer.Write(string.Format(versionFormat, Shared.AppDisplayVersion));
                     writer.Flush();
                 }
 
@@ -172,143 +172,145 @@ namespace com.clusterrr.hakchi_gui
             try
             {
                 bool createdNew = true;
-                using (Mutex mutex = new Mutex(true, "hakchi2", out createdNew))
-                {
+                using Mutex mutex = new Mutex(true, "hakchi2", out createdNew);
+
                     if (createdNew)
                     {
-#if !DUMPER
-                        if (!isPortable)
-                        {
-                            BaseDirectoryExternal = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "hakchi2");
-                            try
-                            {
-                                if (!Directory.Exists(BaseDirectoryExternal))
-                                {
-                                    Directory.CreateDirectory(BaseDirectoryExternal);
-                                }
+                    #if !DUMPER
+                    if (!isPortable)
+                    {
+                    BaseDirectoryExternal = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "hakchi2");
+                    try
+                    {
+                    if (!Directory.Exists(BaseDirectoryExternal))
+                    {
+                    Directory.CreateDirectory(BaseDirectoryExternal);
+                    }
 
-                                // There are some folders which should be accessed by user
-                                // Moving them to "My documents"
-                                var externalDirs = new string[]
-                                    { "art", "folder_images", "info", "patches", "sfrom_tool", "user_mods", "spine_templates" };
-                                foreach (var dir in externalDirs)
-                                {
-                                    var sourceDir = Path.Combine(BaseDirectoryInternal, dir);
-                                    var destDir = Path.Combine(BaseDirectoryExternal, dir);
-                                    if (isFirstRun || !Directory.Exists(destDir))
-                                    {
-                                        try
-                                        {
-                                            Shared.DirectoryCopy(sourceDir, destDir, true, false, true, false);
-                                        }
-                                        catch (Exception dirEx)
-                                        {
-                                            // A single broken folder (locked file, permission,
-                                            // AV interference) must not abort the whole setup.
-                                            Trace.WriteLine(string.Format("Failed to copy external directory '{0}': {1}", dir, dirEx.Message));
-                                        }
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                // Failsafe for errors during external-directory setup
-                                // (MyDocuments creation, enumeration, etc.). Logged so a
-                                // half-installed state is diagnosable instead of failing
-                                // silently. Per-directory copy errors are handled below.
-                                Trace.WriteLine("External directory setup failed: " + ex);
-                            }
-                        }
-                        else
-                            BaseDirectoryExternal = BaseDirectoryInternal;
+                    // There are some folders which should be accessed by user
+                    // Moving them to "My documents"
+                    var externalDirs = new string[]
+                    { "art", "folder_images", "info", "patches", "sfrom_tool", "user_mods", "spine_templates" };
+                    foreach (var dir in externalDirs)
+                    {
+                    var sourceDir = Path.Combine(BaseDirectoryInternal, dir);
+                    var destDir = Path.Combine(BaseDirectoryExternal, dir);
+                    if (isFirstRun || !Directory.Exists(destDir))
+                    {
+                    try
+                    {
+                    Shared.DirectoryCopy(sourceDir, destDir, true, false, true, false);
+                    }
+                    catch (Exception dirEx)
+                    {
+                    // A single broken folder (locked file, permission,
+                    // AV interference) must not abort the whole setup.
+                    Trace.WriteLine(string.Format("Failed to copy external directory '{0}': {1}", dir, dirEx.Message));
+                    }
+                    }
+                    }
+                    }
+                    catch (Exception ex)
+                    {
+                    // Failsafe for errors during external-directory setup
+                    // (MyDocuments creation, enumeration, etc.). Logged so a
+                    // half-installed state is diagnosable instead of failing
+                    // silently. Per-directory copy errors are handled below.
+                    Trace.WriteLine("External directory setup failed: " + ex);
+                    }
+                    }
+                    else
+                    BaseDirectoryExternal = BaseDirectoryInternal;
 
-                        Directory.SetCurrentDirectory(BaseDirectoryInternal);
+                    Directory.SetCurrentDirectory(BaseDirectoryInternal);
 
-                        Trace.WriteLine("Base directory: " + BaseDirectoryExternal + " (" + (isPortable ? "portable" : "non-portable") + " mode)");
-                        ConfigIni.Load();
-                        try
-                        {
-                            if (!string.IsNullOrEmpty(ConfigIni.Instance.Language))
-                                Thread.CurrentThread.CurrentUICulture = new CultureInfo(ConfigIni.Instance.Language);
-                        }
-                        catch { }
+                    Trace.WriteLine("Base directory: " + BaseDirectoryExternal + " (" + (isPortable ? "portable" : "non-portable") + " mode)");
+                    ConfigIni.Load();
+                    try
+                    {
+                    if (!string.IsNullOrEmpty(ConfigIni.Instance.Language))
+                    Thread.CurrentThread.CurrentUICulture = new CultureInfo(ConfigIni.Instance.Language);
+                    }
+                    catch { }
 
-                        // .NET 8 автоматически ищет спутниковые сборки локализации
-                        // в подпапках рядом с exe (<AppDir>\ru-RU\hakchi.resources.dll).
-                        // Ручной перенос в languages\<culture>\ больше не нужен —
-                        // MSBuild-target MoveLanguageResourceFiles удалён из .csproj.
+                    // .NET 8 автоматически ищет спутниковые сборки локализации
+                    // в подпапках рядом с exe (<AppDir>\ru-RU\hakchi.resources.dll).
+                    // Ручной перенос в languages\<culture>\ больше не нужен —
+                    // MSBuild-target MoveLanguageResourceFiles удалён из .csproj.
 
-                        Trace.WriteLine("Loading spine templates");
-                        var templateDir = new DirectoryInfo(Path.Combine(BaseDirectoryExternal, "spine_templates"));
-                        _SpineTemplates = new Dictionary<string, SpineTemplate<Bitmap>>();
-                        if (templateDir.Exists)
-                        {
-                            foreach (var dir in templateDir.GetDirectories())
-                            {
-                                if (dir.GetFiles().Where(file => file.Name == "template.json" || file.Name == "template.png").Count() == 2)
-                                {
-                                    using (var file = File.OpenRead(Path.Combine(dir.FullName, "template.png")))
-                                        _SpineTemplates.Add(dir.Name, SpineTemplate<Bitmap>.FromJsonFile(new SystemDrawingBitmap(new Bitmap(file) as Bitmap), Path.Combine(dir.FullName, "template.json")));
-                                }
-                            }
-                        }
+                    Trace.WriteLine("Loading spine templates");
+                    var templateDir = new DirectoryInfo(Path.Combine(BaseDirectoryExternal, "spine_templates"));
+                    _SpineTemplates = new Dictionary<string, SpineTemplate<Bitmap>>();
+                    if (templateDir.Exists)
+                    {
+                    foreach (var dir in templateDir.GetDirectories())
+                    {
+                    if (dir.GetFiles().Where(file => file.Name == "template.json" || file.Name == "template.png").Count() == 2)
+                    {
+                    using (var file = File.OpenRead(Path.Combine(dir.FullName, "template.png")))
+                    _SpineTemplates.Add(dir.Name, SpineTemplate<Bitmap>.FromJsonFile(new SystemDrawingBitmap(new Bitmap(file) as Bitmap), Path.Combine(dir.FullName, "template.json")));
+                    }
+                    }
+                    }
 
-                        SetupScrapers();
-#else
-                        BaseDirectoryExternal = BaseDirectoryInternal;
-#endif
+                    SetupScrapers();
+                    #else
+                    BaseDirectoryExternal = BaseDirectoryInternal;
+                    #endif
 
-                        Trace.WriteLine("Starting, version: " + Shared.AppDisplayVersion);
+                    Trace.WriteLine("Starting, version: " + Shared.AppDisplayVersion);
 
-                        // ИСПРАВЛЕНО: Принудительно указываем .NET 8 использовать TLS 1.2 и 1.3 для совместимости со старыми серверами Hakchi
-                        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls13;
+                    // ИСПРАВЛЕНО: Принудительно указываем .NET 8 использовать TLS 1.2 и 1.3 для совместимости со старыми серверами Hakchi
+                    System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls13;
 
-                        // ИСПРАВЛЕНО: WebBrowser control по умолчанию рендерит в IE7.
-                        // Без FEATURE_BROWSER_EMULATION CSS3 (border-radius, flexbox, box-shadow) не работает.
-                        try
-                        {
-                            using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"))
-                            {
-                                var exeName = Path.GetFileName(Application.ExecutablePath);
-                                key.SetValue(exeName, 11001, Microsoft.Win32.RegistryValueKind.DWord);
-                                var readBack = key.GetValue(exeName);
-                                Trace.WriteLine($"[Browser] Set FEATURE_BROWSER_EMULATION for {exeName} = {readBack}");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Trace.WriteLine($"[Browser] Failed to set FEATURE_BROWSER_EMULATION: {ex.Message}");
-                        }
+                    // ИСПРАВЛЕНО: WebBrowser control по умолчанию рендерит в IE7.
+                    // Без FEATURE_BROWSER_EMULATION CSS3 (border-radius, flexbox, box-shadow) не работает.
+                    try
+                    {
+                    using var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION");
 
-                        // ИСПРАВЛЕНО: Добавлена поддержка высокого DPI для .NET 8
-                        Application.SetHighDpiMode(HighDpiMode.SystemAware);
-                        Application.EnableVisualStyles();
-                        Application.SetCompatibleTextRenderingDefault(false);
+                        var exeName = Path.GetFileName(Application.ExecutablePath);
+                        key.SetValue(exeName, 11001, Microsoft.Win32.RegistryValueKind.DWord);
+                        var readBack = key.GetValue(exeName);
+                        Trace.WriteLine($"[Browser] Set FEATURE_BROWSER_EMULATION for {exeName} = {readBack}");
 
-                        FormContext.AllFormsClosed += Process.GetCurrentProcess().Kill; // Suicide! Just easy and dirty way to kill all threads.
+                    
+                    }
+                    catch (Exception ex)
+                    {
+                    Trace.WriteLine($"[Browser] Failed to set FEATURE_BROWSER_EMULATION: {ex.Message}");
+                    }
 
-#if !DUMPER
-                        FormContext.AddForm(new MainForm());
-#else
-                        FormContext.AddForm(new DumperForm());
-#endif
-                        Application.Run(FormContext);
-                        Trace.WriteLine("Done.");
+                    // ИСПРАВЛЕНО: Добавлена поддержка высокого DPI для .NET 8
+                    Application.SetHighDpiMode(HighDpiMode.SystemAware);
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+
+                    FormContext.AllFormsClosed += Process.GetCurrentProcess().Kill; // Suicide! Just easy and dirty way to kill all threads.
+
+                    #if !DUMPER
+                    FormContext.AddForm(new MainForm());
+                    #else
+                    FormContext.AddForm(new DumperForm());
+                    #endif
+                    Application.Run(FormContext);
+                    Trace.WriteLine("Done.");
                     }
                     else
                     {
-                        Process current = Process.GetCurrentProcess();
-                        foreach (Process process in Process.GetProcessesByName("hakchi"))
-                        {
-                            if (process.Id != current.Id)
-                            {
-                                ShowWindow(process.MainWindowHandle, 9); // Restore
-                                SetForegroundWindow(process.MainWindowHandle); // Foreground
-                                break;
-                            }
-                        }
+                    Process current = Process.GetCurrentProcess();
+                    foreach (Process process in Process.GetProcessesByName("hakchi"))
+                    {
+                    if (process.Id != current.Id)
+                    {
+                    ShowWindow(process.MainWindowHandle, 9); // Restore
+                    SetForegroundWindow(process.MainWindowHandle); // Foreground
+                    break;
                     }
-                }
+                    }
+                    }
+
+                
             }
             catch (Exception ex)
             {

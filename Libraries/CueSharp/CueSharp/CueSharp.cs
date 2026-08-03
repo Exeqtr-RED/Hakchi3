@@ -1,4 +1,4 @@
-/*
+﻿/*
 Title:    CueSharp
 Version:  0.5
 Released: March 24, 2007
@@ -757,7 +757,7 @@ namespace CueSharp
                 ((lastTrackIndex(m_Tracks[0]).Minutes * 60) + lastTrackIndex(m_Tracks[0]).Seconds);
 
             ulong lDiscId = (((uint)n % 0xff) << 24 | (uint)t << 8 | (uint)m_Tracks.Length);
-            return String.Format("{0:x8}", lDiscId);
+            return string.Format("{0:x8}", lDiscId);
         }
 
         private Index lastTrackIndex(Track track)

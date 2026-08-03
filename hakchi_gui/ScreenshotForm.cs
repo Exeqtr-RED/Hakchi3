@@ -64,7 +64,7 @@ namespace com.clusterrr.hakchi_gui
         async private void LoadScreenshot()
         {
             DateTime currentTime = DateTime.Now;
-            Text = String.Format(formatTitle, currentTime.ToShortDateString(), currentTime.ToLongTimeString());
+            Text = string.Format(formatTitle, currentTime.ToShortDateString(), currentTime.ToLongTimeString());
             screenshotPictureBox.Image = await TakeScreenshot();
         }
 
