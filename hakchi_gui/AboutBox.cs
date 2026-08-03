@@ -18,7 +18,12 @@ namespace com.clusterrr.hakchi_gui
             this.labelGitTag.Text = string.Format("Git Tag {0}", Shared.GitTag ?? "Unknown");
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            // WinForms TextBox.Multiline on Windows requires \r\n line endings to render
+            // line breaks. The AssemblyDescription attribute is copied verbatim from
+            // <Description>...</Description> in the .csproj, which uses LF-only endings
+            // (see .gitattributes: *.csproj text eol=lf). Normalize to \r\n here so the
+            // AboutBox renders multi-line credits correctly.
+            this.textBoxDescription.Text = AssemblyDescription?.Replace("\r\n", "\n").Replace("\n", "\r\n") ?? string.Empty;
 
             commitsSinceTag = Encoding.UTF8.GetString(Properties.Resources.gitCommitsSinceLastTag).Trim();
 
