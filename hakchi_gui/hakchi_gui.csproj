@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0-windows</TargetFramework>
-		<AssemblyName>hakchi</AssemblyName>
+		<AssemblyName>hakchi3</AssemblyName>
 		<RootNamespace>com.clusterrr.hakchi_gui</RootNamespace>
 		<UseWindowsForms>true</UseWindowsForms>
 		<GenerateResourceDesignTimeOutput>True</GenerateResourceDesignTimeOutput>
@@ -29,6 +29,7 @@ Portuguese: kONNEN
 Spanish (Latin America): ReyVGM
 Swedish: yeager
 Russian: Exeqtr-RED
+
 
 Sega Boxart and spine templates designed by TheWez1981 with backgrounds designed by HerbFargus and taken from the EmulationStation ""TronkyFran"" Theme
 
