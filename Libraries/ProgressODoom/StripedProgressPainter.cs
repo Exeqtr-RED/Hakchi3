@@ -62,7 +62,7 @@ namespace ProgressODoom {
 		}
 
 		private void AnimateFrame(Rectangle box, Graphics g, ref int marqueeX) {
-			if (box == null || g == null || box.Width <= 1) { return; }
+			if (g == null || box.Width <= 1) { return; }
 
 			Pen penb = new Pen(new SolidBrush(blend));
 			g.FillRectangle(new SolidBrush(color1), box);

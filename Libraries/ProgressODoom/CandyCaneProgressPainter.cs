@@ -23,7 +23,7 @@ namespace ProgressODoom {
 			get { return baseColor; }
 			set {
 				baseColor = value;
-				try { if (box != null) { RepaintImage(box); } } catch { }
+				try { RepaintImage(box); } catch { }
 				FireChange();
 			}
 		}

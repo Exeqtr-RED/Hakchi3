@@ -438,14 +438,8 @@ namespace TeamShinkansen.Scrapers.TheGamesDB
                 data.Platform = platformValue?.Name;
                 data.Images = Images.ToArray();
 
-                if (data.ReleaseDate != null)
-                {
-                    data.Copyright = $"© {data.ReleaseDate.Year} {String.Join(", ", data.Developers)}";
-                }
-                else
-                {
-                    data.Copyright = $"© {String.Join(", ", data.Developers)}";
-                }
+                // ReleaseDate is DateTime (value type, never null) — always include year
+                data.Copyright = $"© {data.ReleaseDate.Year} {String.Join(", ", data.Developers)}";
 
                 items.Add(data);
 

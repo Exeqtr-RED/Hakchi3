@@ -46,7 +46,7 @@ namespace ProgressODoom {
 		}
 
 		private void AnimateFrame(Rectangle box, Graphics g, ref int marqueeX) {
-			if (box == null || g == null || box.Width <= 1) { return; }
+			if (g == null || box.Width <= 1) { return; }
 
 			g.SmoothingMode = SmoothingMode.AntiAlias;
 			//g.Clip = new Region(box);

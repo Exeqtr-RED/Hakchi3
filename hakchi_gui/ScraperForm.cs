@@ -528,8 +528,8 @@ namespace com.clusterrr.hakchi_gui
                     if (result.Developers != null && result.Developers.Length > 0)
                         textBoxDeveloper.Text = String.Join(", ", result.Developers);
 
-                    if (result.ReleaseDate != null)
-                        maskedTextBoxReleaseDate.Text = result.ReleaseDate.ToString("yyyy-MM-dd");
+                    // ReleaseDate is DateTime (value type, never null) — assignment is unconditional
+                    maskedTextBoxReleaseDate.Text = result.ReleaseDate.ToString("yyyy-MM-dd");
 
                     if (result.Copyright != null)
                         textBoxCopyright.Text = result.Copyright;

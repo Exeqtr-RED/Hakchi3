@@ -446,21 +446,15 @@ namespace com.clusterrr.hakchi_gui.Tasks
                             }
                             else if (apiResult.Developers != null && apiResult.Developers.Length > 0)
                             {
-                                if (apiResult.ReleaseDate != null)
-                                {
-                                    app.Desktop.Copyright = $"© {apiResult.ReleaseDate.Year} {String.Join(", ", apiResult.Developers)}";
-                                }
-                                else
-                                {
-                                    app.Desktop.Copyright = $"© {String.Join(", ", apiResult.Developers)}";
-                                }
+                                // ReleaseDate is DateTime (value type, never null) — always include year when developers are present
+                                app.Desktop.Copyright = $"© {apiResult.ReleaseDate.Year} {String.Join(", ", apiResult.Developers)}";
                             }
 
                             if (apiResult.Description != null)
                                 app.Desktop.Description = apiResult.Description;
 
-                            if (apiResult.ReleaseDate != null)
-                                app.Desktop.ReleaseDate = apiResult.ReleaseDate.ToString("yyyy-MM-dd");
+                            // ReleaseDate is DateTime (value type, never null) — assignment is unconditional
+                            app.Desktop.ReleaseDate = apiResult.ReleaseDate.ToString("yyyy-MM-dd");
 
                             if (apiResult.PlayerCount > 0)
                             {
