@@ -106,7 +106,11 @@ Gert Driesen for SSH.NET.
 		<PackageReference Include="LibUsbDotNet" Version="3.0.102-alpha" />
 		<PackageReference Include="Markdig" Version="1.3.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="nQuant" Version="1.0.3" />
+		<!-- nQuant 1.0.3 only ships .NET Framework assemblies, but its byte-level API
+		     (WuQuantizer / QuantizationException) is managed code that runs fine on .NET 8.
+		     We accept the framework mismatch and silence NU1701 explicitly. If nQuant stops
+		     working on a future .NET version, swap for a maintained quantizer. -->
+		<PackageReference Include="nQuant" Version="1.0.3" NoWarn="NU1701" />
 		<PackageReference Include="SharpCompress" Version="0.48.0" />
 		<PackageReference Include="SSH.NET" Version="2025.1.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
