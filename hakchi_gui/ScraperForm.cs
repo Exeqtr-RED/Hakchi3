@@ -310,7 +310,7 @@ namespace com.clusterrr.hakchi_gui
                         {
                             resultsTask.Wait();
                         } 
-                        catch (OperationCanceledException ex)
+                        catch (OperationCanceledException)
                         {
                             Threads.Remove(Thread.CurrentThread);
                             item.ScraperTasks[scraper].Remove(resultsTask);
@@ -783,7 +783,7 @@ namespace com.clusterrr.hakchi_gui
                                 {
                                     resultsTask.Wait();
                                 }
-                                catch (OperationCanceledException ex)
+                                catch (OperationCanceledException)
                                 {
                                     Threads.Remove(Thread.CurrentThread);
                                     item.ScraperTasks[scraper].Remove(resultsTask);
@@ -928,7 +928,7 @@ namespace com.clusterrr.hakchi_gui
                     {
                         resultsTask.Wait();
                     }
-                    catch (OperationCanceledException ex)
+                    catch (OperationCanceledException)
                     {
                         Threads.Remove(Thread.CurrentThread);
                         item.ScraperTasks[scraper].Remove(resultsTask);

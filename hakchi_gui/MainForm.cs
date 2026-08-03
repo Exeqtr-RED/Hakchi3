@@ -246,7 +246,7 @@ namespace com.clusterrr.hakchi_gui
                 }
                 new Motd(message).ShowDialog(this);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Trace.WriteLine("Could not show \"Message of the day\"");
             }
