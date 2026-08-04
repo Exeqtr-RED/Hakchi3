@@ -54,7 +54,7 @@ Gert Driesen for SSH.NET.
 		<Version>0.3.5</Version>
 		<Authors>Exeqtr-RED</Authors>
 		<Company>Exeqtr-RED</Company>
-		<Copyright>Copyright © 2026</Copyright>
+		<Copyright>Copyright Â© 2026</Copyright>
 		<RepositoryUrl>https://github.com/Exeqtr-RED/Hakchi3</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -64,7 +64,7 @@ Gert Driesen for SSH.NET.
 		<!-- The public API exposes a static class named `hakchi` (lowercase) for historical
                      reasons (hakchi.Shell, hakchi.DetectedConsoleType, etc.). The .NET source generator
                      for System.Text.RegularExpressions also emits a partial `hakchi` type, which triggers
-                     CS8981. Suppress the diagnostic project-wide rather than rename the type — renaming
+                     CS8981. Suppress the diagnostic project-wide rather than rename the type â€” renaming
                      would break every caller in this codebase and downstream forks. -->
 		<NoWarn>$(NoWarn);CS8981</NoWarn>
 
@@ -76,7 +76,7 @@ Gert Driesen for SSH.NET.
 		<GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
 
 		<!-- Localized satellite assemblies stay in <OutDir>\<culture>\hakchi.resources.dll
-                     (default .NET 8 layout). Do NOT move them into a custom "languages\" folder —
+                     (default .NET 8 layout). Do NOT move them into a custom "languages\" folder â€”
                      the .NET 8 runtime only probes the default culture subfolder next to the exe,
                      and AppendPrivatePath / <probing privatePath> no longer apply to satellites. -->
 	</PropertyGroup>
@@ -261,9 +261,6 @@ Gert Driesen for SSH.NET.
 	</Target>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<!-- Copy GeneratedData/* into the output directory so hakchi.exe can find
-                     tarballs, hmods, tools at runtime. Originally used busybox tar piped
-                     through tar; rewritten to use MSBuild Copy task with recursive glob. -->
 		<ItemGroup Condition="'$(Configuration)|$(Platform)'!='Dumper|AnyCPU' And Exists('$(SolutionDir)GeneratedData')">
 			<GeneratedDataFiles Include="$(SolutionDir)GeneratedData/**/*.*" />
 		</ItemGroup>
@@ -281,24 +278,14 @@ Gert Driesen for SSH.NET.
 			  Condition="'@(DumperFiles)' != ''" />
 	</Target>
 
-	<!-- PreBuild: generate build-metadata files consumed by Resources.resx.
-             Previously this target shelled out to tools/busybox.exe with bash-style
-             `cd /D` syntax, which failed silently on GitHub Actions windows-latest
-             runner (busybox.exe exists but pwsh does not understand `cd /D`), so
-             commit.txt was never created and the build failed with MSB3103.
-             Rewritten to use native MSBuild tasks (MakeDir, WriteLinesToFile) and
-             `git` invocations that work on every OS. -->
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
 		<MakeDir Directories="$(ProjectDir)ApiKeys" Condition="!Exists('$(ProjectDir)ApiKeys')" />
 		<WriteLinesToFile File="$(ProjectDir)ApiKeys/TheGamesDB.txt" Lines="" Overwrite="false" Condition="!Exists('$(ProjectDir)ApiKeys/TheGamesDB.txt')" />
-		<!-- Resources.resx references ..\apikeys\thegamesdb.txt (lowercase) — on case-sensitive
-                     filesystems (Linux CI) we need to create the lowercase path too. On Windows
-                     this is a no-op because the filesystem is case-insensitive. -->
+
 		<MakeDir Directories="$(ProjectDir)apikeys" Condition="!Exists('$(ProjectDir)apikeys')" />
 		<WriteLinesToFile File="$(ProjectDir)apikeys/thegamesdb.txt" Lines="" Overwrite="false" Condition="!Exists('$(ProjectDir)apikeys/thegamesdb.txt')" />
 
-		<!-- commit.txt: short hash + -dirty suffix if working tree is dirty -->
-		<Exec Command="git rev-parse --short HEAD" ConsoleToMSBuild="true" IgnoreExitCode="true">
+		<Exec Command="git rev-parse --short HEAD 2>nul" ConsoleToMSBuild="true" IgnoreExitCode="true">
 			<Output TaskParameter="ConsoleOutput" PropertyName="GitShortHash" />
 		</Exec>
 		<Exec Command="git diff-index --quiet HEAD --" IgnoreExitCode="true">
@@ -307,23 +294,24 @@ Gert Driesen for SSH.NET.
 		<PropertyGroup Condition="'$(GitDirtyExitCode)' != '0' And '$(GitShortHash)' != ''">
 			<GitShortHash>$(GitShortHash)-dirty</GitShortHash>
 		</PropertyGroup>
-		<WriteLinesToFile File="$(ProjectDir)commit.txt" Lines="$(GitShortHash)" />
+		<WriteLinesToFile File="$(ProjectDir)commit.txt" Lines="$(GitShortHash)" Overwrite="true" />
 
-		<!-- tag.txt: tag pointing exactly at HEAD, or empty -->
-		<Exec Command="git describe --tags --exact-match" ConsoleToMSBuild="true" IgnoreExitCode="true">
+		<Exec Command="git describe --tags --exact-match 2>nul" ConsoleToMSBuild="true" IgnoreExitCode="true">
 			<Output TaskParameter="ConsoleOutput" PropertyName="GitTag" />
 		</Exec>
-		<WriteLinesToFile File="$(ProjectDir)tag.txt" Lines="$(GitTag)" />
-
-		<!-- git-commits-since-last-tag.txt: log since the most recent tag -->
-		<Exec Command="git log $(GitTag)..HEAD --oneline --no-decorate" ConsoleToMSBuild="true" IgnoreExitCode="true" Condition="'$(GitTag)' != ''">
+		<WriteLinesToFile File="$(ProjectDir)tag.txt" Lines="$(GitTag)" Overwrite="true" />
+		<!-- Fallback: when GitTag is empty (HEAD not at a tag), find nearest tag -->
+		<Exec Command="git describe --tags --abbrev=0 2>nul" ConsoleToMSBuild="true" IgnoreExitCode="true" Condition="'$(GitTag)' == ''">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitNearestTag" />
+		</Exec>
+		<Exec Command="git log $(GitNearestTag)..HEAD --oneline --no-decorate 2>nul" ConsoleToMSBuild="true" IgnoreExitCode="true" Condition="'$(GitTag)' == '' And '$(GitNearestTag)' != ''">
 			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommitsSinceTag" />
 		</Exec>
-		<WriteLinesToFile File="$(ProjectDir)git-commits-since-last-tag.txt" Lines="$(GitCommitsSinceTag)" />
 
-		<!-- Note: licenses.tar is created by ce-data.csproj PreBuild (it bundles
-                     hakchi_gui/Licenses/*.txt into GeneratedData/data/licenses.tar).
-                     hakchi_gui depends on ce-data via ProjectReference, so ce-data builds
-                     first and licenses.tar is ready before hakchi_gui's CoreResGen runs. -->
+		<Exec Command="git log $(GitTag)..HEAD --oneline --no-decorate 2>nul" ConsoleToMSBuild="true" IgnoreExitCode="true" Condition="'$(GitTag)' != ''">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommitsSinceTag" />
+		</Exec>
+		<WriteLinesToFile File="$(ProjectDir)git-commits-since-last-tag.txt" Lines="$(GitCommitsSinceTag)" Overwrite="true" />
+
 	</Target>
 </Project>
