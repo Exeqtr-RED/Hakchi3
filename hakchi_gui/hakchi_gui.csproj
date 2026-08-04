@@ -1,4 +1,4 @@
-ï»¿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
@@ -54,7 +54,7 @@ Gert Driesen for SSH.NET.
 		<Version>0.3.5</Version>
 		<Authors>Exeqtr-RED</Authors>
 		<Company>Exeqtr-RED</Company>
-		<Copyright>Copyright Â© 2026</Copyright>
+		<Copyright>Copyright © 2026</Copyright>
 		<RepositoryUrl>https://github.com/Exeqtr-RED/Hakchi3</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -64,7 +64,7 @@ Gert Driesen for SSH.NET.
 		<!-- The public API exposes a static class named `hakchi` (lowercase) for historical
                      reasons (hakchi.Shell, hakchi.DetectedConsoleType, etc.). The .NET source generator
                      for System.Text.RegularExpressions also emits a partial `hakchi` type, which triggers
-                     CS8981. Suppress the diagnostic project-wide rather than rename the type â€” renaming
+                     CS8981. Suppress the diagnostic project-wide rather than rename the type — renaming
                      would break every caller in this codebase and downstream forks. -->
 		<NoWarn>$(NoWarn);CS8981</NoWarn>
 
@@ -76,7 +76,7 @@ Gert Driesen for SSH.NET.
 		<GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
 
 		<!-- Localized satellite assemblies stay in <OutDir>\<culture>\hakchi.resources.dll
-                     (default .NET 8 layout). Do NOT move them into a custom "languages\" folder â€”
+                     (default .NET 8 layout). Do NOT move them into a custom "languages\" folder —
                      the .NET 8 runtime only probes the default culture subfolder next to the exe,
                      and AppendPrivatePath / <probing privatePath> no longer apply to satellites. -->
 	</PropertyGroup>
@@ -98,7 +98,6 @@ Gert Driesen for SSH.NET.
 		<EmbeddedResource Remove="Libraries\**" />
 		<EmbeddedResource Remove="Makefile Projects\**" />
 		<EmbeddedResource Remove="NSI\nsi-helper\**" />
-		<EmbeddedResource Remove="Scrapers.Test\**" />
 		<EmbeddedResource Remove="Scrapers\**" />
 		<EmbeddedResource Remove="Zipper\**" />
 	</ItemGroup>
@@ -292,7 +291,7 @@ Gert Driesen for SSH.NET.
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
 		<MakeDir Directories="$(ProjectDir)ApiKeys" Condition="!Exists('$(ProjectDir)ApiKeys')" />
 		<WriteLinesToFile File="$(ProjectDir)ApiKeys/TheGamesDB.txt" Lines="" Overwrite="false" Condition="!Exists('$(ProjectDir)ApiKeys/TheGamesDB.txt')" />
-		<!-- Resources.resx references ..\apikeys\thegamesdb.txt (lowercase) â€” on case-sensitive
+		<!-- Resources.resx references ..\apikeys\thegamesdb.txt (lowercase) — on case-sensitive
                      filesystems (Linux CI) we need to create the lowercase path too. On Windows
                      this is a no-op because the filesystem is case-insensitive. -->
 		<MakeDir Directories="$(ProjectDir)apikeys" Condition="!Exists('$(ProjectDir)apikeys')" />
